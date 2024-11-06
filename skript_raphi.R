@@ -10,8 +10,9 @@ load("C:/Users/49177/Desktop/Praktikum/Praktikum GIthub/StatPrak-Overdose/NSDUH_
 filterdata2015 <- PUF2015_021518 %>%
   select(c(1:ALCBNG30D, cocever:CC30EST, herever:HR30EST, ircigrc:II2ALCRC, ircocrc:II2COCRC, irherrc:II2HERRC,
            iralcfy:II2ALCFY, ircocfy:II2COCFY, irherfy:II2HERFY, ircigfm:IIALCBNG30D, ircocfm:II2COCFM, irherfm:II2HERFM,
-           ircigage:iialcyfu, ircocage:iicocyfu, irherage:iiheryfu, cigflag:alcmon, cocflag:cocmon, herflag:hermon)) %>%
-  mutate(year = "2015") # searched till hermon, page 118, what about p. 123?
+           ircigage:iialcyfu, ircocage:iicocyfu, irherage:iiheryfu, cigflag:alcmon, cocflag:cocmon, herflag:hermon,
+           )) %>%
+  mutate(year = "2015") # searched till hermon, page 118, what about p. 123? OPYNMIR
 filterdata2016 <- PUF2016_022818 %>%
   select(c(1:ALCBNG30D, cocever:CC30EST, herever:HR30EST)) %>%
   mutate(year = "2016")
