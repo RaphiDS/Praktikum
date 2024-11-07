@@ -86,4 +86,7 @@ filterdata2019 <- PUF2019_100920 %>%
            txltyothr:TXLTYALCO2, TXLTYCOCN2:TXLTYHERN2, txltyill:verep)) %>%
   mutate(year = "2019")
 
+common_columns <- intersect(names(filterdata2015), names(filterdata2016), names(filterdata2017), names(filterdata2018),
+                            names(filterdata2019))
+?intersect
 allfilterdata <- rbind(filterdata2015, filterdata2016, filterdata2017, filterdata2018, filterdata2019)
