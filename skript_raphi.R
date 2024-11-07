@@ -18,11 +18,22 @@ PUF2015_021518 %>%
            difgether, appdrgmon:rkfqdblt, grskcigpkd, grskcocmon:grskherwk, grskbngdly:grskbngwk, difobtcoc,
            difobther, APPDRGMON2, blntever:alcfmctd, coclottm:herfmctd, ircgirtb:iicglmr, ndssansp:depndalc,
            depndcoc:depndher, depndpyill:abusealc, abusecoc:abuseher, abusepyill:abodalc, abodcoc:abodher,
-           udpyhrpnr:udpyilaal, booked:prob, )) #p.262
+           udpyhrpnr:udpyilaal, booked:prob, cigaglst:cocmlu, heraglst:hermlu, cigyrbfr:cocyrbfr, txevrrcvd:ndmortalc,
+           ndmortcoc:ndmorther, ndtxyralc, ndtxyrcoc:ndtxyrher, ndtxeffrt:txltyalco, txltycocn:txltyhern)) #p.262
 
 
 filterdata2015 <- PUF2015_021518 %>%
-  select(relevant_cols) %>%
+  select(c(1:ALCBNG30D, cocever:CC30EST, herever:HR30EST, ircigrc:II2ALCRC, ircocrc:II2COCRC, irherrc:II2HERRC,
+           iralcfy:II2ALCFY, ircocfy:II2COCFY, irherfy:II2HERFY, ircigfm:IIALCBNG30D, ircocfm:II2COCFM,
+           irherfm:II2HERFM, ircigage:iialcyfu, ircocage:iicocyfu, irherage:iiheryfu, cigflag:alcmon,
+           cocflag:cocmon, herflag:hermon, opinmyr:illmon, illemflag:illalcflg, cigafu:ALCAFU3, alcydays,
+           cocydays, cigmdays:alcmdays, cocmdays, CIG1PACK:FUALC21, FUCOC18:FUCOC21, FUHER18:FUHER21,
+           cocneedl:hrndlrec, anyndlrec:nedcoc, HERSMOK2:HERSNIF2, rskcigpkd, rskhertry:rskbngwk, difgetcoc,
+           difgether, appdrgmon:rkfqdblt, grskcigpkd, grskcocmon:grskherwk, grskbngdly:grskbngwk, difobtcoc,
+           difobther, APPDRGMON2, blntever:alcfmctd, coclottm:herfmctd, ircgirtb:iicglmr, ndssansp:depndalc,
+           depndcoc:depndher, depndpyill:abusealc, abusecoc:abuseher, abusepyill:abodalc, abodcoc:abodher,
+           udpyhrpnr:udpyilaal, booked:prob, cigaglst:cocmlu, heraglst:hermlu, cigyrbfr:cocyrbfr, txevrrcvd:ndmortalc,
+           ndmortcoc:ndmorther, ndtxyralc, ndtxyrcoc:ndtxyrher, ndtxeffrt:txltyalco, txltycocn:txltyhern)) %>%
   mutate(year = 2015)
 
 filterdata2016 <- PUF2016_022818 %>%
