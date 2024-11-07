@@ -8,7 +8,6 @@ load("C:/Users/49177/Desktop/Praktikum/Praktikum GIthub/StatPrak-Overdose/NSDUH_
 library(tidyverse)
 
 #filtering the relevant columns and creating reduced dataset
-
 filterdata2015 <- PUF2015_021518 %>%
   select(c(1:ALCBNG30D, cocever:CC30EST, herever:HR30EST, ircigrc:II2ALCRC, ircocrc:II2COCRC, irherrc:II2HERRC,
            iralcfy:II2ALCFY, ircocfy:II2COCFY, irherfy:II2HERFY, ircigfm:IIALCBNG30D, ircocfm:II2COCFM,
@@ -37,7 +36,7 @@ filterdata2016 <- PUF2016_022818 %>%
            udpyhrpnr:udpyilaal, booked:prob, cigaglst:cocmlu, heraglst:hermlu, cigyrbfr:cocyrbfr, txevrrcvd:ndmortalc,
            ndmortcoc:ndmorther, ndtxyralc, ndtxyrcoc:ndtxyrher, ndtxeffrt:txltyalco, txltycocn:txltyhern,
            txltyothr:TXLTYALCO2, TXLTYCOCN2:TXLTYHERN2, txltyill:verep)) %>%
-  mutate(year = "2016")
+  mutate(year = 2016)
 
 filterdata2017 <- PUF2017_100918 %>%
   select(c(1:ALCBNG30D, cocever:CC30EST, herever:HR30EST, ircigrc:II2ALCRC, ircocrc:II2COCRC, irherrc:II2HERRC,
@@ -52,7 +51,7 @@ filterdata2017 <- PUF2017_100918 %>%
            udpyhrpnr:udpyilaal, booked:prob, cigaglst:cocmlu, heraglst:hermlu, cigyrbfr:cocyrbfr, txevrrcvd:ndmortalc,
            ndmortcoc:ndmorther, ndtxyralc, ndtxyrcoc:ndtxyrher, ndtxeffrt:txltyalco, txltycocn:txltyhern,
            txltyothr:TXLTYALCO2, TXLTYCOCN2:TXLTYHERN2, txltyill:verep)) %>%
-  mutate(year = "2017")
+  mutate(year = 2017)
 
 filterdata2018 <- PUF2018_100819 %>%
   mutate(cigafu = NA, ALCAFU3 = NA, FUALC21 = NA, FUCOC18 = NA, FUCOC21 = NA, FUHER18 = NA, FUHER21 = NA) %>%
@@ -68,7 +67,7 @@ filterdata2018 <- PUF2018_100819 %>%
            udpyhrpnr:udpyilaal, booked:prob, cigaglst:cocmlu, heraglst:hermlu, cigyrbfr:cocyrbfr, txevrrcvd:ndmortalc,
            ndmortcoc:ndmorther, ndtxyralc, ndtxyrcoc:ndtxyrher, ndtxeffrt:txltyalco, txltycocn:txltyhern,
            txltyothr:TXLTYALCO2, TXLTYCOCN2:TXLTYHERN2, txltyill:verep)) %>%
-  mutate(year = "2018")
+  mutate(year = 2018)
 
 filterdata2019 <- PUF2019_100920 %>%
   mutate(cigafu = NA, ALCAFU3 = NA, FUALC21 = NA, FUCOC18 = NA, FUCOC21 = NA, FUHER18 = NA, FUHER21 = NA) %>%
@@ -84,9 +83,9 @@ filterdata2019 <- PUF2019_100920 %>%
            udpyhrpnr:udpyilaal, booked:prob, cigaglst:cocmlu, heraglst:hermlu, cigyrbfr:cocyrbfr, txevrrcvd:ndmortalc,
            ndmortcoc:ndmorther, ndtxyralc, ndtxyrcoc:ndtxyrher, ndtxeffrt:txltyalco, txltycocn:txltyhern,
            txltyothr:TXLTYALCO2, TXLTYCOCN2:TXLTYHERN2, txltyill:verep)) %>%
-  mutate(year = "2019")
+  mutate(year = 2019)
 
-common_columns <- intersect(names(filterdata2015), names(filterdata2016), names(filterdata2017), names(filterdata2018),
-                            names(filterdata2019))
-?intersect
-allfilterdata <- rbind(filterdata2015, filterdata2016, filterdata2017, filterdata2018, filterdata2019)
+combdata1 <- inner_join(filterdata2015, filterdata2016)
+combdata2 <- inner_join(filterdata2017, filterdata2018)
+combdata3 <- inner_join(combdata1, combdata2)
+allfilterdata <- inner_join(combdata3, filterdata2019)
