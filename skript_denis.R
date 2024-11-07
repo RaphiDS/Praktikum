@@ -1,7 +1,7 @@
-# Define a vector
-numbers <- c(1, 2, 3, 4, 5)
+load("C:/Users/denis/OneDrive/Desktop/RStudio/locales/StatPrak-Overdose/NSDUH_2015.RData")
+load("C:/Users/denis/OneDrive/Desktop/RStudio/locales/StatPrak-Overdose/NSDUH_2016.RData")
+load("C:/Users/denis/OneDrive/Desktop/RStudio/locales/StatPrak-Overdose/NSDUH_2017.RData")
+load("C:/Users/denis/OneDrive/Desktop/RStudio/locales/StatPrak-Overdose/NSDUH_2018.RData")
+load("C:/Users/denis/OneDrive/Desktop/RStudio/locales/StatPrak-Overdose/NSDUH_2019.RData")
 
-# Use a for loop to iterate over each element in the vector
-for (num in numbers) {
-  print(num)
-}
+
