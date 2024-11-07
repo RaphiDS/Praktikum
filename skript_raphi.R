@@ -85,7 +85,13 @@ filterdata2019 <- PUF2019_100920 %>%
            txltyothr:TXLTYALCO2, TXLTYCOCN2:TXLTYHERN2, txltyill:verep)) %>%
   mutate(year = 2019)
 
-combdata1 <- inner_join(filterdata2015, filterdata2016)
-combdata2 <- inner_join(filterdata2017, filterdata2018)
-combdata3 <- inner_join(combdata1, combdata2)
-allfilterdata <- inner_join(combdata3, filterdata2019)
+allfilterdata <- rbind(filterdata2015[Reduce(intersect,list(colnames(filterdata2015), colnames(filterdata2016),
+                      colnames(filterdata2017),colnames(filterdata2018), colnames(filterdata2019)))],
+                      filterdata2016[Reduce(intersect,list(colnames(filterdata2015), colnames(filterdata2016),
+                      colnames(filterdata2017),colnames(filterdata2018), colnames(filterdata2019)))],
+                      filterdata2017[Reduce(intersect,list(colnames(filterdata2015), colnames(filterdata2016),
+                      colnames(filterdata2017),colnames(filterdata2018), colnames(filterdata2019)))],
+                      filterdata2018[Reduce(intersect,list(colnames(filterdata2015), colnames(filterdata2016),
+                      colnames(filterdata2017),colnames(filterdata2018), colnames(filterdata2019)))],
+                      filterdata2019[Reduce(intersect,list(colnames(filterdata2015), colnames(filterdata2016),
+                      colnames(filterdata2017),colnames(filterdata2018), colnames(filterdata2019)))])
