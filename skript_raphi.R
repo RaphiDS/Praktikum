@@ -13,8 +13,9 @@ filterdata2015 <- PUF2015_021518 %>%
            iralcfy:II2ALCFY, ircocfy:II2COCFY, irherfy:II2HERFY, ircigfm:IIALCBNG30D, ircocfm:II2COCFM, irherfm:II2HERFM,
            ircigage:iialcyfu, ircocage:iicocyfu, irherage:iiheryfu, cigflag:alcmon, cocflag:cocmon, herflag:hermon,
            opinmyr:illmon, illemflag:illalcflg, cigafu:ALCAFU3, alcydays, cocydays, cigmdays:alcmdays, cocmdays,
-           CIG1PACK:FUALC21, FUCOC18:FUCOC21, FUHER18:FUHER21)) %>%
-  mutate(year = "2015") # searched till hermon, page 118, what about p. 123? OPYNMIR
+           CIG1PACK:FUALC21, FUCOC18:FUCOC21, FUHER18:FUHER21, cocneedl:hrndlrec, anyndlrec:nedcoc, HERSMOK2:HERSNIF2,
+           rskcigpkd, rskhertry:rskbngwk, difgetcoc, difgether, appdrgmon:rkfqdblt, grskcigpkd, grskcocmon:grskherwk)) %>%
+  mutate(year = "2015") # heroin = pain reliever?, sedative?, cocaine = stimulant?
 
 filterdata2016 <- PUF2016_022818 %>%
   select(c(1:ALCBNG30D, cocever:CC30EST, herever:HR30EST, ircigrc:II2ALCRC, ircocrc:II2COCRC, irherrc:II2HERRC,
