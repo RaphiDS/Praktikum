@@ -19,7 +19,8 @@ PUF2015_021518 %>%
            difobther, APPDRGMON2, blntever:alcfmctd, coclottm:herfmctd, ircgirtb:iicglmr, ndssansp:depndalc,
            depndcoc:depndher, depndpyill:abusealc, abusecoc:abuseher, abusepyill:abodalc, abodcoc:abodher,
            udpyhrpnr:udpyilaal, booked:prob, cigaglst:cocmlu, heraglst:hermlu, cigyrbfr:cocyrbfr, txevrrcvd:ndmortalc,
-           ndmortcoc:ndmorther, ndtxyralc, ndtxyrcoc:ndtxyrher, ndtxeffrt:txltyalco, txltycocn:txltyhern)) #p.262
+           ndmortcoc:ndmorther, ndtxyralc, ndtxyrcoc:ndtxyrher, ndtxeffrt:txltyalco, txltycocn:txltyhern,
+           txltyothr:TXLTYALCO2, txltycocn2:txltyhern2, txltyill:verep)) #p.262
 
 
 filterdata2015 <- PUF2015_021518 %>%
