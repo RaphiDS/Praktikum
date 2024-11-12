@@ -4,6 +4,6 @@ load("C:/Users/denis/OneDrive/Desktop/RStudio/locales/StatPrak-Overdose/NSDUH_20
 load("C:/Users/denis/OneDrive/Desktop/RStudio/locales/StatPrak-Overdose/NSDUH_2018.RData")
 load("C:/Users/denis/OneDrive/Desktop/RStudio/locales/StatPrak-Overdose/NSDUH_2019.RData")
 
-load("~/StatPrak-Overdose/combi_redu_data.Rdata")
+load("C:/Users/denis/OneDrive/Desktop/RStudio/locales/StatPrak-Overdose/combi_redu_data.Rdata")
 
 
