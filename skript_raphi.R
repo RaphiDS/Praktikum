@@ -97,3 +97,26 @@ allfilterdata <- rbind(filterdata2015[Reduce(intersect,list(colnames(filterdata2
                       colnames(filterdata2017),colnames(filterdata2018), colnames(filterdata2019)))])
 
 save(allfilterdata, file = "combi_redu_data.Rdata") 
+
+drugdata <- allfilterdata
+
+drugdata %>%
+  group_by(year) %>%
+  count(cigever) %>%
+  mutate(relative = n / sum(n)) %>%
+  ggplot(aes(x = factor(cigever, labels = c("Yes", "No")), y = relative, fill = cigever)) +
+  geom_col() +
+  facet_grid(~year) +
+  xlab("Ever smoked a cigarette?") +
+  ylab("relative share") +
+  theme_light()
+
+drugdata %>%
+  group_by(year) %>%
+  count(cigever) %>%
+  mutate(relative = n / sum(n)) %>%
+  ggplot(aes(x = year, y = relative, color = factor(cigever, labels = c("Yes", "No")))) +
+  geom_path() +
+  xlab("Ever smoked a cigarette?") +
+  ylab("Relative share") +
+  theme_light()
