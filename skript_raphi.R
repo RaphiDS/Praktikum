@@ -29,7 +29,7 @@ drugdata %>%
 Please do not include times when you only had a sip or two from a drink.") +
   theme_light()
 
-,# Column Graph for herever
+# Column Graph for herever
 drugdata %>%
   group_by(year) %>%
   count(herever) %>%
