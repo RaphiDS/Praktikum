@@ -29,7 +29,7 @@ drugdata %>%
 Please do not include times when you only had a sip or two from a drink.") +
   theme_light()
 
-# Column Graph for herever
+,# Column Graph for herever
 drugdata %>%
   group_by(year) %>%
   count(herever) %>%
@@ -55,7 +55,25 @@ drugdata %>%
   ggtitle("Have you ever, even once, used any form of cocaine?") +
   theme_light()
 
+# Column Graph for smklssevr
+drugdata %>%
+  group_by(year) %>%
+  count(pipever) %>%
+  mutate(relative = n / sum(n)) %>%
+  filter(pipever == 1) %>%
+  ggplot(aes(x = year, y = relative)) +
+  geom_col() +
+  xlab("Year") +
+  ylab("Share of people that answered \"Yes\"") +
+  ggtitle("Have you ever used \"smokeless\" tobacco, even once?") +
+  theme_light()
 
+drugdata %>%
+  filter(aldaypwk < 10) %>%
+  group_by(aldaypwk, year) %>%
+  count() %>%
+  ggplot(aes(x = year, y = n, fill = aldaypwk)) +
+  geom_col(position = "dodge")
 
 # ______________________________________________________________________________
 
