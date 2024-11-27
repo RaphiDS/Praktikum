@@ -14,28 +14,28 @@ summary(drugusedata)
 
 # creating graph for days cigs used in the last 30 days
 drugusedata %>%
-  filter(CGR30USE >= 1 & CGR30USE <= 30) %>% 
+  filter(CIG30USE >= 1 & CIG30USE <= 30) %>% 
   group_by(year) %>% 
-  summarize(avg_days = mean(CGR30USE, na.rm = TRUE)) %>% 
+  summarize(avg_days = mean(CIG30USE, na.rm = TRUE)) %>% 
   ggplot(aes(x = factor(year), y = avg_days)) + 
   geom_col(fill = "steelblue") + 
   labs(
-    title = "average days of cigar use in the past 30 days",
+    title = "average days of cigaretts use in the past 30 days",
     x = "Year", 
     y = "Average Days" 
   ) +
   theme_minimal() 
   
-#NOCH NICHT WIRKLICH SINNVOLL
-# Scatterplots for the number of days people smoked cigars in the past 30 days (2015-2019)
+#NOCH NICHT WIRKLICH SINNVOLL Probiere es mit häufigkeit vllt noch über farbe 
+# Scatterplots for the number of days people smoked cigarettes in the past 30 days (2015-2019)
 drugusedata %>%
-  filter(CGR30USE >= 1 & CGR30USE <= 30) %>%
-  ggplot(aes(x = year, y = CGR30USE)) +
+  filter(CGR30USE >= 1 & CIG30USE <= 30) %>%
+  ggplot(aes(x = year, y = CIG30USE)) +
   geom_point(position = position_jitter(width = 0.2, height = 0.2), 
              alpha = 0.5, color = "steelblue") +
   facet_wrap(~ year, nrow = 1, scales = "free_x") +
   labs(
-    title = "Number of Days People Smoked Cigars in the Past 30 Days (2015-2019)",
+    title = "number of days people smoked cigaretts in the Past 30 Days (2015-2019)",
     x = "Year",
     y = "Number of Days Smoked"
   ) +
@@ -48,7 +48,7 @@ drugusedata %>%
 drugusedata %>%
   group_by(year) %>%
   mutate(total_people = n()) %>%
-  filter(CGR30USE >= 1 & CGR30USE <= 30) %>%
+  filter(CIG30USE >= 1 & CIG30USE <= 30) %>%
   summarize(
     total_people = first(total_people),
     smokers_count = n(),
@@ -57,7 +57,7 @@ drugusedata %>%
   ggplot(aes(x = factor(year), y = percentage)) +
   geom_col(fill = "steelblue") +
   labs(
-    title = "Percentage of People Who Smoked Cigars in the Past 30 Days",
+    title = "Percentage of People who smoked cigaretts in the Past 30 Days",
     x = "Year",
     y = "smoked in %"
   ) +
