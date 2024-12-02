@@ -1,4 +1,5 @@
 # Skript Raphi
+load("C:/Users/49177/Desktop/Praktikum/Praktikum GIthub/StatPrak-Overdose/combi_redu_data.Rdata")
 drugdata <- allfilterdata
 library(tidyverse)
 
@@ -103,3 +104,54 @@ columngraph <- function(variable, title) {
     theme_light()
 }
 columngraph(drugdata$herever, "AB")
+
+
+cigeverdata <-  drugdata %>%
+    group_by(year) %>%
+    count(cigever) %>%
+    mutate(relative = n / sum(n)) %>%
+    filter(cigever == 1) %>%
+    select(year, relative) %>%
+    mutate(drug = "cig")
+
+alceverdata <-  drugdata %>%
+  group_by(year) %>%
+  count(alcever) %>%
+  mutate(relative = n / sum(n)) %>%
+  filter(alcever == 1) %>%
+  select(year, relative) %>%
+  mutate(drug = "alc")
+
+hereverdata <-  drugdata %>%
+  group_by(year) %>%
+  count(herever) %>%
+  mutate(relative = n / sum(n)) %>%
+  filter(herever == 1) %>%
+  select(year, relative) %>%
+  mutate(drug = "her")
+
+coceverdata <-  drugdata %>%
+  group_by(year) %>%
+  count(cocever) %>%
+  mutate(relative = n / sum(n)) %>%
+  filter(cocever == 1) %>%
+  select(year, relative) %>%
+  mutate(drug = "coc")
+reldata <- matrix(0)
+relative_data <- function(drug, text, index) {
+  reldata[index] <- drugdata %>%
+  group_by(year) %>%
+  count(drugdata[,drug]) %>%
+  mutate(relative = n / sum(n)) %>%
+  filter(drugdata[,drug] == 1) %>%
+  select(year, relative) %>%
+  mutate(drugdata[,drug] = text)
+}
+  
+
+everdata <- as.data.frame(rbind(alceverdata, cigeverdata, coceverdata, hereverdata))
+
+ggplot(everdata, aes(x = year, y = relative, color = drug)) +
+  geom_point() +
+  geom_line() +
+  theme_minimal()
