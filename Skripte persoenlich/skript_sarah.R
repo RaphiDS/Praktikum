@@ -39,4 +39,12 @@ ggplot(insurance.substance, aes(x = as.factor (values), fill = as.factor(values)
   ggtitle("Drug and alcohol abuse covered by private Insurance")+ 
   labs( fill = " Insurance status", x = "Status")
 
-## 
+## college enrollemnt(people aged 18-22, enrolled in School and College)
+college.enrollment <- data %>%
+  select(collenrlst) %>%
+  pivot_longer(cols = everything(), names_to = "status", values_to = "count") %>%
+  group_by(status)
+
+#graph
+ggplot(college.enrollment)+
+  geom_histogram(aes(x = status))
