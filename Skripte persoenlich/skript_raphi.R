@@ -1,5 +1,5 @@
 # Skript Raphi
-load("C:/Users/49177/Desktop/Praktikum/Praktikum GIthub/StatPrak-Overdose/combi_redu_data.Rdata")
+load("C:/Users/49177/Desktop/Praktikum/Praktikum GIthub/StatPrak-Overdose/Daten bearbeitet/combi_redu_data.Rdata")
 drugdata <- allfilterdata
 library(tidyverse)
 
@@ -19,11 +19,22 @@ alceverdata <- everdatafun("alcever", "Alcohol")
 hereverdata <- everdatafun("herever", "Heroin")
 coceverdata <- everdatafun("cocever", "Cocaine")
 smklsseverdata <- everdatafun("smklssevr", "Smokeless Tobacco")
+cigareverdata <- everdatafun("cigarevr", "Cigar")
+pipeeverdata <- everdatafun("pipever", "Pipe")
+
+
 
 #creating combined df to plot in the same graph
-everdata <- as.data.frame(rbind(alceverdata, cigeverdata, coceverdata, hereverdata, smklsseverdata))
+everdata <- as.data.frame(rbind(alceverdata, cigeverdata, coceverdata, hereverdata))
+tobaccodata <- as.data.frame(rbind(cigeverdata, smklsseverdata, pipeeverdata))
 
+#Plot for Drug Use
 ggplot(everdata, aes(x = year, y = relative, color = drug)) +
+  geom_point() + geom_line() +
+  theme_minimal()
+
+# Plot for Tobacco Use
+ggplot(tobaccodata, aes(x = year, y = relative, color = drug)) +
   geom_point() + geom_line() +
   theme_minimal()
 
@@ -50,7 +61,7 @@ graphfun1(smklsseverdata, "Have you ever used \"smokeless\" tobacco, even once?"
 # to do: display how often people smoked over the years
 drugdata %>%
   filter(aldaypwk < 10) %>%
-  group_by(aldaypwk, year) %>%
+  group_by(year, aldaypwk) %>%
   count() %>%
-  ggplot(aes(x = year, y = n, fill = aldaypwk)) +
-  geom_col(position = "dodge")
+  ggplot(aes(x = factor(year), y = n, fill = factor(aldaypwk))) +
+  geom_col(position = "fill", color = "black")
