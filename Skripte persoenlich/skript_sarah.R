@@ -8,6 +8,47 @@ data2019 <- PUF2019_100920
 library(ggplot2)
 library(tidyverse)
 
+## write function to filter for data --> type of yes/no/missing/no response
+filter_columns_dplyr <- function(data.set, columns_to_keep) {
+  data.set %>%  
+    #select the variable
+    select(all_of(columns_to_keep)) %>%  
+    
+    # shift the table to adjust values to fit a barplot
+    pivot_longer(cols = everything(), names_to = "variable", values_to = "value") %>% 
+    
+    # group values together
+    group_by(variable) 
+}
+filter_columns_dplyr(data2019, "wrkselfem")
+
+## function to create barplot
+
+create_barplot <- function(data, x_var, y_var = NULL, fill_var = NULL, title = "Bar Plot") {
+  # Assertions for input validation
+  assert(is.data.frame(data), "data must be a data frame")
+  assert(x_var %in% names(data), paste0("x_var '", x_var, "' must be a column in the data frame"))
+  if (!is.null(y_var)) assert(y_var %in% names(data), paste0("y_var '", y_var, "' must be a column in the data frame"))
+  if (!is.null(fill_var)) assert(fill_var %in% names(data), paste0("fill_var '", fill_var, "' must be a column in the data frame"))
+  
+  # Base ggplot object
+  if (is.null(y_var)) {
+    # Bar plot for counts
+    p <- ggplot(data, aes_string(x = x_var, fill = fill_var)) +
+      geom_bar()
+  } else {
+    # Bar plot for specific y values
+    p <- ggplot(data, aes_string(x = x_var, y = y_var, fill = fill_var)) +
+      geom_bar(stat = "identity")
+  }
+  
+  # Add title and theme
+  p <- p + labs(title = title, x = x_var, y = ifelse(is.null(y_var), "Count", y_var)) +
+    theme_minimal()
+  
+  # Return the plot
+  return(p)
+}
 
 ## combine Variables to find out who was employed the last 12 Months (or self employed)
 ### categorized into yes,no or no answer/NA
@@ -54,60 +95,23 @@ ggplot(college.enrollment, aes( x = value, fill = as.factor(value)))+
   labs(fill = "status")+
   theme_minimal()
 
-## write function to filter for data --> type of yes/no/missing/no response
-filter_columns_dplyr <- function(data.set, columns_to_keep) {
-  data.set %>%  
-    #select the variable
-    select(all_of(columns_to_keep)) %>%  
-    
-    # shift the table to adjust values to fit a barplot
-    pivot_longer(cols = everything(), names_to = "variable", values_to = "value") %>% 
-    
-    # group values together
-    group_by(variable) 
-}
-filter_columns_dplyr(data2019, "wrkselfem")
 
-## code to create barplot
 
-create_barplot <- function(data, x_var, y_var = NULL, fill_var = NULL, title = "Bar Plot") {
-  # Assertions for input validation
-  assert(is.data.frame(data), "data must be a data frame")
-  assert(x_var %in% names(data), paste0("x_var '", x_var, "' must be a column in the data frame"))
-  if (!is.null(y_var)) assert(y_var %in% names(data), paste0("y_var '", y_var, "' must be a column in the data frame"))
-  if (!is.null(fill_var)) assert(fill_var %in% names(data), paste0("fill_var '", fill_var, "' must be a column in the data frame"))
-  
-  # Base ggplot object
-  if (is.null(y_var)) {
-    # Bar plot for counts
-    p <- ggplot(data, aes_string(x = x_var, fill = fill_var)) +
-      geom_bar()
-  } else {
-    # Bar plot for specific y values
-    p <- ggplot(data, aes_string(x = x_var, y = y_var, fill = fill_var)) +
-      geom_bar(stat = "identity")
-  }
-  
-  # Add title and theme
-  p <- p + labs(title = title, x = x_var, y = ifelse(is.null(y_var), "Count", y_var)) +
-    theme_minimal()
-  
-  # Return the plot
-  return(p)
-}
+## AIA (indian) segments, general racial background, alcohol in these regions
+Racial.Background <- data2019 %>%
+  select (MAIIN102,NEWRACE2, sexrace, eduhighcat) 
 
-## AIA (indian) segments, alcohol in these regions
-AIA <- data2019 %>%
-  select (MAIIN102) 
 
 
 ## kovarianz: filter arbeitslos und kokain/ mariuana/alcohol /cigarette
+
+MY ORIGINAL ANSWER/TRIAL
 #substanceUse.Work <- data2019 %>%
-  select(wrkdpstyr, wrkselfem, cocrec, crakrec, herrec) %>%
-  filter( wrkdpstyr %in% c(1, 2) | wrkselfem %in% c(1, 2),          # Check if wrkdpstyr or wrkselfem equals 1 or 2
-    cocrec %in% c(1, 2) & crakrec %in% c(1, 2, 91) & herrec %in% c(1, 2, 91)) %>% # Check if cocrec, crakrec, and herrec all have values 1 or 2
-  mutate(employed = if_else(wrkdpstyr == 1 | wrkselfem == 1, 1, 2),       # Create "employed" column based on conditions
-         drug = if_else(cocrec == 91 & crakrec == 91, "heroin","cocain" | cocrec & crakrec & herrec == 1|2 ,"both" )) 
+ # select(wrkdpstyr, wrkselfem, cocrec, crakrec, herrec) %>%
+#  filter( wrkdpstyr %in% c(1, 2) | wrkselfem %in% c(1, 2),          # Check if wrkdpstyr or wrkselfem equals 1 or 2
+ #   cocrec %in% c(1, 2) & crakrec %in% c(1, 2, 91) & herrec %in% c(1, 2, 91)) %>% # Check if cocrec, crakrec, and herrec all have values 1 or 2
+ # mutate(employed = if_else(wrkdpstyr == 1 | wrkselfem == 1, 1, 2),       # Create "employed" column based on conditions
+      #   drug = if_else(cocrec == 91 & crakrec == 91, "heroin","cocain" | cocrec & crakrec & herrec == 1|2 ,"both" )) 
   
 substanceUse.Work <- data2019 %>%
   select(wrkdpstyr, wrkselfem, cocrec, crakrec, herrec) %>%
@@ -127,5 +131,7 @@ substanceUse.Work <- data2019 %>%
   group_by(drug)
 
   substanceUse.Work
+  
   ggplot(substanceUse.Work, aes(x = employed)) +
     geom_bar(aes(fill = as.factor(drug)))
+    
