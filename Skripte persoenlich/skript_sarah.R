@@ -56,12 +56,19 @@ ggplot(college.enrollment, aes( x = value, fill = as.factor(value)))+
 
 ## write function to filter for data --> type of yes/no/missing/no response
 filter_columns_dplyr <- function(data.set, columns_to_keep) {
-  data.set %>%
-    select(all_of(columns_to_keep)) %>%
-    pivot_longer(cols = everything(), names_to = "variable", values_to = "value") %>%
-    group_by(variable)
+  data.set %>%  
+    #select the variable
+    select(all_of(columns_to_keep)) %>%  
+    
+    # shift the table to adjust values to fit a barplot
+    pivot_longer(cols = everything(), names_to = "variable", values_to = "value") %>% 
+    
+    # group values together
+    group_by(variable) 
 }
 filter_columns_dplyr(data2019, "wrkselfem")
+
+## code to create barplot
 
 create_barplot <- function(data, x_var, y_var = NULL, fill_var = NULL, title = "Bar Plot") {
   # Assertions for input validation
@@ -89,4 +96,36 @@ create_barplot <- function(data, x_var, y_var = NULL, fill_var = NULL, title = "
   return(p)
 }
 
+## AIA (indian) segments, alcohol in these regions
+AIA <- data2019 %>%
+  select (MAIIN102) 
 
+
+## kovarianz: filter arbeitslos und kokain/ mariuana/alcohol /cigarette
+#substanceUse.Work <- data2019 %>%
+  select(wrkdpstyr, wrkselfem, cocrec, crakrec, herrec) %>%
+  filter( wrkdpstyr %in% c(1, 2) | wrkselfem %in% c(1, 2),          # Check if wrkdpstyr or wrkselfem equals 1 or 2
+    cocrec %in% c(1, 2) & crakrec %in% c(1, 2, 91) & herrec %in% c(1, 2, 91)) %>% # Check if cocrec, crakrec, and herrec all have values 1 or 2
+  mutate(employed = if_else(wrkdpstyr == 1 | wrkselfem == 1, 1, 2),       # Create "employed" column based on conditions
+         drug = if_else(cocrec == 91 & crakrec == 91, "heroin","cocain" | cocrec & crakrec & herrec == 1|2 ,"both" )) 
+  
+substanceUse.Work <- data2019 %>%
+  select(wrkdpstyr, wrkselfem, cocrec, crakrec, herrec) %>%
+  filter(
+    wrkdpstyr %in% c(1, 2) | wrkselfem %in% c(1, 2),          # Check if wrkdpstyr or wrkselfem equals 1 or 2
+    cocrec %in% c(1, 2,91) & crakrec %in% c(1, 2, 91) & herrec %in% c(1, 2, 91) # Check if cocrec, crakrec, and herrec have valid values
+  ) %>%
+  mutate(
+    employed = if_else(wrkdpstyr == 1 | wrkselfem == 1, 1, 2),  # Create "employed" column
+    drug = case_when(                                         # Create "drug" column with multiple conditions
+      cocrec == 91 & crakrec == 91 & herrec == 1 ~ "heroin",
+      cocrec %in% c(1, 2) & crakrec %in% c(1, 2) & herrec %in% c(1, 2) ~ "both",
+      cocrec %in% c(1, 2) | crakrec %in% c(1, 2) ~ "cocain",
+      TRUE ~ NA_character_                                    # Assign NA for rows that do not match any condition
+    )
+  ) %>%
+  group_by(drug)
+
+  substanceUse.Work
+  ggplot(substanceUse.Work, aes(x = employed)) +
+    geom_bar(aes(fill = as.factor(drug)))
