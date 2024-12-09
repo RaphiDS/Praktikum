@@ -1,10 +1,5 @@
-load("C:/Users/denis/OneDrive/Desktop/RStudio/locales/StatPrak-Overdose/NSDUH_2015.RData")
-load("C:/Users/denis/OneDrive/Desktop/RStudio/locales/StatPrak-Overdose/NSDUH_2016.RData")
-load("C:/Users/denis/OneDrive/Desktop/RStudio/locales/StatPrak-Overdose/NSDUH_2017.RData")
-load("C:/Users/denis/OneDrive/Desktop/RStudio/locales/StatPrak-Overdose/NSDUH_2018.RData")
-load("C:/Users/denis/OneDrive/Desktop/RStudio/locales/StatPrak-Overdose/NSDUH_2019.RData")
+load("C:/Users/denis/OneDrive/Desktop/RStudio/locales/StatPrak-Overdose/Daten bearbeitet/combi_redu_data.Rdata")
 
-load("C:/Users/denis/OneDrive/Desktop/RStudio/locales/StatPrak-Overdose/combi_redu_data.Rdata")
 drugusedata <- allfilterdata
 library(tidyverse)
 library(checkmate)
@@ -62,3 +57,178 @@ drugusedata %>%
     y = "smoked in %"
   ) +
   theme_minimal()
+
+# Nur von denen die geraucht haben 
+drugusedata %>%
+  filter(CIG30USE >= 1 & CIG30USE <= 30) %>%
+  ggplot(aes(x = factor(year), y = CIG30USE)) +
+  geom_boxplot(fill = "steelblue", color = "black", alpha = 0.7, outlier.color = "red", outlier.shape = 16) +
+  labs(
+    title = "Boxplots der Anzahl gerauchter Tage (2015-2019)",
+    x = "Jahr",
+    y = "Anzahl der Tage (geraucht)"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12)
+  )
+
+
+# Boxplot für Anzahl tage cigs geraucht NICHT WIRKLICH SINNVOLL
+drugusedata %>%
+  mutate(CIG30USE = ifelse(CIG30USE %in% c(91, 93), 0, CIG30USE)) %>%  
+  filter(CIG30USE >= 0 & CIG30USE <= 30) %>%  
+  ggplot(aes(x = factor(year), y = CIG30USE)) +
+  geom_boxplot(fill = "steelblue", color = "black", alpha = 0.7, outlier.color = "red", outlier.shape = 16) +
+  labs(
+    title = "Boxplots der Anzahl gerauchter Tage (inklusive Nichtraucher) 2015-2019",
+    x = "Jahr",
+    y = "Anzahl der Tage (geraucht)"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12)
+  )
+
+
+# Cigs Histogram Anzahl gerauchter Tage inkl. Nichtraucher Totale Häugigkeiten 
+drugusedata %>%
+  mutate(CIG30USE = ifelse(CIG30USE %in% c(91, 93), 0, CIG30USE)) %>%  
+  filter(CIG30USE >= 0 & CIG30USE <= 30) %>%  
+  ggplot(aes(x = CIG30USE)) +
+  geom_histogram(binwidth = 1, fill = "steelblue", color = "black", alpha = 0.7) +
+  facet_wrap(~ year, nrow = 1, scales = "free_y") +  
+  labs(
+    title = "Histogramme der Anzahl gerauchter Tage (inklusive Nichtraucher, 2015-2019)",
+    x = "Anzahl der Tage (geraucht)",
+    y = "Häufigkeit"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12),
+    strip.text = element_text(size = 12)  
+  )
+
+
+# anzahl gerauchter Tage in relativen Häufigkeiten inkl. Nichtraucher 
+drugusedata %>%
+  mutate(CGR30USE = ifelse(CGR30USE %in% c(91, 93), 0, CGR30USE)) %>%
+  ggplot(aes(x = CGR30USE)) +
+  geom_histogram(aes(y = after_stat(density)), 
+                 binwidth = 1, 
+                 fill = "steelblue", 
+                 color = "black", 
+                 alpha = 0.7) +
+  facet_wrap(~ year, nrow = 1, scales = "free_y") +
+  labs(
+    title = "Relative Häufigkeiten der Rauchtage (2015-2019)",
+    x = "Anzahl der gerauchten Tage",
+    y = "Relative Häufigkeit"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
+    axis.title.x = element_text(size = 14),
+    axis.title.y = element_text(size = 14),
+    strip.text = element_text(size = 12)
+  )
+
+
+# Cigs relative Häufigkeiten NUR Raucher in Historgram
+drugusedata %>%
+  filter(CGR30USE >= 1 & CGR30USE <= 30) %>% 
+  ggplot(aes(x = CGR30USE)) +
+  geom_histogram(aes(y = after_stat(density)), 
+                 binwidth = 1, 
+                 fill = "steelblue", 
+                 color = "black", 
+                 alpha = 0.7) +
+  facet_wrap(~ year, nrow = 1, scales = "free_y") +
+  labs(
+    title = "Relative Häufigkeiten der Rauchtage (2015-2019)",
+    x = "Anzahl der gerauchten Tage",
+    y = "Relative Häufigkeit"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
+    axis.title.x = element_text(size = 14),
+    axis.title.y = element_text(size = 14),
+    strip.text = element_text(size = 12)
+  )
+
+
+# cigs relative Häufigkeit der gerauchten Tage 
+drugusedata %>%
+  mutate(CGR30USE = ifelse(CGR30USE %in% c(91, 93), 0, CGR30USE)) %>% # Nichtraucher als 0 kodieren
+  filter(CGR30USE > 0) %>% # Nichtraucher aus der Darstellung ausschließen
+  ggplot(aes(x = CGR30USE)) +
+  geom_histogram(aes(y = after_stat(count / sum(count))), # Relative Häufigkeit
+                 binwidth = 1, 
+                 fill = "steelblue", 
+                 color = "black", 
+                 alpha = 0.7) +
+  facet_wrap(~ year, nrow = 1, scales = "free_y") +
+  scale_x_continuous(breaks = seq(0, 30, by = 5), limits = c(1, 30)) + # Alle 5 Tage ein Label
+  labs(
+    title = "Relative Häufigkeiten der Rauchtage (2015-2019)",
+    x = "Anzahl der gerauchten Tage",
+    y = "Relative Häufigkeit"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
+    axis.title.x = element_text(size = 14),
+    axis.title.y = element_text(size = 14),
+    strip.text = element_text(size = 12)
+  )
+
+
+# Cigars Versuche es in Histogrammen besser darzustellen  von Leuten die geraucht haben 
+drugusedata %>%
+  filter(CGR30USE >= 1 & CGR30USE <= 30) %>%
+  ggplot(aes(x = CGR30USE)) +
+  geom_histogram(binwidth = 1, fill = "steelblue", color = "black", alpha = 0.7) +
+  facet_wrap(~ year, nrow = 1, scales = "free_y") +
+  labs(
+    title = "Histograms of Number of Days Smoked Cigars (2015-2019)",
+    x = "Number of Days Smoked",
+    y = "Frequency"
+  ) +
+  theme_minimal()
+
+
+# Creating boxplot for the number of days cigars were smoked in the past 30 days (grouped by year) VON LEUTEN DIE GERAUCHT HABEN 
+drugusedata %>%
+  filter(CGR30USE >= 1 & CGR30USE <= 30) %>%
+  ggplot(aes(x = factor(year), y = CGR30USE)) +
+  geom_boxplot(fill = "steelblue", color = "black", alpha = 0.7, outlier.color = "red", outlier.shape = 16) +
+  labs(
+    title = "Boxplots of Number of Days Smoked Cigars (2015-2019)",
+    x = "Year",
+    y = "Anzahl Tage (geraucht)"
+  ) +
+  theme_minimal()
+
+
+# Adjusting data to include non-smokers as 0 days smoked        ABER NICHT SO SINNVOLL
+drugusedata %>%
+  mutate(CGR30USE = ifelse(CGR30USE %in% c(91, 93), 0, CGR30USE)) %>%
+  filter(CGR30USE %in% c(0:30)) %>%
+  ggplot(aes(x = factor(year), y = CGR30USE)) +
+  geom_boxplot(fill = "steelblue", color = "black", alpha = 0.7, outlier.color = "black", outlier.shape = 16) +
+  labs(
+    title = "Boxplots of Number of Days Smoked Cigars (2015-2019)",
+    x = "Year",
+    y = "Number of Days Smoked"
+  ) +
+  theme_minimal()
+
+
+
