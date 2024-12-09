@@ -3,7 +3,9 @@
 ## datensatz: demografische Faktoren ahnschauen
 
 load("C:/Users/sarah/OneDrive/UNI/WS 24_25/Praktikum/Datensätze/NSDUH-2019-DS0001-bndl-data-r/NSDUH_2019.RData")
-data2019 <- PUF2019_100920
+data2019 <- PUF2019_100920                   # loading data set
+
+## installing rquired packages
 
 library(ggplot2)
 library(tidyverse)
@@ -54,11 +56,11 @@ create_barplot <- function(data, x_var, y_var = NULL, fill_var = NULL, title = "
 ### categorized into yes,no or no answer/NA
 
 general.employment <- data2019%>%
-  select(wrkdpstyr, wrkselfem) %>%
+  select(wrkdpstyr, wrkselfem) %>%                          #select needed variables
   filter(wrkdpstyr %in% c(1,2) | wrkselfem %in% c(1,2)) %>%
-  pivot_longer(cols = everything(), names_to = "variable", values_to = "value") %>%
+  pivot_longer(cols = everything(), names_to = "variable", values_to = "value") %>% #rearange table to fit values for barplot
   group_by(variable,value) %>%
-  summarise(count = n(), .groups = 'drop')
+  summarise(count = n(), .groups = 'drop')            # group to find summarized values for the bar
   
 general.employment
 
