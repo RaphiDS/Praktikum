@@ -99,9 +99,9 @@ boxplotfun("herage")
 boxplotfun("alctry")
 
 
-#Alter bei Anfang von Konsum
+#Alter bei Anfang von Konsum fertig
 
-# Bedingte Häufigkeit bei Drogenkonsum
+# Bedingte Häufigkeit bei Drogenkonsum als tabelle fertig
 
 # Farbskalen
 
