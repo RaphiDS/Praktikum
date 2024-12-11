@@ -83,7 +83,7 @@ ggplot(insurance.substance, aes(x = as.factor (values), fill = as.factor(values)
   ggtitle("Drug and alcohol abuse covered by private Insurance")+ 
   labs( fill = " Insurance status", x = "Status")
 
-## college enrollemnt(people aged 18-22, enrolled in School and College)
+## college enrollment(people aged 18-22, enrolled in School and College)
 college.enrollment <- data2019 %>%
   select(collenrlst) %>%
   pivot_longer(cols = everything(), names_to = "status", values_to = "value") %>%
@@ -105,6 +105,8 @@ Racial.Background <- data2019 %>%
 
 
 Racial.Background$labels <- paste(as.character(Racial.Background$NEWRACE2)) ## trying to change label of plot
+
+## Plot for Eudcation level dependend on race
 
 ggplot(Racial.Background, aes(x = eduhighcat))+
   geom_bar()+
