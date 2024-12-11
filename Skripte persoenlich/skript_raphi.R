@@ -99,10 +99,6 @@ boxplotfun("herage")
 boxplotfun("alctry")
 
 
-#Alter bei Anfang von Konsum fertig
-
-# Bedingte Häufigkeit bei Drogenkonsum als tabelle fertig
+# Bedingte Häufigkeit bei Drogenkonsum als tabelle machen, nicht nur Tabak
 
 # Farbskalen
-
-# Erklärung 2017 raussuchen
