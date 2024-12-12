@@ -248,3 +248,14 @@ drugusedata %>%
 
 
 
+# CIG30USE HOW MANY DAYS SMOKED CIG IN PAST 30 DAYS
+# CGR30USE HOW MANY DAYS SMOKED CIGAR IN PAST 30 DAYS
+# ALCUS30D ist für #Drinks in den letzten 30 Tagen  
+# AL30EST ist für #Tagen an denen min. ein Drink in den letzten 30 Tagen
+# COCUS30A ist für #Tage an denen Kokain in den letzten 30 Tagen
+# CC30EST BEST ESTIMATE # DAYS USED COCAINE PAST 30 DAYS
+# HER30USE # DAYS USED HEROIN PAST 30 DAYS
+# HR30EST BEST EST. # DAYS USED HEROIN PAST 30 DAYS
+
+
+
