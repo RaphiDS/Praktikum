@@ -166,32 +166,26 @@ drugusedata %>%
 
 # cigs relative Häufigkeit der gerauchten Tage 
 
-# Relative Häufigkeiten der gerauchten Tage (mit Berücksichtigung aller Sondercodes)
-drugusedata %>%
+drugusedata_clean <- drugusedata %>%
   mutate(
-    # Alle Sonderwerte, die keine tatsächlichen Rauchtage darstellen, auf 0 setzen
-    CGR30USE = ifelse(CGR30USE %in% c(91, 93, 94, 97, 98), 0, CGR30USE)
-  ) %>% 
-  # Nichtraucher und Sonderfälle ausschließen
-  filter(CGR30USE > 0) %>% 
-  # Fehlende Werte entfernen, falls vorhanden
-  filter(!is.na(CGR30USE)) %>% 
+    CGR30USE = ifelse(CGR30USE %in% c(91,93,94,97,98), NA, CGR30USE)
+  ) %>%
+  filter(!is.na(CGR30USE)) %>%
+  filter(CGR30USE > 0, CGR30USE <= 30)
+
+
+drugusedata_clean %>%
   ggplot(aes(x = CGR30USE)) +
   geom_histogram(
     aes(y = after_stat(count / sum(count))),
-    # Manuelle Festlegung der Bins für jeden einzelnen Tag von 1 bis 30
     breaks = seq(0.5, 30.5, by = 1),
     fill = "steelblue",
     color = "black",
-    alpha = 0.7
+    alpha = 0.7,
+    na.rm = TRUE  # Entfernt dennoch eventuell auftretende NA-Werte beim Plotten
   ) +
-  # Facettierung nach Jahr, unterschiedliche Y-Skalen pro Facette
   facet_wrap(~ year, nrow = 1, scales = "free_y") +
-  # X-Achse: Beschriftung alle 5 Tage, von Tag 1 bis 30
-  scale_x_continuous(
-    breaks = seq(5, 30, by = 5),
-    limits = c(1, 30)
-  ) +
+  scale_x_continuous(breaks = seq(5, 30, by = 5), limits = c(1, 30)) +
   labs(
     title = "Relative Häufigkeiten der Rauchtage (2015-2019)",
     x = "Anzahl der gerauchten Tage",
@@ -204,6 +198,7 @@ drugusedata %>%
     axis.title.y = element_text(size = 14),
     strip.text = element_text(size = 12)
   )
+
 
 
 # Cigars Versuche es in Histogrammen besser darzustellen  von Leuten die geraucht haben 
