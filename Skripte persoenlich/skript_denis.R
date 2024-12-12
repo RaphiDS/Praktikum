@@ -237,79 +237,75 @@ drugusedata %>%
 # HER30USE # DAYS USED HEROIN PAST 30 DAYS
 # HR30EST BEST EST. # DAYS USED HEROIN PAST 30 DAYS
 
-# Beispielhafte Funktion zur Berechnung der relativen Anteile
-usage_data_fun <- function(datacol, drug_name) {
+
+# Funktion: Daten für eine bestimmte Droge vorbereiten.
+# Werte von 1–30 bleiben so, alle anderen werden auf 0 gesetzt.
+prepare_data <- function(datacol, drug_name) {
   drugusedata %>%
-    group_by(year) %>%
-    # Zähle wie oft jeder Wert vorkommt
-    count(.data[[datacol]]) %>%
-    # Berechne pro Jahr den relativen Anteil
-    mutate("Relative share" = n / sum(n)) %>%
-    # Filter auf gültige Werte (1-30)
-    filter(.data[[datacol]] >= 1 & .data[[datacol]] <= 30) %>%
-    ungroup() %>%
-    mutate(Drug = drug_name) %>% 
-    select(year, "Relative share", Drug)
-}
-
-# Erzeuge Einzeldatensätze für jede Droge
-her30_usage_data <- usage_data_fun("HER30USE", "Heroin")
-coc30_usage_data <- usage_data_fun("COCUS30A", "Cocaine")
-alc30_usage_data <- usage_data_fun("ALCUS30D", "Alcohol")
-cig30_usage_data <- usage_data_fun("CIG30USE", "Cigarettes")
-
-# Kombiniere alle Datensätze
-combined_drug_usage <- bind_rows(her30_usage_data, coc30_usage_data, alc30_usage_data, cig30_usage_data)
-
-# Liniendiagramm für alle Drogen über die Jahre
-ggplot(combined_drug_usage, aes(x = year, y = `Relative share`, color = Drug)) +
-  geom_point() +
-  geom_line() +
-  theme_light() +
-  labs(
-    title = "Relative share of people using substances (1-30 days) in the last 30 days",
-    x = "Year",
-    y = "Relative Share"
-  )
-
-# Boxplots für jede Droge:
-# Hier wollen wir die Verteilung der tatsächlichen Tage (1-30) pro Jahr plotten.
-# Dafür benötigen wir den ursprünglichen Datensatz gefiltert nach 1-30 Tagen Nutzung.
-# Wir können diesen Schritt modularisieren, indem wir eine Funktion schreiben, 
-# die einen Subdatensatz für Boxplots liefert.
-
-boxplot_data_fun <- function(datacol, drug_name) {
-  drugusedata %>%
-    filter(.data[[datacol]] >= 1 & .data[[datacol]] <= 30) %>%
-    mutate(Drug = drug_name, UsageDays = .data[[datacol]]) %>%
+    mutate(
+      UsageDays = case_when(
+        .data[[datacol]] >= 1 & .data[[datacol]] <= 30 ~ .data[[datacol]],
+        TRUE ~ 0
+      ),
+      Drug = drug_name
+    ) %>%
     select(year, Drug, UsageDays)
 }
 
-her30_box_data <- boxplot_data_fun("HER30USE", "Heroin")
-coc30_box_data <- boxplot_data_fun("COCUS30A", "Cocaine")
-alc30_box_data <- boxplot_data_fun("ALCUS30D", "Alcohol")
-cig30_box_data <- boxplot_data_fun("CIG30USE", "Cigarettes")
+# Funktion: Durchschnittliche Nutzungstage pro Jahr (inkl. 0-Tage-Nutzer)
+avg_data_fun <- function(datacol, drug_name) {
+  prepare_data(datacol, drug_name) %>%
+    group_by(year, Drug) %>%
+    summarize(avg_days = mean(UsageDays, na.rm = TRUE), .groups = "drop")
+}
 
-# Nun erstellen wir für jede Droge einen Boxplot:
+# Daten für jede Droge mit Durchschnitt berechnen
+her30_avg_data <- avg_data_fun("HER30USE", "Heroin")
+coc30_avg_data <- avg_data_fun("COCUS30A", "Cocaine")
+alc30_avg_data <- avg_data_fun("ALCUS30D", "Alcohol")
+cig30_avg_data <- avg_data_fun("CIG30USE", "Cigarettes")
+
+# Kombinierte Daten für das Liniendiagramm
+combined_avg_usage <- bind_rows(her30_avg_data, coc30_avg_data, alc30_avg_data, cig30_avg_data)
+
+# Liniendiagramm mit Durchschnittstagen (inkl. 0er)
+ggplot(combined_avg_usage, aes(x = year, y = avg_days, color = Drug)) +
+  geom_point(size = 3) +
+  geom_line() +
+  theme_light() +
+  labs(
+    title = "Average number of days using substances (including non-users as 0)",
+    x = "Year",
+    y = "Average Usage Days"
+  )
+
+# Daten für Boxplots erstellen (inklusive 0-Werte)
+her30_box_data <- prepare_data("HER30USE", "Heroin")
+coc30_box_data <- prepare_data("COCUS30A", "Cocaine")
+alc30_box_data <- prepare_data("ALCUS30D", "Alcohol")
+cig30_box_data <- prepare_data("CIG30USE", "Cigarettes")
+
+# Boxplots (inkl. 0-Werte)
 ggplot(her30_box_data, aes(x = factor(year), y = UsageDays)) +
   geom_boxplot() +
   theme_light() +
-  labs(title = "Heroin usage days in the last 30 days (1-30)", x = "Year", y = "Days")
+  labs(title = "Heroin usage days including non-users (0)", x = "Year", y = "Usage Days")
 
 ggplot(coc30_box_data, aes(x = factor(year), y = UsageDays)) +
   geom_boxplot() +
   theme_light() +
-  labs(title = "Cocaine usage days in the last 30 days (1-30)", x = "Year", y = "Days")
+  labs(title = "Cocaine usage days including non-users (0)", x = "Year", y = "Usage Days")
 
 ggplot(alc30_box_data, aes(x = factor(year), y = UsageDays)) +
   geom_boxplot() +
   theme_light() +
-  labs(title = "Alcohol usage days in the last 30 days (1-30)", x = "Year", y = "Days")
+  labs(title = "Alcohol usage days including non-users (0)", x = "Year", y = "Usage Days")
 
 ggplot(cig30_box_data, aes(x = factor(year), y = UsageDays)) +
   geom_boxplot() +
   theme_light() +
-  labs(title = "Cigarettes usage days in the last 30 days (1-30)", x = "Year", y = "Days")
+  labs(title = "Cigarettes usage days including non-users (0)", x = "Year", y = "Usage Days")
+
 
 
 
