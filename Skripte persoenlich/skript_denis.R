@@ -21,21 +21,6 @@ drugusedata %>%
   ) +
   theme_minimal() 
   
-#NOCH NICHT WIRKLICH SINNVOLL Probiere es mit häufigkeit vllt noch über farbe 
-# Scatterplots for the number of days people smoked cigarettes in the past 30 days (2015-2019)
-drugusedata %>%
-  filter(CGR30USE >= 1 & CIG30USE <= 30) %>%
-  ggplot(aes(x = year, y = CIG30USE)) +
-  geom_point(position = position_jitter(width = 0.2, height = 0.2), 
-             alpha = 0.5, color = "steelblue") +
-  facet_wrap(~ year, nrow = 1, scales = "free_x") +
-  labs(
-    title = "number of days people smoked cigaretts in the Past 30 Days (2015-2019)",
-    x = "Year",
-    y = "Number of Days Smoked"
-  ) +
-  theme_minimal()
-
 
 
 
@@ -251,6 +236,85 @@ drugusedata %>%
 # CC30EST BEST ESTIMATE # DAYS USED COCAINE PAST 30 DAYS
 # HER30USE # DAYS USED HEROIN PAST 30 DAYS
 # HR30EST BEST EST. # DAYS USED HEROIN PAST 30 DAYS
+
+# Beispielhafte Funktion zur Berechnung der relativen Anteile
+usage_data_fun <- function(datacol, drug_name) {
+  drugusedata %>%
+    group_by(year) %>%
+    # Zähle wie oft jeder Wert vorkommt
+    count(.data[[datacol]]) %>%
+    # Berechne pro Jahr den relativen Anteil
+    mutate("Relative share" = n / sum(n)) %>%
+    # Filter auf gültige Werte (1-30)
+    filter(.data[[datacol]] >= 1 & .data[[datacol]] <= 30) %>%
+    ungroup() %>%
+    mutate(Drug = drug_name) %>% 
+    select(year, "Relative share", Drug)
+}
+
+# Erzeuge Einzeldatensätze für jede Droge
+her30_usage_data <- usage_data_fun("HER30USE", "Heroin")
+coc30_usage_data <- usage_data_fun("COCUS30A", "Cocaine")
+alc30_usage_data <- usage_data_fun("ALCUS30D", "Alcohol")
+cig30_usage_data <- usage_data_fun("CIG30USE", "Cigarettes")
+
+# Kombiniere alle Datensätze
+combined_drug_usage <- bind_rows(her30_usage_data, coc30_usage_data, alc30_usage_data, cig30_usage_data)
+
+# Liniendiagramm für alle Drogen über die Jahre
+ggplot(combined_drug_usage, aes(x = year, y = `Relative share`, color = Drug)) +
+  geom_point() +
+  geom_line() +
+  theme_light() +
+  labs(
+    title = "Relative share of people using substances (1-30 days) in the last 30 days",
+    x = "Year",
+    y = "Relative Share"
+  )
+
+# Boxplots für jede Droge:
+# Hier wollen wir die Verteilung der tatsächlichen Tage (1-30) pro Jahr plotten.
+# Dafür benötigen wir den ursprünglichen Datensatz gefiltert nach 1-30 Tagen Nutzung.
+# Wir können diesen Schritt modularisieren, indem wir eine Funktion schreiben, 
+# die einen Subdatensatz für Boxplots liefert.
+
+boxplot_data_fun <- function(datacol, drug_name) {
+  drugusedata %>%
+    filter(.data[[datacol]] >= 1 & .data[[datacol]] <= 30) %>%
+    mutate(Drug = drug_name, UsageDays = .data[[datacol]]) %>%
+    select(year, Drug, UsageDays)
+}
+
+her30_box_data <- boxplot_data_fun("HER30USE", "Heroin")
+coc30_box_data <- boxplot_data_fun("COCUS30A", "Cocaine")
+alc30_box_data <- boxplot_data_fun("ALCUS30D", "Alcohol")
+cig30_box_data <- boxplot_data_fun("CIG30USE", "Cigarettes")
+
+# Nun erstellen wir für jede Droge einen Boxplot:
+ggplot(her30_box_data, aes(x = factor(year), y = UsageDays)) +
+  geom_boxplot() +
+  theme_light() +
+  labs(title = "Heroin usage days in the last 30 days (1-30)", x = "Year", y = "Days")
+
+ggplot(coc30_box_data, aes(x = factor(year), y = UsageDays)) +
+  geom_boxplot() +
+  theme_light() +
+  labs(title = "Cocaine usage days in the last 30 days (1-30)", x = "Year", y = "Days")
+
+ggplot(alc30_box_data, aes(x = factor(year), y = UsageDays)) +
+  geom_boxplot() +
+  theme_light() +
+  labs(title = "Alcohol usage days in the last 30 days (1-30)", x = "Year", y = "Days")
+
+ggplot(cig30_box_data, aes(x = factor(year), y = UsageDays)) +
+  geom_boxplot() +
+  theme_light() +
+  labs(title = "Cigarettes usage days in the last 30 days (1-30)", x = "Year", y = "Days")
+
+
+
+
+
 
 
 
