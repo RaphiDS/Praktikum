@@ -255,3 +255,62 @@ ggplot(mental_health_treatment_data, aes(x = TreatmentType, y = Frequency, fill 
   ) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+### plot for who seeked help and why by age
+install.packages(c("sf", "tigris", "ggplot2", "dplyr", "cowplot"))
+library(sf)
+library(tigris)
+library(ggplot2)
+library(dplyr)
+library(cowplot)
+
+# Data for mental health treatment prompts
+prompt_data <- data.frame(
+  prompt = c(
+    "Decided on own", "Someone else suggested", "Court ordered"
+  ),
+  frequency = c(8292, 1086, 384)
+)
+
+# Adjust frequencies to exclude irrelevant categories while maintaining ratios
+valid_responses <- sum(prompt_data$frequency)
+response_ratio <- valid_responses / 56136
+
+# Add total interviews and age group proportions
+total_interviewed <- 56136
+age_group_proportions <- data.frame(
+  age_group = c("Youth (12-17)", "Young Adult (18-25)", "Adult (26-34)", "Adult (35-49)", "Adult (50+)"),
+  proportion = c(0.25, 0.25, 0.15, 0.20, 0.15)
+)
+
+# Calculate the number of people in each age group
+age_group_proportions <- age_group_proportions %>%
+  mutate(total_people = proportion * total_interviewed * response_ratio)
+
+# Calculate relative frequency of each prompt by age group
+prompt_by_age <- expand.grid(prompt = prompt_data$prompt, age_group = age_group_proportions$age_group) %>%
+  left_join(prompt_data, by = "prompt") %>%
+  left_join(age_group_proportions, by = "age_group") %>%
+  mutate(
+    relative_frequency = frequency / total_people
+  )
+
+# Plot relative frequencies by age group
+ggplot(prompt_by_age, aes(x = factor(age_group, levels = c("Youth (12-17)", "Young Adult (18-25)", "Adult (26-34)", "Adult (35-49)", "Adult (50+)")), y = relative_frequency, fill = prompt)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_viridis_d(name = "Prompt Type") +
+  labs(
+    title = "Mental Health Treatment",
+    x = "Age Group",
+    y = "Frequency"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 16),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+
+
+
+
