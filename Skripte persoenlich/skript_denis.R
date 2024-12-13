@@ -314,7 +314,7 @@ ggplot(coc30_box_data, aes(x = factor(year), y = UsageDays)) +
 ggplot(alc30_box_data, aes(x = factor(year), y = UsageDays)) +
   geom_boxplot() +
   theme_light() +
-  coord_cartesian(ylim = c(0, 30)) +
+  coord_cartesian(ylim = c(0, 15)) +
   labs(title = "Alcohol usage days including non-users (0)", x = "Year", y = "Usage Days")
 
 ggplot(cig30_box_data, aes(x = factor(year), y = UsageDays)) +
