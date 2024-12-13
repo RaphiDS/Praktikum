@@ -237,6 +237,10 @@ drugusedata %>%
 # HER30USE # DAYS USED HEROIN PAST 30 DAYS
 # HR30EST BEST EST. # DAYS USED HEROIN PAST 30 DAYS
 
+#============================================================================================
+# Hier versucht es mit Funktionen und in Raphis Stil zu machen. Es klappt besser, aber noch nicht ganz.
+# Probleme: Bei den Boxplots von Hero, Cigs und Coc sieht man nicht => evtl. noch reinzoomen  
+#============================================================================================
 
 # Funktion: Daten für eine bestimmte Droge vorbereiten.
 # Werte von 1–30 bleiben so, alle anderen werden auf 0 gesetzt.
@@ -289,22 +293,60 @@ cig30_box_data <- prepare_data("CIG30USE", "Cigarettes")
 ggplot(her30_box_data, aes(x = factor(year), y = UsageDays)) +
   geom_boxplot() +
   theme_light() +
+  coord_cartesian(ylim = c(0, 5)) +
   labs(title = "Heroin usage days including non-users (0)", x = "Year", y = "Usage Days")
 
 ggplot(coc30_box_data, aes(x = factor(year), y = UsageDays)) +
   geom_boxplot() +
   theme_light() +
+  coord_cartesian(ylim = c(0, 5)) +
   labs(title = "Cocaine usage days including non-users (0)", x = "Year", y = "Usage Days")
 
 ggplot(alc30_box_data, aes(x = factor(year), y = UsageDays)) +
   geom_boxplot() +
   theme_light() +
+  coord_cartesian(ylim = c(0, 5)) +
   labs(title = "Alcohol usage days including non-users (0)", x = "Year", y = "Usage Days")
 
 ggplot(cig30_box_data, aes(x = factor(year), y = UsageDays)) +
   geom_boxplot() +
   theme_light() +
+  coord_cartesian(ylim = c(0, 5)) + 
   labs(title = "Cigarettes usage days including non-users (0)", x = "Year", y = "Usage Days")
+
+#=============================================================
+# Versuch es mit histogrammen besser darzustellen
+# => funktioniert besser, bin mir aber noch nicht sicher 
+#    ob die Werte stimmen
+#=============================================================
+
+# Funktion zur Berechnung der relativen Anteile und Erstellen des Histogramms
+histogram_fun <- function(datacol, drug_name) {
+  data <- drugusedata %>%
+    group_by(year) %>%
+    count(day = .data[[datacol]]) %>%
+    mutate("Relative share" = n / sum(n)) %>%
+    # Nur Tage zwischen 1 und 30 filtern
+    filter(day >= 1 & day <= 30) %>%
+    ungroup() %>%
+    mutate(Drug = drug_name)
+  
+  ggplot(data, aes(x = factor(day), y = `Relative share`)) +
+    geom_col(fill = "steelblue", color = "black", alpha = 0.7) +
+    facet_wrap(~year) +
+    theme_light() +
+    labs(
+      title = paste0("Distribution of usage days for ", drug_name),
+      x = "Number of Days Used in Last 30 Days",
+      y = "Relative Share"
+    )
+}
+
+# Beispielaufrufe für jede Droge:
+histogram_fun("CIG30USE", "Cigarettes")
+histogram_fun("ALCUS30D", "Alcohol")
+histogram_fun("COCUS30A", "Cocaine")
+histogram_fun("HER30USE", "Heroin")
 
 
 
