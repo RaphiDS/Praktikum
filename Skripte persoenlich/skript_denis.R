@@ -1,3 +1,7 @@
+#================================================
+# Laden von Daten und nötigen Paketen
+#================================================
+
 load("C:/Users/denis/OneDrive/Desktop/RStudio/locales/StatPrak-Overdose/Daten bearbeitet/combi_redu_data.Rdata")
 
 drugusedata <- allfilterdata
@@ -6,6 +10,11 @@ library(checkmate)
 str(drugusedata)
 summary(drugusedata)
 
+
+#===============================================================================
+# Im Folgendem sind die ersten Versuche etwas herauszufinden.
+# => das meiste ist noch nicht sehr sinnvoll
+#===============================================================================
 
 # creating graph for days cigs used in the last 30 days
 drugusedata %>%
@@ -21,8 +30,6 @@ drugusedata %>%
   ) +
   theme_minimal() 
   
-
-
 
 #smoked in the last 30 days in percent
 drugusedata %>%
@@ -240,6 +247,7 @@ drugusedata %>%
 #============================================================================================
 # Hier versucht es mit Funktionen und in Raphis Stil zu machen. Es klappt besser, aber noch nicht ganz.
 # Probleme: Bei den Boxplots von Hero, Cigs und Coc sieht man nicht => evtl. noch reinzoomen  
+# auch nach reinzoomen noch nicht sehr aussagekräfitg, da immer noch extrem nah an 0
 #============================================================================================
 
 # Funktion: Daten für eine bestimmte Droge vorbereiten.
