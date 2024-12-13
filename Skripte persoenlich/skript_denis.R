@@ -234,10 +234,11 @@ drugusedata %>%
   theme_minimal()
 
 
+#============== nützliche Variablen ========================================================
 
 # CIG30USE HOW MANY DAYS SMOKED CIG IN PAST 30 DAYS
 # CGR30USE HOW MANY DAYS SMOKED CIGAR IN PAST 30 DAYS
-# ALCDAYS # DAYS HAD ONE OR MORE DRINKS PAST 30 DAYS
+# ALCDAYS heißt aber alcdays in drugusedata # DAYS HAD ONE OR MORE DRINKS PAST 30 DAYS
 # ALCUS30D ist für #Drinks in den letzten 30 Tagen  
 # AL30EST ist für #Tagen an denen min. ein Drink in den letzten 30 Tagen
 # COCUS30A ist für #Tage an denen Kokain in den letzten 30 Tagen
@@ -249,6 +250,7 @@ drugusedata %>%
 # Hier versucht es mit Funktionen und in Raphis Stil zu machen. Es klappt besser, aber noch nicht ganz.
 # Probleme: Bei den Boxplots von Hero, Cigs und Coc sieht man nicht => evtl. noch reinzoomen  
 # auch nach reinzoomen noch nicht sehr aussagekräfitg, da immer noch extrem nah an 0
+# ==> Es funktioniert aber man sieht halt nicht viel
 #============================================================================================
 
 # Funktion: Daten für eine bestimmte Droge vorbereiten.
