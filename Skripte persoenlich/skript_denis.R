@@ -237,6 +237,7 @@ drugusedata %>%
 
 # CIG30USE HOW MANY DAYS SMOKED CIG IN PAST 30 DAYS
 # CGR30USE HOW MANY DAYS SMOKED CIGAR IN PAST 30 DAYS
+# ALCDAYS # DAYS HAD ONE OR MORE DRINKS PAST 30 DAYS
 # ALCUS30D ist für #Drinks in den letzten 30 Tagen  
 # AL30EST ist für #Tagen an denen min. ein Drink in den letzten 30 Tagen
 # COCUS30A ist für #Tage an denen Kokain in den letzten 30 Tagen
@@ -274,7 +275,7 @@ avg_data_fun <- function(datacol, drug_name) {
 # Daten für jede Droge mit Durchschnitt berechnen
 her30_avg_data <- avg_data_fun("HER30USE", "Heroin")
 coc30_avg_data <- avg_data_fun("COCUS30A", "Cocaine")
-alc30_avg_data <- avg_data_fun("ALCUS30D", "Alcohol")
+alc30_avg_data <- avg_data_fun("alcdays", "Alcohol")
 cig30_avg_data <- avg_data_fun("CIG30USE", "Cigarettes")
 
 # Kombinierte Daten für das Liniendiagramm
@@ -294,7 +295,7 @@ ggplot(combined_avg_usage, aes(x = year, y = avg_days, color = Drug)) +
 # Daten für Boxplots erstellen (inklusive 0-Werte)
 her30_box_data <- prepare_data("HER30USE", "Heroin")
 coc30_box_data <- prepare_data("COCUS30A", "Cocaine")
-alc30_box_data <- prepare_data("ALCUS30D", "Alcohol")
+alc30_box_data <- prepare_data("alcdays", "Alcohol")
 cig30_box_data <- prepare_data("CIG30USE", "Cigarettes")
 
 # Boxplots (inkl. 0-Werte)
@@ -313,7 +314,7 @@ ggplot(coc30_box_data, aes(x = factor(year), y = UsageDays)) +
 ggplot(alc30_box_data, aes(x = factor(year), y = UsageDays)) +
   geom_boxplot() +
   theme_light() +
-  coord_cartesian(ylim = c(0, 5)) +
+  coord_cartesian(ylim = c(0, 30)) +
   labs(title = "Alcohol usage days including non-users (0)", x = "Year", y = "Usage Days")
 
 ggplot(cig30_box_data, aes(x = factor(year), y = UsageDays)) +
@@ -352,7 +353,7 @@ histogram_fun <- function(datacol, drug_name) {
 
 # Beispielaufrufe für jede Droge:
 histogram_fun("CIG30USE", "Cigarettes")
-histogram_fun("ALCUS30D", "Alcohol")
+histogram_fun("alcdays", "Alcohol")
 histogram_fun("COCUS30A", "Cocaine")
 histogram_fun("HER30USE", "Heroin")
 
