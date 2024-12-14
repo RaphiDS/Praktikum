@@ -11,10 +11,10 @@ str(drugusedata)
 summary(drugusedata)
 
 
-#===============================================================================
+#==================================================================================
 # Im Folgendem sind die ersten Versuche etwas herauszufinden.
-# => das meiste ist noch nicht sehr sinnvoll
-#===============================================================================
+# => vieles davon nicht so schön und einheitlich außerdem teilweise nicht sinnvoll
+#==================================================================================
 
 # creating graph for days cigs used in the last 30 days
 drugusedata %>%
@@ -343,7 +343,7 @@ histogram_fun <- function(datacol, drug_name) {
     mutate(Drug = drug_name)
   
   ggplot(data, aes(x = factor(day), y = `Relative share`)) +
-    geom_col(fill = "steelblue", color = "black", alpha = 0.7) +
+    geom_col(fill = "darkgrey", color = "black", alpha = 0.7) +
     facet_wrap(~year) +
     theme_light() +
     labs(
