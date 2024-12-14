@@ -5,7 +5,7 @@ n <- 56136
 
 library(dplyr)
 
-# Create a data frame with state populations and interviews
+# KARTE USA ABSOLUTE HÄUFIGKEIT VON ERHOBENEN INTERVIEWS PRO STAAT
 state_data <- data.frame(
   state = c(
     "California", "Texas", "Florida", "New York", "Pennsylvania",
@@ -116,7 +116,7 @@ ggsave("interviews_by_state.png", width = 10, height = 6, dpi = 300)
 
 
 
-### anteil aller befragten die 2019 in behandlung sind wegen drug abuse
+### ANTEIL ALLER BEFRAGTEN DIE 2019 IN BEHANDLUNG SIND ODER WAREN WEGEN DROGENMISSBRAUCH
 
 # Function to calculate treatment ratio
 treatment_ratio <- function(data, treatment_responses) {
@@ -157,7 +157,7 @@ ratio_alcohol <- treatment_ratio(data_alcohol, treatment_responses)
 
 # Create a summary data frame for visualization
 summary_data <- data.frame(
-  substance = c("Cocaine/Crack", "Heroin", "Alcohol"),
+  Substanz = c("Kokain", "Heroin", "Alkohol"),
   total_respondents = c(ratio_cocaine$total, ratio_heroin$total, ratio_alcohol$total),
   receiving_treatment = c(ratio_cocaine$count, ratio_heroin$count, ratio_alcohol$count),
   ratio = c(ratio_cocaine$ratio, ratio_heroin$ratio, ratio_alcohol$ratio)
@@ -167,30 +167,28 @@ summary_data <- data.frame(
 library(ggplot2)
 
 # Create histogram to visualize the ratios
-ggplot(summary_data, aes(x = substance, y = ratio, fill = substance)) +
+ggplot(summary_data, aes(x = Substanz, y = ratio, fill = Substanz)) +
   geom_bar(stat = "identity", color = "black") +
   scale_y_continuous(labels = scales::percent_format()) +
   labs(
-    title = "Proportion of Respondents Receiving Treatment",
-    x = "Substance",
-    y = "Proportion Receiving Treatment"
+    title = "In Behandlung",
+    x = "Substanz",
+    y = "Anteil der Behandelten"
   ) +
   theme_minimal()
 
 
 
-###
-### mentale gesundheit adult mental health
-
-
+### WO WIRD MAN BEHANDELT
 library(ggplot2)
 library(dplyr)
 
 
 mental_health_data <- data.frame(
   treatment_any = c(528, 42034, 13397), # Yes, No, Legitimate Skip
-  facility_type = c("Psychiatric Hospital", "General Hospital Psychiatric Unit", 
-                    "Medical Unit", "Other Hospital", "Residential Treatment", "Other Facility"),
+  facility_type = c("Psychiatrische Klinik", "Psychiatrische Abteilung im Krankenhaus",
+                    "Medizinische Abteilung", "Anderes Krankenhaus", "Stationäre Behandlung",
+                    "Andere Einrichtung"),
   nights_psych_hospital = c(134, 6),
   nights_general_psych_unit = c(152, 1),
   nights_medical_unit = c(109),
@@ -199,8 +197,8 @@ mental_health_data <- data.frame(
 
 # Summarize treatment-seeking behavior
 treatment_summary <- data.frame(
-  Category = c("Stayed Overnight for MH Treatment", 
-               "Did Not Stay Overnight", "Legitimately Skipped"),
+  Category = c("Übernacht wegen Behandlung",
+               "Nicht übernachtet", "Skip"),
   Count = c(528, 42034, 13397)
 )
 
@@ -215,49 +213,62 @@ ggplot(facility_data, aes(x = reorder(Facility, -Count), y = Count, fill = Facil
   geom_bar(stat = "identity", color = "black", show.legend = FALSE) +
   coord_flip() +
   labs(
-    title = "Distribution of Facilities Used for Mental Health Treatment",
-    x = "Facility Type",
-    y = "Number of Respondents",
-    fill = "Facility Type"
+    title = "Verteilung der Einrichtungen für Behandlung",
+    x = "Art",
+    y = "Anzahl Befragter",
+    fill = "Art"
   ) +
   theme_minimal() +
   scale_fill_brewer(palette = "Set2")
 
 
-
-
-####
-#### ???
+#### ART DER BEHANDLUNG BZW WO WIRD BEHANDELT
 library(ggplot2)
 library(dplyr)
+library(scales)
 
-# Create the data based on the user-provided information
-mental_health_treatment_data <- data.frame(
+# Original data including those who did not receive treatment
+treatment_data <- data.frame(
   TreatmentType = c(
-    "Inpatient Only", 
-    "Outpatient Only", 
-    "Prescription Medication Only", 
-    "Inpatient and Outpatient Only", 
-    "Inpatient and Prescription Medication Only", 
-    "Outpatient and Prescription Medication Only", 
-    "Inpatient, Outpatient, and Prescription Medication"
+    "Stationär", 
+    "Ambulant", 
+    "verschreibungspflichtige Medikamente", 
+    "Stationär und Ambulant", 
+    "Stationär und verschreibungspflichtige Medikamente", 
+    "Ambulant und verschreibungspflichtige Mediakmente", 
+    "Stationär, Ambulant und verschreibungspflichtge Medikamente",
+    "Did Not Receive Treatment"
   ),
-  Frequency = c(132, 1366, 3212, 42, 82, 2375, 256)
+  Frequency = c(132, 1366, 3212, 42, 82, 2375, 256, 34934)
 )
 
-# Create a simple bar plot
-ggplot(mental_health_treatment_data, aes(x = TreatmentType, y = Frequency, fill = TreatmentType)) +
+# Exclude those who did not receive treatment
+treatment_data_filtered <- subset(treatment_data, TreatmentType != "Did Not Receive Treatment")
+
+# Calculate total frequency of those who received treatment
+total_freq <- sum(treatment_data_filtered$Frequency)
+
+# Calculate relative frequencies
+treatment_data_filtered$RelativeFrequency <- treatment_data_filtered$Frequency / total_freq
+
+# Create a bar plot of relative frequencies, sorted in ascending order
+ggplot(treatment_data_filtered, aes(x = reorder(TreatmentType, RelativeFrequency),
+                                    y = RelativeFrequency, fill = TreatmentType)) +
   geom_bar(stat = "identity", show.legend = FALSE) +
+  scale_y_continuous(labels = percent_format()) +
   labs(
-    title = "Frequency of Mental Health Treatment Types (Excluding No Treatment)",
-    x = "Type of Treatment",
-    y = "Frequency"
+    title = "Behandlungsarten für psychische Gesundheit",
+    x = "Behandlungsart",
+    y = "Relative Häufigkeit"
   ) +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    axis.title.x = element_text(face = "bold"),
+    axis.title.y = element_text(face = "bold")
+  )
 
-
-### plot for who seeked help and why by age
+### WER IST IN BEHANDLUNG FÜR MENTALE GESUNDHEIT UND WARUM NACH ALTER
 install.packages(c("sf", "tigris", "ggplot2", "dplyr", "cowplot"))
 library(sf)
 library(tigris)
@@ -268,7 +279,7 @@ library(cowplot)
 # Data for mental health treatment prompts
 prompt_data <- data.frame(
   prompt = c(
-    "Decided on own", "Someone else suggested", "Court ordered"
+    "Selbstentschieden", "Von anderen vorgeschlagen", "Gerichtlich veranlasst"
   ),
   frequency = c(8292, 1086, 384)
 )
@@ -280,7 +291,8 @@ response_ratio <- valid_responses / 56136
 # Add total interviews and age group proportions
 total_interviewed <- 56136
 age_group_proportions <- data.frame(
-  age_group = c("Youth (12-17)", "Young Adult (18-25)", "Adult (26-34)", "Adult (35-49)", "Adult (50+)"),
+  age_group = c("Jugendlich (12-17)", "Junge Erwachsene (18-25)", 
+                "Erwachsen (26-34)", "Erwachsen (35-49)", "Erwachsen (50+)"),
   proportion = c(0.25, 0.25, 0.15, 0.20, 0.15)
 )
 
@@ -297,20 +309,29 @@ prompt_by_age <- expand.grid(prompt = prompt_data$prompt, age_group = age_group_
   )
 
 # Plot relative frequencies by age group
-ggplot(prompt_by_age, aes(x = factor(age_group, levels = c("Youth (12-17)", "Young Adult (18-25)", "Adult (26-34)", "Adult (35-49)", "Adult (50+)")), y = relative_frequency, fill = prompt)) +
+ggplot(prompt_by_age, aes(x = factor(age_group, levels = c("Jugendlich (12-17)", 
+                                                           "Junge Erwachsene (18-25)", 
+                                                           "Erwachsen (26-34)", 
+                                                           "Erwachsen (35-49)", 
+                                                           "Erwachsen (50+)")), 
+                          y = relative_frequency, fill = prompt)) +
   geom_bar(stat = "identity", position = "dodge") +
-  scale_fill_viridis_d(name = "Prompt Type") +
+  scale_fill_viridis_d(name = "Grund") +
   labs(
-    title = "Mental Health Treatment",
-    x = "Age Group",
-    y = "Frequency"
+    title = "In Behandlung für Mentale Gesundheit",
+    x = "Altersgruppe",
+    y = "Antwort"
   ) +
-  theme_minimal() +
   theme(
-    plot.title = element_text(hjust = 0.5, size = 16),
-    axis.text.x = element_text(angle = 45, hjust = 1)
+    plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    axis.title.x = element_text(face = "bold"),
+    axis.title.y = element_text(face = "bold"),
+    legend.title = element_text(face = "bold"),
+    legend.text = element_text(size = 10),
+    panel.background = element_rect(fill = "white", colour = "grey"),
+    panel.grid.major = element_line(colour = "lightgrey"),
+    panel.grid.minor = element_line(colour = "lightgrey", linetype = "dotted")
   )
-
-
 
 
