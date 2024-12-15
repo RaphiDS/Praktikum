@@ -14,6 +14,7 @@ summary(drugusedata)
 #==================================================================================
 # Im Folgendem sind die ersten Versuche etwas herauszufinden.
 # => vieles davon nicht so schön und einheitlich außerdem teilweise nicht sinnvoll
+# @Raphi den Teil brauchst du nicht zu vereinheitlichen
 #==================================================================================
 
 # creating graph for days cigs used in the last 30 days
@@ -251,6 +252,7 @@ drugusedata %>%
 # Probleme: Bei den Boxplots von Hero, Cigs und Coc sieht man nicht => evtl. noch reinzoomen  
 # auch nach reinzoomen noch nicht sehr aussagekräfitg, da immer noch extrem nah an 0
 # ==> Es funktioniert aber man sieht halt nicht viel
+# @Raphi ab hier kannst du vereinheitlichen 
 #============================================================================================
 
 # Funktion: Daten für eine bestimmte Droge vorbereiten.
@@ -329,6 +331,7 @@ ggplot(cig30_box_data, aes(x = factor(year), y = UsageDays)) +
 # Versuch es mit histogrammen besser darzustellen
 # => funktioniert besser, bin mir aber noch nicht sicher 
 #    ob die Werte stimmen
+# => evtl. absolute Häufigkeit über Histogram und rel. Häufigkeit über Kerndichteschätzer
 #=============================================================
 
 # Funktion zur Berechnung der relativen Anteile und Erstellen des Histogramms
@@ -353,11 +356,46 @@ histogram_fun <- function(datacol, drug_name) {
     )
 }
 
-# Beispielaufrufe für jede Droge:
+# Aufrufe der Plots für jede Droge:
 histogram_fun("CIG30USE", "Cigarettes")
 histogram_fun("alcdays", "Alcohol")
 histogram_fun("COCUS30A", "Cocaine")
 histogram_fun("HER30USE", "Heroin")
+
+# Versuch es über Kerndichteschätzer zu machen
+density_fun <- function(datacol, drug_name) {
+  data <- drugusedata %>%
+    # Filter auf 1-30 Tage
+    filter(.data[[datacol]] >= 1 & .data[[datacol]] <= 30) %>%
+    mutate(UsageDays = .data[[datacol]], Drug = drug_name)
+  
+  ggplot(data, aes(x = UsageDays)) +
+    geom_density(fill = "darkgrey", alpha = 0.7) +
+    facet_wrap(~year) +
+    theme_light() +
+    labs(
+      title = paste0("Kernel Density of Usage Days for ", drug_name),
+      x = "Number of Days Used in Last 30 Days",
+      y = "Density"
+    )
+}
+
+# Aufrufen der Plots der Kerndichteschätzer
+density_fun("CIG30USE", "Cigarettes")
+density_fun("alcdays", "Alcohol")
+density_fun("COCUS30A", "Cocaine")
+density_fun("HER30USE", "Heroin")
+
+
+
+#===========Versuch Zusammenhang zwischen Drogen zu finden======================
+# @Raphi der Teil ist noch in Arbeit 
+# Am besten ist es wohl es mit den ever Daten zu machen, da in den letzten 30 Tagen
+# wenig Heroin und Cocain genommen wurde und es deshalb nicht sehr aussgekräftig 
+# ist.
+
+
+#===============================================================================
 
 
 
