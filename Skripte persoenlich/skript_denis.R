@@ -374,16 +374,16 @@ density_fun <- function(datacol, drug_name) {
     facet_wrap(~year) +
     theme_light() +
     labs(
-      title = paste0("Kernel Density of Usage Days for ", drug_name),
-      x = "Number of Days Used in Last 30 Days",
-      y = "Density"
+      title = paste0("Kerndichteschätzer für #Tage Konsum ", drug_name),
+      x = "# Tagen in den letzten 30 Tagen",
+      y = "Dichte"
     )
 }
 
 # Aufrufen der Plots der Kerndichteschätzer
-density_fun("CIG30USE", "Cigarettes")
-density_fun("alcdays", "Alcohol")
-density_fun("COCUS30A", "Cocaine")
+density_fun("CIG30USE", "Zigaretten")
+density_fun("alcdays", "Alkohol")
+density_fun("COCUS30A", "Cocain")
 density_fun("HER30USE", "Heroin")
 
 
