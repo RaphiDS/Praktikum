@@ -335,3 +335,47 @@ ggplot(prompt_by_age, aes(x = factor(age_group, levels = c("Jugendlich (12-17)",
   )
 
 
+#### SUIZID GEDANKEN PLOT
+# Input the data
+suicide_data <- data.frame(
+  Response = c("Unknown/Aged 12-17", "Nein", "Ja"),
+  Frequency = c(13746, 39319, 3071),
+  Percentage = c(24.49, 70.04, 5.47)
+)
+
+# Calculate total valid responses (excluding unknown/aged 12-17)
+valid_data <- suicide_data %>%
+  filter(Response != "Unknown/Aged 12-17")
+
+total_valid <- sum(valid_data$Frequency)
+
+# Calculate relative frequencies
+valid_data <- valid_data %>%
+  mutate(Relative_Frequency = Frequency / total_valid)
+
+# Print the calculated relative frequencies
+print(valid_data)
+
+# Create a plot
+library(ggplot2)
+
+ggplot(valid_data, aes(x = Response, y = Relative_Frequency, fill = Response)) +
+  geom_bar(stat = "identity", color = "black") +
+  scale_y_continuous(labels = scales::percent_format()) +
+  labs(
+    title = "Suizid Gedanken",
+    x = "Antwort",
+    y = " ",
+    fill = "Response"
+  ) +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
+    axis.title = element_text(face = "bold", size = 12),
+    axis.text = element_text(size = 10),
+    axis.text.x = element_text(angle = 0, hjust = 0.5),
+    axis.line = element_line(color = "black"),
+    panel.background = element_rect(fill = "white"),
+    panel.grid.major = element_line(color = "gray", linetype = "dotted"),
+    panel.grid.minor = element_blank(),
+    legend.position = "none"
+  )
