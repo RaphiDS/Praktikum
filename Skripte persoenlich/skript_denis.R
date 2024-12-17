@@ -389,7 +389,8 @@ density_fun("HER30USE", "Heroin")
 
 
 #===========Versuch Zusammenhang zwischen Drogen zu finden======================
-# @Raphi der Teil ist noch in Arbeit 
+# @Raphi der Teil ist noch in Arbeit. Habe inzwischen hier was gemacht, ändere es
+# aber vllt wieder.
 # Am besten ist es wohl es mit den ever Daten zu machen, da in den letzten 30 Tagen
 # wenig Heroin und Cocain genommen wurde und es deshalb nicht sehr aussgekräftig 
 # ist.
