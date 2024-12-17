@@ -11,6 +11,8 @@ data2019 <- allfilterdata %>%
   filter (year == 2019)
 n <- 56136
 
+allfilterdata[COLLENRLST]
+
 #--------------------------------------------------------------------------------------------------
 ## Age of Survey People
 age <- data2019 %>%
@@ -26,15 +28,24 @@ general.employment <- data2019%>%
   filter(wrkdpstyr %in% c(1,2) | wrkselfem %in% c(1,2)) %>%
   pivot_longer(cols = everything(), names_to = "variable", values_to = "value") %>% #rearange table to fit values for barplot
   group_by(variable,value) %>%
-  summarise(count = n(), .groups = 'drop') %>%          # group to find summarized values for the bar
-  filter (value < 99)                                # getting rid of NAs --> NOT working
-  
+  summarise(count = n()/56136, .groups = 'drop') %>%          # group to find summarized values for the bar
+  filter (value < 94)                                # getting rid of NAs --> NOT working
+
 general.employment
 
-# graph
-employment.bar <- ggplot(general.employment, aes(x = as.factor(value), y = count, fill = as.factor(value)))+
+## graph
+
+#manual scale name
+employment.scale.manual <- c("1" = "Yes",
+                             "2" = "No")
+
+employment.bar <- ggplot(general.employment, aes(x = as.factor(value), y = count, fill = factor(value)))+
   geom_bar(stat = "identity") +
-  facet_wrap(~ variable)
+  facet_wrap(~ variable)+
+  scale_x_discrete(labels = employment.scale.manual)+
+  scale_fill_manual(values = c("1" = "blue", "2" = "red"), labels = employment.scale.manual)+
+  scale_y_continuous(labels = scales::percent)+
+  labs(title = "Employed either at a business or selfemployed", x = " ")
 
 employment.bar
 
@@ -42,17 +53,25 @@ employment.bar
 
 imputed.employment18 <- data2019 %>%
   select (IRWRKSTAT18) %>%
-  filter (IRWRKSTAT18 < 99)
-ggplot(imputed.employment18, aes(x = IRWRKSTAT18, fill = factor(IRWRKSTAT18))) +
-  geom_bar()+
-  labs(title = "Employment status of People 18+")
+  filter (IRWRKSTAT18 < 99) %>%
+  pivot_longer(cols = everything(), names_to = "status", values_to = "number")%>%
+  group_by(status, number) %>%
+  summarise(count = n()/56136, .groups = 'drop')
+  
+
+ggplot(imputed.employment18, aes(x = factor(number), y = count, fill = factor(number))) +
+  geom_bar(stat = "identity")+
+  scale_x_discrete(labels = c("1" = "EMployed full-time", "2" = "Employed part-time", "3" = "Unemployed", "4" = "not in labour force"))+
+  scale_y_continuous(labels = scales::percent)+
+  labs(title = "Employment status of People 18+", x = "Employment Status", y = "Percentage")+
+  theme_minimal()
 
 #----------------------------------------------------------------------------------------------------
 ## represent number of people who get health care for substance abuse
 # categorize into yes(1), no(2), don't know (94), skip (prvhlthin = 2 --> no private insurance!, 97/98)
 insurance.substance <- data2019 %>%
   select(hltinalc,hltindrg)%>%
-  filter(hltinalc < 94 | hltindrg < 94) %>%
+  filter(hltinalc < 94 & hltindrg < 94) %>%
   pivot_longer(cols = everything(), names_to = "variable", values_to = "values") 
 
 ## plot comparing the values
@@ -67,6 +86,7 @@ ggplot(insurance.substance, aes(x = as.factor (values), fill = as.factor(values)
 ## college enrollment(people aged 18-2count## college enrollment(people aged 18-22, enrolled in School and College)
 college.enrollment <- data2019 %>%
   select(collenrlst) %>%
+  filter(collenrlst < 5) %>%
   pivot_longer(cols = everything(), names_to = "status", values_to = "value") %>%
   group_by(status)
 
@@ -80,6 +100,7 @@ ggplot(college.enrollment, aes( x = value, fill = as.factor(value)))+
   labs(fill = "status")+
   theme_minimal()
 
+hello
 
 #------------------------------------------------------------------------------------------------------
 ## AIA (indian) segments, general racial background, alcohol in these regions
