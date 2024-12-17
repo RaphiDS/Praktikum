@@ -393,10 +393,51 @@ density_fun("HER30USE", "Heroin")
 # Am besten ist es wohl es mit den ever Daten zu machen, da in den letzten 30 Tagen
 # wenig Heroin und Cocain genommen wurde und es deshalb nicht sehr aussgekräftig 
 # ist.
-
-
+# Wie? mit Streudiagrammen #tage droge1 eine achse #tage droge2 andere achse
+# und nach Jahren gruppieren 
+# => sieht noch nicht sehr sinnvoll aus 
 #===============================================================================
 
+# Funktion zur Datenaufbereitung
+prepare_jointdata <- function() {
+  drugusedata %>%
+    mutate(
+      CIG30USE_clean = ifelse(CIG30USE >= 1 & CIG30USE <= 30, CIG30USE, 0),
+      alcdays_clean = ifelse(alcdays >= 1 & alcdays <= 30, alcdays, 0),
+      COCUS30A_clean = ifelse(COCUS30A >= 1 & COCUS30A <= 30, COCUS30A, 0),
+      HER30USE_clean = ifelse(HER30USE >= 1 & HER30USE <= 30, HER30USE, 0)
+    ) %>%
+    # Nur Personen behalten, die mindestens eine Droge konsumiert haben
+    filter(
+      (CIG30USE_clean > 0 | alcdays_clean > 0 | COCUS30A_clean > 0 | HER30USE_clean > 0),
+      year >= 2015 & year <= 2019
+    ) %>%
+    select(year, CIG30USE_clean, alcdays_clean, COCUS30A_clean, HER30USE_clean)
+}
+
+# Funktion zum Plotten des Zusammenhangs zwischen zwei ausgewählten Drogen
+plot_drug_correlation <- function(data, drug_x, drug_y) {
+  ggplot(data, aes_string(x = drug_x, y = drug_y)) +
+    geom_point(alpha = 0.7, color = "grey30") +
+    facet_wrap(~year, nrow = 1) +
+    theme_light() +
+    labs(
+      title = paste0("Zusammenhang zwischen ", drug_x, " und ", drug_y, " nach Jahren"),
+      x = paste0("Tage Nutzung: ", drug_x),
+      y = paste0("Tage Nutzung: ", drug_y)
+    )
+}
+
+# Daten vorbereiten
+joint_data <- prepare_jointdata()
+
+# Beispielhafte Aufrufe für verschiedene Drogenpaare
+plot_drug_correlation(joint_data, "alcdays_clean", "CIG30USE_clean")
+plot_drug_correlation(joint_data, "alcdays_clean", "COCUS30A_clean")
+plot_drug_correlation(joint_data, "alcdays_clean", "HER30USE_clean")
+plot_drug_correlation(joint_data, "CIG30USE_clean", "COCUS30A_clean")
+plot_drug_correlation(joint_data, "CIG30USE_clean", "HER30USE_clean")
+plot_drug_correlation(joint_data, "COCUS30A_clean", "HER30USE_clean")
 
 
 
