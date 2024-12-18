@@ -51,7 +51,7 @@ drugusedata %>%
   ) +
   theme_minimal()
 
-# Nur von denen die geraucht haben 
+# Boxplot Nur von denen die cigs geraucht haben 
 drugusedata %>%
   filter(CIG30USE >= 1 & CIG30USE <= 30) %>%
   ggplot(aes(x = factor(year), y = CIG30USE)) +
@@ -66,94 +66,6 @@ drugusedata %>%
     plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
     axis.title.x = element_text(size = 12),
     axis.title.y = element_text(size = 12)
-  )
-
-
-# Boxplot für Anzahl tage cigs geraucht NICHT WIRKLICH SINNVOLL
-drugusedata %>%
-  mutate(CIG30USE = ifelse(CIG30USE %in% c(91, 93), 0, CIG30USE)) %>%  
-  filter(CIG30USE >= 0 & CIG30USE <= 30) %>%  
-  ggplot(aes(x = factor(year), y = CIG30USE)) +
-  geom_boxplot(fill = "steelblue", color = "black", alpha = 0.7, outlier.color = "red", outlier.shape = 16) +
-  labs(
-    title = "Boxplots der Anzahl gerauchter Tage (inklusive Nichtraucher) 2015-2019",
-    x = "Jahr",
-    y = "Anzahl der Tage (geraucht)"
-  ) +
-  theme_minimal() +
-  theme(
-    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
-    axis.title.x = element_text(size = 12),
-    axis.title.y = element_text(size = 12)
-  )
-
-
-# Cigs Histogram Anzahl gerauchter Tage inkl. Nichtraucher Totale Häugigkeiten 
-drugusedata %>%
-  mutate(CIG30USE = ifelse(CIG30USE %in% c(91, 93), 0, CIG30USE)) %>%  
-  filter(CIG30USE >= 0 & CIG30USE <= 30) %>%  
-  ggplot(aes(x = CIG30USE)) +
-  geom_histogram(binwidth = 1, fill = "steelblue", color = "black", alpha = 0.7) +
-  facet_wrap(~ year, nrow = 1, scales = "free_y") +  
-  labs(
-    title = "Histogramme der Anzahl gerauchter Tage (inklusive Nichtraucher, 2015-2019)",
-    x = "Anzahl der Tage (geraucht)",
-    y = "Häufigkeit"
-  ) +
-  theme_minimal() +
-  theme(
-    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
-    axis.title.x = element_text(size = 12),
-    axis.title.y = element_text(size = 12),
-    strip.text = element_text(size = 12)  
-  )
-
-
-# anzahl gerauchter Tage in relativen Häufigkeiten inkl. Nichtraucher 
-drugusedata %>%
-  mutate(CGR30USE = ifelse(CGR30USE %in% c(91, 93), 0, CGR30USE)) %>%
-  ggplot(aes(x = CGR30USE)) +
-  geom_histogram(aes(y = after_stat(density)), 
-                 binwidth = 1, 
-                 fill = "steelblue", 
-                 color = "black", 
-                 alpha = 0.7) +
-  facet_wrap(~ year, nrow = 1, scales = "free_y") +
-  labs(
-    title = "Relative Häufigkeiten der Rauchtage (2015-2019)",
-    x = "Anzahl der gerauchten Tage",
-    y = "Relative Häufigkeit"
-  ) +
-  theme_minimal() +
-  theme(
-    plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
-    axis.title.x = element_text(size = 14),
-    axis.title.y = element_text(size = 14),
-    strip.text = element_text(size = 12)
-  )
-
-
-# Cigs relative Häufigkeiten NUR Raucher in Historgram
-drugusedata %>%
-  filter(CGR30USE >= 1 & CGR30USE <= 30) %>% 
-  ggplot(aes(x = CGR30USE)) +
-  geom_histogram(aes(y = after_stat(density)), 
-                 binwidth = 1, 
-                 fill = "steelblue", 
-                 color = "black", 
-                 alpha = 0.7) +
-  facet_wrap(~ year, nrow = 1, scales = "free_y") +
-  labs(
-    title = "Relative Häufigkeiten der Rauchtage (2015-2019)",
-    x = "Anzahl der gerauchten Tage",
-    y = "Relative Häufigkeit"
-  ) +
-  theme_minimal() +
-  theme(
-    plot.title = element_text(hjust = 0.5, size = 16, face = "bold"),
-    axis.title.x = element_text(size = 14),
-    axis.title.y = element_text(size = 14),
-    strip.text = element_text(size = 12)
   )
 
 
@@ -418,7 +330,7 @@ prepare_jointdata <- function() {
 
 # Funktion zum Plotten des Zusammenhangs zwischen zwei ausgewählten Drogen
 plot_drug_correlation <- function(data, drug_x, drug_y) {
-  ggplot(data, aes_string(x = drug_x, y = drug_y)) +
+  ggplot(data, aes(x = .data[[drug_x]], y = .data[[drug_y]])) +
     geom_point(alpha = 0.7, color = "grey30") +
     facet_wrap(~year, nrow = 1) +
     theme_light() +
@@ -428,6 +340,7 @@ plot_drug_correlation <- function(data, drug_x, drug_y) {
       y = paste0("Tage Nutzung: ", drug_y)
     )
 }
+
 
 # Daten vorbereiten
 joint_data <- prepare_jointdata()
