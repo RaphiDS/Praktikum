@@ -294,6 +294,7 @@ density_fun("HER30USE", "Heroin")
 # Wie? mit Streudiagrammen #tage droge1 eine achse #tage droge2 andere achse
 # und nach Jahren gruppieren 
 # => sieht noch nicht sehr sinnvoll aus 
+# => auch mit heatmap noch nicht gut 
 #===============================================================================
 
 # Funktion zur Datenaufbereitung
@@ -383,8 +384,11 @@ plot_hexbin_correlation(joint_data, "CIG30USE_clean", "COCUS30A_clean")
 plot_hexbin_correlation(joint_data, "CIG30USE_clean", "HER30USE_clean")
 plot_hexbin_correlation(joint_data, "COCUS30A_clean", "HER30USE_clean")
 
-
-
+#======================weitere nützliche Variablen==============================
+# ALCYRTOT TOTAL # OF DAYS USED ALCOHOL IN PAST 12 MOS
+# COCYRTOT TOTAL # OF DAYS USED COCAINE IN PAST 12 MONTHS
+# HRDAYPYR # DAYS USED HEROIN PAST 12 MONTHS
+#===============================================================================
 
 
 
