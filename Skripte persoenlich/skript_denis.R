@@ -132,21 +132,6 @@ drugusedata %>%
   ) +
   theme_minimal()
 
-
-# Adjusting data to include non-smokers as 0 days smoked        ABER NICHT SO SINNVOLL
-drugusedata %>%
-  mutate(CGR30USE = ifelse(CGR30USE %in% c(91, 93), 0, CGR30USE)) %>%
-  filter(CGR30USE %in% c(0:30)) %>%
-  ggplot(aes(x = factor(year), y = CGR30USE)) +
-  geom_boxplot(fill = "steelblue", color = "black", alpha = 0.7, outlier.color = "black", outlier.shape = 16) +
-  labs(
-    title = "Boxplots of Number of Days Smoked Cigars (2015-2019)",
-    x = "Year",
-    y = "Number of Days Smoked"
-  ) +
-  theme_minimal()
-
-
 #============== nützliche Variablen ========================================================
 
 # CIG30USE HOW MANY DAYS SMOKED CIG IN PAST 30 DAYS
@@ -352,6 +337,53 @@ plot_drug_correlation(joint_data, "alcdays_clean", "HER30USE_clean")
 plot_drug_correlation(joint_data, "CIG30USE_clean", "COCUS30A_clean")
 plot_drug_correlation(joint_data, "CIG30USE_clean", "HER30USE_clean")
 plot_drug_correlation(joint_data, "COCUS30A_clean", "HER30USE_clean")
+
+
+
+# Funktion zum Erstellen einer Heatmap für den Zusammenhang zwischen zwei Variablen
+plot_heatmap_correlation <- function(data, drug_x, drug_y) {
+  ggplot(data, aes(x = .data[[drug_x]], y = .data[[drug_y]])) +
+    geom_bin2d(bins = 20) + # Aufteilung der Daten in Bins
+    scale_fill_viridis_c(option = "magma", name = "Dichte") +
+    facet_wrap(~year, nrow = 1) + # Facets für die Jahre
+    theme_minimal() +
+    labs(
+      title = paste0("Heatmap: Zusammenhang zwischen ", drug_x, " und ", drug_y, " nach Jahren"),
+      x = paste0("Tage Nutzung: ", drug_x),
+      y = paste0("Tage Nutzung: ", drug_y)
+    )
+}
+
+
+# Beispielhafte Aufrufe für verschiedene Drogenpaare
+plot_heatmap_correlation(joint_data, "alcdays_clean", "CIG30USE_clean")
+plot_heatmap_correlation(joint_data, "alcdays_clean", "COCUS30A_clean")
+plot_heatmap_correlation(joint_data, "alcdays_clean", "HER30USE_clean")
+plot_heatmap_correlation(joint_data, "CIG30USE_clean", "COCUS30A_clean")
+plot_heatmap_correlation(joint_data, "CIG30USE_clean", "HER30USE_clean")
+plot_heatmap_correlation(joint_data, "COCUS30A_clean", "HER30USE_clean")
+
+# Funktion zum Erstellen eines Hexbin-Plots
+plot_hexbin_correlation <- function(data, drug_x, drug_y) {
+  ggplot(data, aes(x = .data[[drug_x]], y = .data[[drug_y]])) +
+    geom_hex(bins = 15) + # Hexagonale Bins, Anzahl der Bins anpassen
+    scale_fill_viridis_c(option = "plasma", name = "Dichte") +
+    facet_wrap(~year, nrow = 1) +
+    theme_minimal() +
+    labs(
+      title = paste0("Hexbin: Zusammenhang zwischen ", drug_x, " und ", drug_y, " nach Jahren"),
+      x = paste0("Tage Nutzung: ", drug_x),
+      y = paste0("Tage Nutzung: ", drug_y)
+    )
+}
+plot_hexbin_correlation(joint_data, "alcdays_clean", "CIG30USE_clean")
+plot_hexbin_correlation(joint_data, "alcdays_clean", "COCUS30A_clean")
+plot_hexbin_correlation(joint_data, "alcdays_clean", "HER30USE_clean")
+plot_hexbin_correlation(joint_data, "CIG30USE_clean", "COCUS30A_clean")
+plot_hexbin_correlation(joint_data, "CIG30USE_clean", "HER30USE_clean")
+plot_hexbin_correlation(joint_data, "COCUS30A_clean", "HER30USE_clean")
+
+
 
 
 
