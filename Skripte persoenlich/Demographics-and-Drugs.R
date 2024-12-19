@@ -9,7 +9,7 @@ data2019 <- allfilterdata %>%
 #--------------------------------------------------------------------------------------
 
 ## kovarianz: filter arbeitslos und kokain/ mariuana/(alcohol /cigarette)
-substanceUse.Work <- data2019 %>%
+#substanceUse.Work <- data2019 %>%
   select(wrkdpstyr, wrkselfem, cocrec, herrec) %>%
   filter(
     wrkdpstyr %in% c(1, 2) | wrkselfem %in% c(1, 2),          # Check if wrkdpstyr or wrkselfem equals 1 or 2
@@ -25,14 +25,16 @@ substanceUse.Work <- data2019 %>%
     )
   ) %>%
   filter(is.na(drug) == FALSE) %>%
-  group_by(employed) %>%
-   count(drug)
+  group_by(employed, drug) %>%
+   summarize(count = n()/56136) 
 ## Verhältnis bilden ----
 
-substanceUse.Work
+#substanceUse.Work
+#ggplot(substanceUse.Work, aes(x = drug, y = count, fill = factor(drug)))+
+  geom_col()+
+  facet_wrap(~employed)
 
 
-## Verhältnis bilden
 
 ### FALSCH: macht kein sinn inhaltlich --> alles neu machen !!!
 
@@ -43,20 +45,21 @@ ggplot(substanceUse.Work, aes(x = employed[[2]], y = n/56136 )) +     # muss n Z
 
 ## zu zeigen: von allen die Drogen nehmen, wie viele sind nicht angestellt?
 
-#-----------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------
 ## represent number of people who get health care for substance abuse
 # categorize into yes(1), no(2), don't know (94), skip (prvhlthin = 2 --> no private insurance!, 97/98)
 insurance.substance <- data2019 %>%
   select(hltinalc,hltindrg)%>%
-  filter(hltinalc < 94 & hltindrg < 94) %>%
+  filter(hltinalc < 3 & hltindrg < 3) %>%
   pivot_longer(cols = everything(), names_to = "variable", values_to = "values") 
 
 ## plot comparing the values
-ggplot(insurance.substance, aes(x = as.factor (values), fill = as.factor(values)))+
+ggplot(insurance.substance, aes(x = values, fill = as.factor(values)))+
   geom_bar()+
   facet_wrap( ~ variable)+
-  ggtitle("Drug and alcohol abuse covered by private Insurance")+ 
-  labs( fill = " Insurance status", x = "Status")
+  scale_fill_manual (values = c("1" = "red", "2" = "turquoise"), labels = c("1" = "Yes", "2" = "No"))+
+  scale_x_discrete(labels = c("1" = "Yes", "2" = "No")) +
+  labs( title = "Drug and alcohol abuse covered by private Insurance", fill = " Insurance status", x = "Status")
 
 
 #----------------------------------------------------------------------------------------------------
@@ -84,7 +87,7 @@ DrugGender <-data.frame(matrix(c(data2019 %>%
   rename("Male" = X1, "Female" = X2)
 DrugGender
 
- mosaicplot(DrugGender, main = "Drug use dependend on gender",col = c("purple", "pink"))
+ mosaicplot(DrugGender, main = "Drug use dependend on gender",col = c("lavender", "skyblue"))
 
 
 

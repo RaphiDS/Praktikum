@@ -11,8 +11,6 @@ data2019 <- allfilterdata %>%
   filter (year == 2019)
 
 
-allfilterdata[COLLENRLST]
-
 #------------------------------------------------------------------------------------------------------
 ## AGE grouped into allocated Categories of NSDUH
 age.grouped <- data2019 %>%
@@ -20,12 +18,14 @@ age.grouped <- data2019 %>%
   pivot_longer(cols = everything(), names_to = "variable", values_to = "group") %>%
   group_by(group) %>%
   summarize(count =n()/56136)
-
   
 ggplot(age.grouped, aes(x= group,y = count, fill = factor(group)))+
   geom_col()+
-  scale_y_continuous(labels = scales::percent)
+  scale_fill_discrete(labels = c("1" = "12-17", "2" = "18-25", "3" = "26-34", "4" = "35+"))+
+  scale_y_continuous(labels = scales::percent)+
+  labs(title = "Age in allocated Groups", y = "Percentage")
 
+#---------------------
 # age in propertion
 age.ratio.levels <- data2019 %>%
   select(CATAG2)%>%
@@ -35,16 +35,19 @@ age.ratio.levels <- data2019 %>%
 
 ggplot(age.ratio.levels, aes(x = group, y = count, fill = factor(group)))+
   geom_col()+
-  scale_y_continuous(labels = scales::percent)
+  scale_fill_discrete(labels = c("1" = "12-17", "2" = "18-25", "3" ="26+"))+
+  scale_y_continuous(labels = scales::percent)+
+  labs(title = "age in levels of three")
 
-## ages properly distinct
-true.age <- data2019 %>%
+#------------------------
+## ages properly distinct --> NOT Neccesary
+#true.age <- data2019 %>%
   select(CATAG7) %>%
   pivot_longer(cols = everything(), names_to = "variable", values_to = "group") %>%
   group_by(group) %>%
   summarize(count =n()/56136)
 
-ggplot(true.age, aes(x = group, y = count, fill = factor(group)))+
+#ggplot(true.age, aes(x = group, y = count, fill = factor(group)))+
   geom_col()+
   scale_y_continuous(labels = scales::percent) ## improvemnt: create stacked bar plots of level 3?
 #------------------------------------------------------------------------------------------------------
@@ -150,6 +153,8 @@ Racial.Background <- data2019 %>%
 ggplot(Racial.Background, aes(x = NEWRACE2, fill = factor(eduhighcat)))+
   geom_bar(position = "fill")+
   scale_y_continuous(labels = scales::percent) +
+  scale_x_discrete(labels = c("1" = "White", "2" = "Afr.Am", "3" = "Am/AK Native", "4" ="Other Pac Isl", "5" = " Asian", "6" = "more than one Race", "7" = "Hispamic"))+
+  scale_fill_discrete(labels = c("1" = "some High School", "2"= "HIgh School Grad", "3" ="Some coll/Assoc Dg", "4"= "College graduate"))+
   theme_light()+
   labs(title = "Education achieved by each Race")
 
@@ -161,6 +166,6 @@ Racial.Background2 <- data2019 %>%
 ggplot(Racial.Background2, aes(x = NEWRACE2, fill = factor(IREDUHIGHST2)))+
   geom_bar(position = "fill")+
   theme_light()+
- # scale_fill_manual(labels = c("1" = "5th", "2"= "6th", "3" ="7th", "4"= "8th", "5" ="9th", "6" = "10th", "7" = "11/12th grade", "8" = "GED", "9" = "some college credit", "10" = "Associate's degree", "11" = "college graduate or higher"))+
+ scale_fill_discrete(labels = c("1" = "5th", "2"= "6th", "3" ="7th", "4"= "8th", "5" ="9th", "6" = "10th", "7" = "11/12th grade", "8" = "GED", "9" = "some college credit", "10" = "Associate's degree", "11" = "college graduate or higher"))+
   scale_y_continuous(labels = scales::percent)+ 
   labs(title = "Class finished by each Race")
