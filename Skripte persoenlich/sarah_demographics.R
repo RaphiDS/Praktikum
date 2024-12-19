@@ -151,8 +151,8 @@ ggplot(Racial.Background, aes(x = NEWRACE2, fill = factor(eduhighcat)))+
   geom_bar(position = "fill")+
   scale_y_continuous(labels = scales::percent) +
   theme_light()+
-  labs(title = "Education achieved by each Race")+
-  scale_fill_manual(labels = c())
+  labs(title = "Education achieved by each Race")
+
 
 ## maybe better: Ireduhighst2: genauer Klassenabschluss also 5,6,7 ... college und weiter
 Racial.Background2 <- data2019 %>%
