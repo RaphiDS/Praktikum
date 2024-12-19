@@ -389,7 +389,46 @@ plot_hexbin_correlation(joint_data, "COCUS30A_clean", "HER30USE_clean")
 # COCYRTOT TOTAL # OF DAYS USED COCAINE IN PAST 12 MONTHS
 # HRDAYPYR # DAYS USED HEROIN PAST 12 MONTHS
 #===============================================================================
+# Veranschaulichung mithilfe von boxplots möglicherweise sinnvoll
+#===============================================================================
 
+# Funktion: Daten für eine bestimmte Droge vorbereiten.
+# Werte von 1–365 bleiben so, alle anderen werden auf 0 gesetzt.
+prepare365_data <- function(datacol, drug_name) {
+  drugusedata %>%
+    mutate(
+      UsageDays = case_when(
+        .data[[datacol]] >= 1 & .data[[datacol]] <= 365 ~ .data[[datacol]],
+        TRUE ~ 0
+      ),
+      Drug = drug_name
+    ) %>%
+    select(year, Drug, UsageDays)
+}
+
+# Daten für Boxplots erstellen (inklusive 0-Werte)
+alc365_box_data <- prepare365_data("alcyrtot", "Alcohol") 
+coc365_box_data <- prepare365_data("cocyrtot", "Cocaine")
+her365_box_data <- prepare365_data("hrdaypyr", "Heroin")
+
+# Boxplots (inkl. 0-Werte) für jede Droge
+ggplot(alc365_box_data, aes(x = factor(year), y = UsageDays)) +
+  geom_boxplot() +
+  theme_light() +
+  coord_cartesian(ylim = c(0, 365)) +
+  labs(title = "Alcohol usage days including non-users (0)", x = "Year", y = "Usage Days")
+
+ggplot(coc365_box_data, aes(x = factor(year), y = UsageDays)) +
+  geom_boxplot() +
+  theme_light() +
+  coord_cartesian(ylim = c(0, 365)) +
+  labs(title = "Cocaine usage days including non-users (0)", x = "Year", y = "Usage Days")
+
+ggplot(her365_box_data, aes(x = factor(year), y = UsageDays)) +
+  geom_boxplot() +
+  theme_light() +
+  coord_cartesian(ylim = c(0, 365)) +
+  labs(title = "Heroin usage days including non-users (0)", x = "Year", y = "Usage Days")
 
 
 
