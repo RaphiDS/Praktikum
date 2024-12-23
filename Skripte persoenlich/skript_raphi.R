@@ -38,6 +38,7 @@ ggplot(tobaccoever, aes(x = Year, y = .data[["Rel. share"]], color = Drug)) +
   labs(title = "Relative share of people who have
 ever tried certain forms of tobacco")
 
+# -----------------------------------------------------------------------------------
 # Columngraph for each drug individually
 graphfun1 <- function (drug, question, ymax) {
   drug %>%
