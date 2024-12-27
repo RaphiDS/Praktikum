@@ -101,33 +101,49 @@ tobacco30 <- as.data.frame(
 ggplot(fourdrugsever, aes(x = Year, y = .data[["Rel. share"]], color = Drug)) +
   geom_point() +
   geom_line() +
+  scale_color_brewer(palette = "Dark2") +  # Farbskala
   theme_light() +
-  labs(title = "Relative share of people who have
-ever tried certain drugs")
+  labs(
+    title = "Relativer Anteil von Personen, die jemals bestimmte Drogen konsumiert haben",
+    x = "Jahr",
+    y = "Relativer Anteil"
+  )
 
 # 2) Plot: "In den letzten 30 Tagen" – 4 Hauptdrogen
 ggplot(fourdrugs30, aes(x = Year, y = .data[["Rel. share"]], color = Drug)) +
   geom_point() +
   geom_line() +
+  scale_color_brewer(palette = "Dark2") +
   theme_light() +
-  labs(title = "Relative share of people who have
-done certain drugs in the last 30 days")
+  labs(
+    title = "Relativer Anteil von Personen, die in den letzten 30 Tagen bestimmte Drogen konsumiert haben",
+    x = "Jahr",
+    y = "Relativer Anteil"
+  )
 
 # 3) Plot: "Jemals probiert" – Tabakprodukte
 ggplot(tobaccoever, aes(x = Year, y = .data[["Rel. share"]], color = Drug)) +
   geom_point() +
   geom_line() +
+  scale_color_brewer(palette = "Dark2") +
   theme_light() +
-  labs(title = "Relative share of people who have
-ever tried certain forms of tobacco")
+  labs(
+    title = "Relativer Anteil von Personen, die jemals bestimmte Tabakprodukte konsumiert haben",
+    x = "Jahr",
+    y = "Relativer Anteil"
+  )
 
 # 4) Plot: "In den letzten 30 Tagen" – Tabakprodukte
 ggplot(tobacco30, aes(x = Year, y = .data[["Rel. share"]], color = Drug)) +
   geom_point() +
   geom_line() +
+  scale_color_brewer(palette = "Dark2") +
   theme_light() +
-  labs(title = "Relative share of people who have
-smoked forms of tobacco in the last 30 days")
+  labs(
+    title = "Relativer Anteil von Personen, die in den letzten 30 Tagen bestimmte Tabakprodukte konsumiert haben",
+    x = "Jahr",
+    y = "Relativer Anteil"
+  )
 
 # Hinweis: Skalen für die Y-Achse könnten ggf. angepasst werden (ylim etc.).
 
@@ -140,31 +156,35 @@ graphfun1 <- function(drug, question, ymax) {
     ggplot(aes(x = Year, y = .data[["Rel. share"]])) +
     geom_line() +
     geom_point() +
-    ggtitle(question) +
+    scale_color_brewer(palette = "Dark2", aesthetics = "color") +  # Farbskala, hier nur relevant, wenn ein 'color'-Mapping vorhanden wäre
+    ggtitle(question) +                                            # Dieser Text kommt als Argument, hier also ggf. manuell anpassen
     theme_light() +
-    ylim(0, ymax)
+    ylim(0, ymax) +
+    labs(
+      x = "Jahr",
+      y = "Relativer Anteil"
+    )
 }
 
 # Beispielaufrufe für einzelne Drogen
 graphfun1(
   everdatafun("cigever", "Cigarettes"),
-  "Have you ever smoked part or all of a cigarette?",
+  "Haben Sie jemals eine Zigarette (ganz oder teilweise) geraucht?",
   0.6
 )
 graphfun1(
   everdatafun("alcever", "Alcohol"),
-  "Have you ever, even once, had a drink of any type of alcoholic beverage?
-Please do not include times when you only had a sip or two from a drink.",
+  "Haben Sie jemals, auch nur einmal, irgendein alkoholisches Getränk zu sich genommen?",
   0.8
 )
 graphfun1(
   everdatafun("herever", "Heroin"),
-  "Have you ever, even once, used heroin?",
+  "Haben Sie jemals, auch nur einmal, Heroin konsumiert?",
   0.025
 )
 graphfun1(
   everdatafun("cocever", "Cocaine"),
-  "Have you ever, even once, used any form of cocaine?",
+  "Haben Sie jemals, auch nur einmal, irgendeine Form von Kokain konsumiert?",
   0.15
 )
 
@@ -206,9 +226,9 @@ drugdata %>%
   geom_histogram(binwidth = 1, color = "black") +
   facet_wrap(~ year, nrow = 1, scales = "free_y") +
   labs(
-    title = "Histograms of Number of Days Smoked Cigars (2015-2019)",
-    x = "Number of Days Smoked",
-    y = "Frequency"
+    title = "Histogramme der Anzahl gerauchter Zigarren (2015-2019)",
+    x = "Anzahl gerauchter Tage",
+    y = "Häufigkeit"
   ) +
   theme_light()
 
@@ -254,11 +274,12 @@ combined_avg_usage <- bind_rows(
 ggplot(combined_avg_usage, aes(x = year, y = avg_days, color = Drug)) +
   geom_point() +
   geom_line() +
+  scale_color_brewer(palette = "Dark2") +
   theme_light() +
   labs(
-    title = "Average number of days using substances (including non-users as 0)",
-    x = "Year",
-    y = "Average Usage Days"
+    title = "Durchschnittliche Anzahl an Konsumtagen (inkl. Nicht-Nutzer als 0)",
+    x = "Jahr",
+    y = "Durchschnittliche Nutzungstage"
   )
 
 ##########################
@@ -279,9 +300,9 @@ histogram_fun <- function(datacol, drug_name) {
     facet_wrap(~ year) +
     theme_light() +
     labs(
-      title = paste0("Distribution of usage days for ", drug_name),
-      x = "Number of Days Used in Last 30 Days",
-      y = "Relative Share"
+      title = paste0("Verteilung der Nutzungstage für ", drug_name),
+      x = "Anzahl der Nutzungstage in den letzten 30 Tagen",
+      y = "Relativer Anteil"
     )
 }
 
@@ -322,7 +343,7 @@ mosaicfun <- function(var1, var2, varname1, varname2) {
     ) %>%
     mosaicplot(
       color = TRUE,
-      main = paste("Correlation between", varname1, "and", varname2)
+      main = paste("Korrelation zwischen", varname1, "und", varname2)
     )
 }
 
@@ -364,7 +385,7 @@ mosaicfun30 <- function(var1, var2, varname1, varname2) {
     ) %>%
     mosaicplot(
       color = TRUE,
-      main = paste("Correlation between", varname1, "and", varname2, "(Last 30 days)")
+      main = paste("Korrelation zwischen", varname1, "und", varname2, "(Letzte 30 Tage)")
     )
 }
 
