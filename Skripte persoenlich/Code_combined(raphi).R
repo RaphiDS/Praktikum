@@ -136,7 +136,7 @@ drugdata %>%
   theme_light()
 
 prepare_data <- function(datacol, drug_name) {
-  drugusedata %>%
+  allfilterdata %>%
     mutate(
       UsageDays = case_when(
         .data[[datacol]] >= 1 & .data[[datacol]] <= 30 ~ .data[[datacol]],
