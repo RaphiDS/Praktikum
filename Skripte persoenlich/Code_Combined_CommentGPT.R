@@ -16,43 +16,62 @@ drugdata <- allfilterdata
 
 ##########################
 # Funktionen zur Datenvorbereitung und Auswertung
+#############################
+# Installation & Loading of Required Packages
 ##########################
 
-# 1) Funktion: Erzeugt für eine angegebene (Drogen-)Variable eine
-#    zusammengefasste Tabelle, in der nur "Ja"-Antworten (Wert 1) berücksichtigt werden.
-#    Angewendet auf die Frage "jemals probiert".
+install.packages("tidyverse")
+library(tidyverse)
+
+##########################
+# Loading the Data
+##########################
+
+# Loads a prepared Rdata file.
+# It contains a dataset called "allfilterdata", which we also store as "drugdata".
+load("Daten bearbeitet/combi_redu_data.Rdata")
+drugdata <- allfilterdata
+
+##########################
+# Functions for Data Preparation and Analysis
+##########################
+
+# 1) Function: Generates a summarized table for a specified (drug) variable,
+#    focusing only on "Yes" answers (value == 1), referring to "ever used".
 everdatafun <- function(datacol, drug) {
   drugdata %>%
     group_by(year) %>%
-    count(.data[[datacol]]) %>%                # Zählt, wie oft jeder Wert in datacol pro Jahr vorkommt
-    mutate("Rel. share" = n / sum(n)) %>%       # Relativer Anteil pro Jahr
-    filter(.data[[datacol]] == 1) %>%           # Nur "Ja"-Antworten (Wert 1)
+    count(.data[[datacol]]) %>%                # Counts how often each value appears in 'datacol' per year
+    mutate("Rel. share" = n / sum(n)) %>%       # Relative share per year
+    filter(.data[[datacol]] == 1) %>%           # Keep only "Yes" answers
     ungroup() %>%
-    mutate(Drug = drug,                         # Name der Droge in eine neue Spalte
-           Year = year) %>%
-    select(Year, "Rel. share", Drug)            # Auswahl der Spalten in passender Reihenfolge
+    mutate(
+      Drug = drug,                              # Name of the drug in a new column
+      Year = year
+    ) %>%
+    select(Year, "Rel. share", Drug)            # Select columns in a consistent order
 }
 
-# 2) Funktion: Erzeugt für eine angegebene (Drogen-)Variable eine
-#    zusammengefasste Tabelle für "Konsum in den letzten 30 Tagen".
-#    Dabei werden die Werte 1–30 als "Ja" interpretiert, darüber/NA als "Nein".
+# 2) Function: Generates a summarized table for a specified (drug) variable,
+#    focusing on consumption "in the last 30 days".
+#    Values 1–30 are treated as "Yes," everything else as "No."
 datafun30 <- function(datacol, drug) {
   drugdata %>%
     group_by(year) %>%
     summarise(
-      TotalPeople = n(),                                         # Gesamtzahl Beobachtungen
+      TotalPeople = n(),                                         # Total number of observations
       Users = sum(.data[[datacol]] >= 1 & .data[[datacol]] <= 30, na.rm = TRUE),
       "Rel. share" = Users / TotalPeople
     ) %>%
-    mutate(Drug = drug) %>%                                      # Droge in eine neue Spalte
-    select(Year = year, "Rel. share", Drug)                      # Spalten umbenennen/anordnen
+    mutate(Drug = drug) %>%                                      # Drug name in a new column
+    select(Year = year, "Rel. share", Drug)                      # Rename and reorder columns
 }
 
 ##########################
-# Beispiel: Erstellung kombinierter Dataframes für mehrere Drogen
+# Example: Creating Combined Data Frames for Several Drugs
 ##########################
 
-# 1) "Jemals" für 4 Hauptdrogen
+# 1) "Ever used" data for 4 major drugs
 fourdrugsever <- as.data.frame(
   rbind(
     everdatafun("alcever", "Alcohol"),
@@ -62,7 +81,7 @@ fourdrugsever <- as.data.frame(
   )
 )
 
-# 2) "Jemals" für verschiedene Tabakprodukte
+# 2) "Ever used" for various tobacco products
 tobaccoever <- as.data.frame(
   rbind(
     everdatafun("cigever", "Cigarettes"),
@@ -72,7 +91,7 @@ tobaccoever <- as.data.frame(
   )
 )
 
-# 3) "In den letzten 30 Tagen" für 4 Hauptdrogen
+# 3) "In the last 30 days" for 4 major drugs
 fourdrugs30 <- as.data.frame(
   rbind(
     datafun30("alcdays", "Alcohol"),
@@ -82,73 +101,73 @@ fourdrugs30 <- as.data.frame(
   )
 )
 
-# 4) "In den letzten 30 Tagen" für verschiedene Tabakprodukte
+# 4) "In the last 30 days" for various tobacco products
 tobacco30 <- as.data.frame(
   rbind(
     datafun30("CIG30USE", "Cigarettes"),
     datafun30("SMKLSS30N", "Smokeless Tobacco"),
-    # Bei Pfeife werden hier scheinbar die "jemals"-Werte genutzt, da eine andere Fragestellung besteht
+    # For pipes, the question seems to differ, so "ever used" is being used here
     everdatafun("PIPE30DY", "Pipe"),
     datafun30("CGR30USE", "Cigar")
   )
 )
 
 ##########################
-# Plot-Erstellungen mittels ggplot2
+# Plot Creation using ggplot2
 ##########################
 
-# 1) Plot: "Jemals probiert" – 4 Hauptdrogen
+# 1) Plot: "Ever used" – 4 major drugs
 ggplot(fourdrugsever, aes(x = Year, y = .data[["Rel. share"]], color = Drug)) +
   geom_point() +
   geom_line() +
-  scale_color_brewer(palette = "Dark2") +  # Farbskala
+  scale_color_brewer(palette = "Set1") +  # More vibrant color palette
   theme_light() +
   labs(
-    title = "Relativer Anteil von Personen, die jemals bestimmte Drogen konsumiert haben",
-    x = "Jahr",
-    y = "Relativer Anteil"
+    title = "Relative share of people who have ever used certain drugs",
+    x = "Year",
+    y = "Relative Share"
   )
 
-# 2) Plot: "In den letzten 30 Tagen" – 4 Hauptdrogen
+# 2) Plot: "In the last 30 days" – 4 major drugs
 ggplot(fourdrugs30, aes(x = Year, y = .data[["Rel. share"]], color = Drug)) +
   geom_point() +
   geom_line() +
-  scale_color_brewer(palette = "Dark2") +
+  scale_color_brewer(palette = "Set1") +
   theme_light() +
   labs(
-    title = "Relativer Anteil von Personen, die in den letzten 30 Tagen bestimmte Drogen konsumiert haben",
-    x = "Jahr",
-    y = "Relativer Anteil"
+    title = "Relative share of people who have used certain drugs in the last 30 days",
+    x = "Year",
+    y = "Relative Share"
   )
 
-# 3) Plot: "Jemals probiert" – Tabakprodukte
+# 3) Plot: "Ever used" – tobacco products
 ggplot(tobaccoever, aes(x = Year, y = .data[["Rel. share"]], color = Drug)) +
   geom_point() +
   geom_line() +
-  scale_color_brewer(palette = "Dark2") +
+  scale_color_brewer(palette = "Set1") +
   theme_light() +
   labs(
-    title = "Relativer Anteil von Personen, die jemals bestimmte Tabakprodukte konsumiert haben",
-    x = "Jahr",
-    y = "Relativer Anteil"
+    title = "Relative share of people who have ever used certain forms of tobacco",
+    x = "Year",
+    y = "Relative Share"
   )
 
-# 4) Plot: "In den letzten 30 Tagen" – Tabakprodukte
+# 4) Plot: "In the last 30 days" – tobacco products
 ggplot(tobacco30, aes(x = Year, y = .data[["Rel. share"]], color = Drug)) +
   geom_point() +
   geom_line() +
-  scale_color_brewer(palette = "Dark2") +
+  scale_color_brewer(palette = "Set1") +
   theme_light() +
   labs(
-    title = "Relativer Anteil von Personen, die in den letzten 30 Tagen bestimmte Tabakprodukte konsumiert haben",
-    x = "Jahr",
-    y = "Relativer Anteil"
+    title = "Relative share of people who have used certain forms of tobacco in the last 30 days",
+    x = "Year",
+    y = "Relative Share"
   )
 
-# Hinweis: Skalen für die Y-Achse könnten ggf. angepasst werden (ylim etc.).
+# Note: You could adjust y-axis scales (ylim) if needed.
 
 ##########################
-# Balkendiagramme: Funktion zum Plotten einzelner Drogen
+# Bar Charts: Function to Plot Single Drugs
 ##########################
 
 graphfun1 <- function(drug, question, ymax) {
@@ -156,43 +175,43 @@ graphfun1 <- function(drug, question, ymax) {
     ggplot(aes(x = Year, y = .data[["Rel. share"]])) +
     geom_line() +
     geom_point() +
-    scale_color_brewer(palette = "Dark2", aesthetics = "color") +  # Farbskala, hier nur relevant, wenn ein 'color'-Mapping vorhanden wäre
-    ggtitle(question) +                                            # Dieser Text kommt als Argument, hier also ggf. manuell anpassen
+    scale_color_brewer(palette = "Set1", aesthetics = "color") +  # Vibrant color palette, relevant if color mapping is used
+    ggtitle(question) +                                           # The question is passed as the title
     theme_light() +
     ylim(0, ymax) +
     labs(
-      x = "Jahr",
-      y = "Relativer Anteil"
+      x = "Year",
+      y = "Relative Share"
     )
 }
 
-# Beispielaufrufe für einzelne Drogen
+# Example calls for single drugs
 graphfun1(
   everdatafun("cigever", "Cigarettes"),
-  "Haben Sie jemals eine Zigarette (ganz oder teilweise) geraucht?",
+  "Have you ever smoked part or all of a cigarette?",
   0.6
 )
 graphfun1(
   everdatafun("alcever", "Alcohol"),
-  "Haben Sie jemals, auch nur einmal, irgendein alkoholisches Getränk zu sich genommen?",
+  "Have you ever, even once, had a drink of any type of alcoholic beverage?\nPlease do not include times when you only had a sip or two from a drink.",
   0.8
 )
 graphfun1(
   everdatafun("herever", "Heroin"),
-  "Haben Sie jemals, auch nur einmal, Heroin konsumiert?",
+  "Have you ever, even once, used heroin?",
   0.025
 )
 graphfun1(
   everdatafun("cocever", "Cocaine"),
-  "Haben Sie jemals, auch nur einmal, irgendeine Form von Kokain konsumiert?",
+  "Have you ever, even once, used any form of cocaine?",
   0.15
 )
 
 ##########################
-# Histogramme: Zigaretten (z.B. gerauchte Tage)
+# Histograms: Example with Cigars (e.g., number of smoked days)
 ##########################
 
-# Beispiel: Datensatz für Zigarren, bei dem Code-Werte wie 91,93,94,97,98 herausgefiltert werden
+# Example: A dataset for cigars, filtering out code values like 91, 93, 94, 97, 98
 cigarettesclean <- drugdata %>%
   mutate(
     CGR30USE = ifelse(CGR30USE %in% c(91, 93, 94, 97, 98), NA, CGR30USE)
@@ -200,7 +219,7 @@ cigarettesclean <- drugdata %>%
   filter(!is.na(CGR30USE)) %>%
   filter(CGR30USE > 0, CGR30USE <= 30)
 
-# Histogramm über gerauchte Tage, gruppiert nach Jahr
+# Histogram of smoked days, grouped by year
 cigarettesclean %>%
   ggplot(aes(x = CGR30USE)) +
   geom_histogram(
@@ -213,30 +232,30 @@ cigarettesclean %>%
   scale_x_continuous(breaks = seq(5, 30, by = 5), limits = c(1, 30)) +
   ylim(0, 0.035) +
   labs(
-    title = "Relative Häufigkeiten der Rauchtage (2015-2019)",
-    x = "Anzahl der gerauchten Tage",
-    y = "Relative Häufigkeit"
+    title = "Relative frequencies of smoking days (2015-2019)",
+    x = "Number of smoking days",
+    y = "Relative Frequency"
   ) +
   theme_light()
 
-# Ähnliches Histogramm, etwas einfacher gehalten (Zigarren pro Jahr)
+# A similar histogram, more straightforward (cigars per year)
 drugdata %>%
   filter(CGR30USE >= 1 & CGR30USE <= 30) %>%
   ggplot(aes(x = CGR30USE)) +
   geom_histogram(binwidth = 1, color = "black") +
   facet_wrap(~ year, nrow = 1, scales = "free_y") +
   labs(
-    title = "Histogramme der Anzahl gerauchter Zigarren (2015-2019)",
-    x = "Anzahl gerauchter Tage",
-    y = "Häufigkeit"
+    title = "Histograms of the number of days cigars were smoked (2015-2019)",
+    x = "Number of days smoked",
+    y = "Frequency"
   ) +
   theme_light()
 
 ##########################
-# Funktion zur Berechnung: Durchschnittliche Nutzungstage pro Jahr (inklusive Nicht-Nutzern = 0)
+# Function: Calculate Average Usage Days per Year (including non-users = 0)
 ##########################
 
-# Hilfsfunktion: Datensatz vorbereiten
+# Helper function: Prepares the dataset
 prepare_data <- function(datacol, drug_name) {
   allfilterdata %>%
     mutate(
@@ -249,20 +268,20 @@ prepare_data <- function(datacol, drug_name) {
     select(year, Drug, UsageDays)
 }
 
-# Durchschnittliche Nutzungstage pro Droge
+# Average usage days per drug
 avg_data_fun <- function(datacol, drug_name) {
   prepare_data(datacol, drug_name) %>%
     group_by(year, Drug) %>%
     summarize(avg_days = mean(UsageDays, na.rm = TRUE), .groups = "drop")
 }
 
-# Beispiel: Drogen mit Durchschnittswerten pro Jahr
+# Example: Drugs with average usage days per year
 her30_avg_data <- avg_data_fun("HER30USE", "Heroin")
 coc30_avg_data <- avg_data_fun("COCUS30A", "Cocaine")
 alc30_avg_data <- avg_data_fun("alcdays", "Alcohol")
 cig30_avg_data <- avg_data_fun("CIG30USE", "Cigarettes")
 
-# Zusammenführen in einen Dataframe
+# Combine into one dataframe
 combined_avg_usage <- bind_rows(
   her30_avg_data,
   coc30_avg_data,
@@ -270,20 +289,20 @@ combined_avg_usage <- bind_rows(
   cig30_avg_data
 )
 
-# Plot: Durchschnittliche Nutzungstage (inkl. 0er)
+# Plot: Average usage days (including 0 for non-users)
 ggplot(combined_avg_usage, aes(x = year, y = avg_days, color = Drug)) +
   geom_point() +
   geom_line() +
-  scale_color_brewer(palette = "Dark2") +
+  scale_color_brewer(palette = "Set1") +
   theme_light() +
   labs(
-    title = "Durchschnittliche Anzahl an Konsumtagen (inkl. Nicht-Nutzer als 0)",
-    x = "Jahr",
-    y = "Durchschnittliche Nutzungstage"
+    title = "Average number of usage days (including 0 for non-users)",
+    x = "Year",
+    y = "Average Usage Days"
   )
 
 ##########################
-# Funktion: Histogramm der Nutzungstage (1–30)
+# Function: Histogram of Usage Days (1–30)
 ##########################
 
 histogram_fun <- function(datacol, drug_name) {
@@ -300,20 +319,20 @@ histogram_fun <- function(datacol, drug_name) {
     facet_wrap(~ year) +
     theme_light() +
     labs(
-      title = paste0("Verteilung der Nutzungstage für ", drug_name),
-      x = "Anzahl der Nutzungstage in den letzten 30 Tagen",
-      y = "Relativer Anteil"
+      title = paste0("Distribution of usage days for ", drug_name),
+      x = "Number of Days Used in Last 30 Days",
+      y = "Relative Share"
     )
 }
 
-# Beispielaufrufe
+# Example calls
 histogram_fun("CIG30USE", "Cigarettes")
 histogram_fun("alcdays", "Alcohol")
 histogram_fun("COCUS30A", "Cocaine")
 histogram_fun("HER30USE", "Heroin")
 
 ##########################
-# Funktion: Mosaikplot für bivariate Daten (Werte 1 und 2)
+# Function: Mosaic Plot for Bivariate Data (values 1 and 2)
 ##########################
 
 mosaicfun <- function(var1, var2, varname1, varname2) {
@@ -343,30 +362,30 @@ mosaicfun <- function(var1, var2, varname1, varname2) {
     ) %>%
     mosaicplot(
       color = TRUE,
-      main = paste("Korrelation zwischen", varname1, "und", varname2)
+      main = paste("Correlation between", varname1, "and", varname2)
     )
 }
 
-# Beispielaufrufe für Mosaikplots
+# Example calls for mosaic plots
 mosaicfun("herever", "cocever", "Heroin", "Cocaine")
 mosaicfun("cigever", "cocever", "Cigarettes", "Cocaine")
 mosaicfun("alcever", "cocever", "Alcohol", "Cocaine")
 mosaicfun("alcever", "cigever", "Alcohol", "Cigarettes")
 
 ##########################
-# Erweiterung: Mosaikplot für "letzte 30 Tage"
+# Extension: Mosaic Plot for "Last 30 Days"
 ##########################
 
 mosaicfun30 <- function(var1, var2, varname1, varname2) {
   
-  # Datensatz, in dem var1 und var2 bei Werten 1–30 auf 1 recodiert werden, ansonsten auf 2
+  # Dataset in which var1 and var2 are recoded to 1 if 1-30, otherwise 2
   allfilterdata30 <- allfilterdata %>%
     mutate(
       usage1 = if_else(.data[[var1]] >= 1 & .data[[var1]] <= 30, 1, 2),
       usage2 = if_else(.data[[var2]] >= 1 & .data[[var2]] <= 30, 1, 2)
     )
   
-  # 2x2-Tabelle aus den Kombinationen (Yes/Yes, No/Yes, Yes/No, No/No)
+  # 2x2 table from the combinations (Yes/Yes, No/Yes, Yes/No, No/No)
   data.frame(
     matrix(
       c(
@@ -385,9 +404,9 @@ mosaicfun30 <- function(var1, var2, varname1, varname2) {
     ) %>%
     mosaicplot(
       color = TRUE,
-      main = paste("Korrelation zwischen", varname1, "und", varname2, "(Letzte 30 Tage)")
+      main = paste("Correlation between", varname1, "and", varname2, "(Last 30 Days)")
     )
 }
 
-# Beispielaufruf: Mosaikplot für letzte 30 Tage
+# Example call: Mosaic plot for the last 30 days
 mosaicfun30("CIG30USE", "COCUS30A", "Cigarettes", "Cocaine")
