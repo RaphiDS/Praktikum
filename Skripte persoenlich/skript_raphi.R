@@ -128,3 +128,44 @@ mosaicfun("herever", "cocever", "Heroin", "Cocaine")
 mosaicfun("cigever", "cocever", "Cigarettes", "Cocaine")
 mosaicfun("alcever", "cocever", "Alcohol", "Cocaine")
 mosaicfun("alcever", "cigever", "Alcohol", "Cigarettes")
+
+
+
+mosaicfun30 <- function(var1, var2, varname1, varname2) {
+  
+  # 1) Erzeuge eine Hilfs-Tabelle, in der du var1 und var2 basierend auf 1–30 Tagen recodierst
+  #    => 1 = Nutzung in den letzten 30 Tagen, 2 = keine Nutzung in den letzten 30 Tagen
+  allfilterdata30 <- allfilterdata %>%
+    mutate(
+      usage1 = if_else(.data[[var1]] >= 1 & .data[[var1]] <= 30, 1, 2),
+      usage2 = if_else(.data[[var2]] >= 1 & .data[[var2]] <= 30, 1, 2)
+    )
+  
+  # 2) Erstelle eine 2x2-Matrix aus den 4 Zellen:
+  #    (Yes/Yes, No/Yes, Yes/No, No/No)
+  #    Die count()-Werte werden jeweils aus dem gefilterten Datensatz ermittelt.
+  data.frame(
+    matrix(
+      c(
+        allfilterdata30 %>% filter(usage1 == 1 & usage2 == 1) %>% count(),
+        allfilterdata30 %>% filter(usage1 == 2 & usage2 == 1) %>% count(),
+        allfilterdata30 %>% filter(usage1 == 1 & usage2 == 2) %>% count(),
+        allfilterdata30 %>% filter(usage1 == 2 & usage2 == 2) %>% count()
+      ),
+      nrow = 2
+    ),
+    row.names = c(paste(varname1, "Yes"), paste(varname1, "No"))
+  ) %>%
+    # 3) Spalten dynamisch umbenennen, damit wir z.B. "Marijuana Yes"/"Marijuana No" o.Ä. bekommen
+    rename(
+      !!paste(varname2, "Yes") := X1,
+      !!paste(varname2, "No")  := X2
+    ) %>%
+    # 4) Den Mosaikplot erzeugen
+    mosaicplot(
+      color = TRUE,
+      main = paste("Correlation between", varname1, "and", varname2, "(Last 30 days)")
+    )
+}
+
+mosaicfun30("CIG30USE", "COCUS30A", "Cigarettes", "Cocaine")
