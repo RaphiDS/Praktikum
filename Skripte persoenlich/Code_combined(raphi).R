@@ -201,3 +201,23 @@ histogram_fun("CIG30USE", "Cigarettes")
 histogram_fun("alcdays", "Alcohol")
 histogram_fun("COCUS30A", "Cocaine")
 histogram_fun("HER30USE", "Heroin")
+
+# Funktion für Mosaikplots für bivariate Daten mit Ausprägung 1 und 2
+mosaicfun <- function(var1, var2, varname1, varname2) {
+  data.frame(matrix(c(allfilterdata %>%
+                        filter(.data[[var1]] == 1 & .data[[var2]] == 1) %>%
+                        count(), allfilterdata %>%
+                        filter(.data[[var1]] == 2 & .data[[var2]] == 1) %>%
+                        count(), allfilterdata %>%
+                        filter(.data[[var1]] == 1 & .data[[var2]] == 2) %>%
+                        count(), allfilterdata %>%
+                        filter(.data[[var1]] == 2 & .data[[var2]] == 2) %>%
+                        count()), nrow = 2), row.names = c(paste(varname1, "Yes"), paste(varname1,"No"))) %>%
+    rename(!!paste(varname2, "Yes") := X1 , !!paste(varname2, "No") := X2) %>%
+    mosaicplot(color = TRUE, main = paste("Correlation between", varname1, "and", varname2))
+}
+
+mosaicfun("herever", "cocever", "Heroin", "Cocaine")
+mosaicfun("cigever", "cocever", "Cigarettes", "Cocaine")
+mosaicfun("alcever", "cocever", "Alcohol", "Cocaine")
+mosaicfun("alcever", "cigever", "Alcohol", "Cigarettes")

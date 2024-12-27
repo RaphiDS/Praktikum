@@ -125,3 +125,6 @@ mosaicfun <- function(var1, var2, varname1, varname2) {
 }
 
 mosaicfun("herever", "cocever", "Heroin", "Cocaine")
+mosaicfun("cigever", "cocever", "Cigarettes", "Cocaine")
+mosaicfun("alcever", "cocever", "Alcohol", "Cocaine")
+mosaicfun("alcever", "cigever", "Alcohol", "Cigarettes")
