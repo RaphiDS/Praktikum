@@ -3,7 +3,35 @@ title: "Drogenkosnum in den USA von 2015-2019"
 format: revealjs
 editor: visual
 author: "Lilly Barnsteiner, Denis Oluri, Sarah Puthiaparampil, Raphael Schneider"
+incremental: true
 ---
+
+# Gliederung
+
+-   Einleitung
+
+-   Infos über Datensatz . . .
+
+    -   Organisation . . .
+    -   Historie
+
+-   Wer und Wie wird befragt
+
+-   Kodierung
+
+-   Demografische Faktoren
+
+-   Entwicklung von ...
+
+    -   Alkohol
+    -   Tabak
+    -   Drogen
+
+-   Einfluss auf Mentale Gesundheit
+
+-   Fazit
+
+## Infos über den Datensatz
 
 ## Quarto
 
@@ -20,29 +48,6 @@ When you click the **Render** button a document will be generated that includes:
 
 When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
 
-```{r echo= FALSE}
-load("C:/Users/sarah/OneDrive/UNI/WS 24_25/Praktikum/Datensätze/NSDUH-2019-DS0001-bndl-data-r/NSDUH_2019.RData")
-data2019 <- PUF2019_100920                   # loading data set
+```{r}
 
-## installing rquired packages
-
-
-library(ggplot2)
-library(tidyverse)
-general.employment <- data2019%>%
-  select(wrkdpstyr, wrkselfem) %>%                          #select needed variables
-  filter(wrkdpstyr %in% c(1,2) | wrkselfem %in% c(1,2)) %>%
-  pivot_longer(cols = everything(), names_to = "variable", values_to = "value") %>% #rearange table to fit values for barplot
-  group_by(variable,value) %>%
-  summarise(count = n(), .groups = 'drop')            # group to find summarized values for the bar
-  
-general.employment
-
-# graph
-employment.bar <- ggplot(general.employment, aes(x = as.factor(value), y = count, fill = as.factor(value)))+
-  geom_bar(stat = "identity") +
-    facet_wrap(~ variable)
-
-{r}
-employment.bar
 ```
