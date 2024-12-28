@@ -38,6 +38,7 @@ ggplot(tobaccoever, aes(x = Year, y = .data[["Rel. share"]], color = Drug)) +
   labs(title = "Relative share of people who have
 ever tried certain forms of tobacco")
 
+# -----------------------------------------------------------------------------------
 # Columngraph for each drug individually
 graphfun1 <- function (drug, question, ymax) {
   drug %>%
@@ -69,7 +70,7 @@ drugdata %>%
   labs(title = "On how many days per week people drink", x = "Year", y = "Rel. Share", color = "Days per week")
 
 #Tabelle mit Pfeife und Cigaretten als Beispiel evtl. Korrelation Odds Ratio
-data.frame(matrix(c(allfilterdata %>%
+pipecigtable <- data.frame(matrix(c(allfilterdata %>%
                filter(cigever == 1 & pipever == 1) %>%
                count(), allfilterdata %>%
                filter(cigever == 2 & pipever == 1) %>%
@@ -79,6 +80,8 @@ data.frame(matrix(c(allfilterdata %>%
                filter(cigever == 2 & pipever == 2) %>%
                count()), nrow = 2), row.names = c("Cig Yes", "Cig No")) %>%
   rename("Pipe Yes" = X1 , "Pipe No" = X2)
+
+
 
 boxplotfun <- function(drug) {
   allfilterdata %>%
@@ -102,3 +105,67 @@ boxplotfun("alctry")
 # Bedingte Häufigkeit bei Drogenkonsum als tabelle machen, nicht nur Tabak
 
 # Farbskalen
+
+mosaicplot(pipecigtable, color = TRUE)
+
+
+# Funktion für Mosaikplots für bivariate Daten mit Ausprägung 1 und 2
+mosaicfun <- function(var1, var2, varname1, varname2) {
+    data.frame(matrix(c(allfilterdata %>%
+                          filter(.data[[var1]] == 1 & .data[[var2]] == 1) %>%
+                          count(), allfilterdata %>%
+                          filter(.data[[var1]] == 2 & .data[[var2]] == 1) %>%
+                          count(), allfilterdata %>%
+                          filter(.data[[var1]] == 1 & .data[[var2]] == 2) %>%
+                          count(), allfilterdata %>%
+                          filter(.data[[var1]] == 2 & .data[[var2]] == 2) %>%
+                          count()), nrow = 2), row.names = c(paste(varname1, "Yes"), paste(varname1,"No"))) %>%
+    rename(!!paste(varname2, "Yes") := X1 , !!paste(varname2, "No") := X2) %>%
+  mosaicplot(color = TRUE, main = paste("Correlation between", varname1, "and", varname2))
+}
+
+mosaicfun("herever", "cocever", "Heroin", "Cocaine")
+mosaicfun("cigever", "cocever", "Cigarettes", "Cocaine")
+mosaicfun("alcever", "cocever", "Alcohol", "Cocaine")
+mosaicfun("alcever", "cigever", "Alcohol", "Cigarettes")
+
+
+
+mosaicfun30 <- function(var1, var2, varname1, varname2) {
+  
+  # 1) Erzeuge eine Hilfs-Tabelle, in der du var1 und var2 basierend auf 1–30 Tagen recodierst
+  #    => 1 = Nutzung in den letzten 30 Tagen, 2 = keine Nutzung in den letzten 30 Tagen
+  allfilterdata30 <- allfilterdata %>%
+    mutate(
+      usage1 = if_else(.data[[var1]] >= 1 & .data[[var1]] <= 30, 1, 2),
+      usage2 = if_else(.data[[var2]] >= 1 & .data[[var2]] <= 30, 1, 2)
+    )
+  
+  # 2) Erstelle eine 2x2-Matrix aus den 4 Zellen:
+  #    (Yes/Yes, No/Yes, Yes/No, No/No)
+  #    Die count()-Werte werden jeweils aus dem gefilterten Datensatz ermittelt.
+  data.frame(
+    matrix(
+      c(
+        allfilterdata30 %>% filter(usage1 == 1 & usage2 == 1) %>% count(),
+        allfilterdata30 %>% filter(usage1 == 2 & usage2 == 1) %>% count(),
+        allfilterdata30 %>% filter(usage1 == 1 & usage2 == 2) %>% count(),
+        allfilterdata30 %>% filter(usage1 == 2 & usage2 == 2) %>% count()
+      ),
+      nrow = 2
+    ),
+    row.names = c(paste(varname1, "Yes"), paste(varname1, "No"))
+  ) %>%
+    # 3) Spalten dynamisch umbenennen, damit wir z.B. "Marijuana Yes"/"Marijuana No" o.Ä. bekommen
+    rename(
+      !!paste(varname2, "Yes") := X1,
+      !!paste(varname2, "No")  := X2
+    ) %>%
+    # 4) Den Mosaikplot erzeugen
+    mosaicplot(
+      color = TRUE,
+      main = paste("Correlation between", varname1, "and", varname2, "(Last 30 days)")
+    )
+}
+
+mosaicfun30("CIG30USE", "COCUS30A", "Cigarettes", "Cocaine")
