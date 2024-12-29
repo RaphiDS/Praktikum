@@ -8,11 +8,6 @@ data2019 <- allfilterdata %>%
   filter (year == 2019)
 #--------------------------------------------------------------------------------------
 
-## kovarianz: filter arbeitslos und kokain/ mariuana/(alcohol /cigarette)
-
-
-
-## zu zeigen: von allen die Drogen nehmen, wie viele sind nicht angestellt?
 
 #------------------------------------------------------------------------------------------------------
 ## represent number of people who get health care for substance abuse
@@ -65,22 +60,46 @@ DrugGender
 
  mosaicplot(DrugGender, main = "Drug use dependend on gender",col = c("lavender", "skyblue"))
 
+ ## Cocaine use ever and Dependency comparision:
+ cocaine.Use.Dependency <- data.frame(matrix(c(data2019 %>%
+                                  filter(cocever == 1 & depndcoc == 1) %>%
+                                  count(), data2019 %>%
+                                  filter (cocever == 1 & depndcoc == 0) %>%
+                                    count(), data2019 %>%
+                                    filter(cocever == 2 &  depndcoc == 1) %>%
+                                    count(), data2019 %>%
+                                    filter(cocever == 2 & depndcoc == 0) %>%
+                                    count()), nrow = 2), row.names = c("Used Ever Yes", "Used Ever No")) %>%
+   rename ("Drug Abuser" = X1, "Not Drug Abuser" = X2)
+ cocaine.Use.Dependency
+ mosaicplot(cocaine.Use.Dependency, main = "Drug Abuse if you ever tried cocaine", col = c("skyblue", "darkgreen"))  ##WRONG
 #-----------------------------------------------------------------------------------------------
-## Drugs and Race
- Race.Cocaine <- data2019 %>%
-   select(NEWRACE2, depndcoc)
- 
-ggplot(Race.Cocaine, aes(x = depndcoc, fill = factor(NEWRACE2)))+
-  geom_bar(postion = "fill")
 
-## Better --> only dependt users
-Race.Coke.Dependendce <- data2019 %>%
-  select(NEWRACE2, depndcoc) %>%
-  filter( depndcoc == 1) 
+#-----------------------------------------------------------------------------------------
+## Drug Dependency and Race
+
+# Background weighted comparison of users and Non-users: "Who is and isnt doing drugs?"
+Dependency.Race <- data2019 %>%
+  select(NEWRACE2, depndcoc, depndalc, depndher) %>%
+  pivot_longer(cols = c(depndcoc,depndher, depndalc), names_to = "Drug", values_to = "Usage")
+
+ggplot(Dependency.Race , aes(x = Drug, fill = factor(NEWRACE2)))+
+         geom_bar(position = "fill")+
+  facet_wrap( ~ Usage)+
+  scale_x_discrete(labels = c("depndalc" = "Alcohol dependency", "depndcoc" = "Cocaine Dependency", "depndher" = "Heroine Dependency"),
+                   guide = guide_axis(angle = 45))+
+  scale_fill_discrete (labels = c("1" = "White", "2" = "Afr.Am", "3" = "Am/AK Native", "4" ="Other Pac Isl", "5" = " Asian", "6" = "more than one Race", "7" = "Hispamic"))
   
-
-ggplot(Race.Coke.Dependendce, aes(x = factor(NEWRACE2))) +
-  geom_bar() +
+  
+# "Of Durg users, how much is each group using?"
+  Dependent.Users.Race <- data2019 %>%
+    select(NEWRACE2, depndcoc, depndalc, depndher) %>%
+    pivot_longer(cols = c(depndcoc,depndher, depndalc), names_to = "Drug", values_to = "Usage") %>%
+  filter(Usage == 1)
+  
+  ggplot(Dependent.Users.Race , aes(x = factor(NEWRACE2), fill = factor(Drug)))+
+    geom_bar(position = "fill")+
+    facet_wrap( ~ Usage)+
   scale_x_discrete(
     labels = c(
       "1" = "White",
@@ -91,31 +110,82 @@ ggplot(Race.Coke.Dependendce, aes(x = factor(NEWRACE2))) +
       "6" = "More than one race",
       "7" = "Hispanic"
     ),
-    guide = guide_axis(angle = 45))
-
+    guide = guide_axis(angle = 45))+
+    labs(title = "Percentage of dependent Users of each Race")
 
 #-----------------------------------------------------------------------------------------
-## Heroine and race 
-# ---> combine it !!!
+## Nikotin Dependency (last month) and Race
+Nikotin.Dependence.Race <- data2019 %>%
+  select(NEWRACE2, dnicnsp) %>%
+  filter (dnicnsp == 1)
 
-Dependency.Race <- data2019 %>%
-  select(NEWRACE2, depndcoc, depndalc, depndher) %>%
+ggplot(Nikotin.Dependence.Race, aes(x = factor(NEWRACE2)))+
+  geom_bar()+
+  scale_x_discrete(
+    labels = c(
+      "1" = "White",
+      "2" = "Afr.Am",
+      "3" = "Am/AK Native",
+      "4" = "Other Pac Isl",
+      "5" = "Asian",
+      "6" = "More than one race",
+      "7" = "Hispanic"
+    ),
+    guide = guide_axis(angle = 45))+
+  labs(title = "Nicotine Dependency by Race")
+#-----------------------------------------------------------------------------------------
+## Drug Abuse and Race
+
+Drug.Abuse.Race <- data2019 %>%
+  select(abusealc, abusecoc, abuseher, NEWRACE2) %>%
+  pivot_longer(cols = c(abusealc,abusecoc, abuseher), names_to = "Drug", values_to = "Usage") %>%
+  filter (Usage == 1)
+
+ggplot(Drug.Abuse.Race, aes(x = factor(NEWRACE2), fill = Drug))+
+  geom_bar(position = "fill")+
+  scale_x_discrete(
+    labels = c(
+      "1" = "White",
+      "2" = "Afr.Am",
+      "3" = "Am/AK Native",
+      "4" = "Other Pac Isl",
+      "5" = "Asian",
+      "6" = "More than one race",
+      "7" = "Hispanic"
+    ),
+    guide = guide_axis(angle = 45))+
+  labs (title = "Drug Abusers by Race")
+
+## Der Plot unten macht keinen Sinn, ich würde nur gerne zeigen/ erwähnen ,dass nur 1 oder 2 % der Bevölkerung wirklich abhängig ist
+Drug.Abuse.Comparison <-  data2019 %>%
+  select(abusealc, abusecoc, abuseher, NEWRACE2) %>%
+  pivot_longer(cols = c(abusealc,abusecoc, abuseher), names_to = "Drug", values_to = "Usage")
+
+ggplot(Drug.Abuse.Comparison, aes(x = Drug, fill = factor(NEWRACE2)))+
+  geom_bar(poisition = "fill")+
+  facet_wrap (~ Usage)
+#------------------------------------------------------------------------------------------------------------
+## Drug Dependency based on sex
+Drug.Dependency.Gender <-data2019 %>%
+  select(irsex, depndcoc, depndalc, depndher) %>%
   pivot_longer(cols = c(depndcoc,depndher, depndalc), names_to = "Drug", values_to = "Usage") %>%
   filter(Usage == 1)
 
-ggplot(Dependency.Race , aes(x = factor(NEWRACE2), fill = factor(Drug)))+
-         geom_bar(position = "fill")+
-  scale_x_discrete(
-    labels = c(
-      "1" = "White",
-      "2" = "Afr.Am",
-      "3" = "Am/AK Native",
-      "4" = "Other Pac Isl",
-      "5" = "Asian",
-      "6" = "More than one race",
-      "7" = "Hispanic"
-    ),
-    guide = guide_axis(angle = 45))
+ggplot(Drug.Dependency.Gender, aes(x = Drug, fill = factor(irsex)))+
+  geom_bar(position = "fill")
 
-
-       
+ggplot(Drug.Dependency.Gender, aes(x = Drug, fill = factor(irsex)))+
+  geom_bar()+
+  labs(title = "Drug Dependency by Gender")+
+  scale_x_discrete(labels = c("depndalc" = "Alcohol dependency", "depndcoc" = "Cocaine Dependency", "depndher" = "Heroine Dependency"))+
+  scale_fill_discrete(labels = c("1" = "Male", "2" = "Female"))
+ 
+#-----------------------------------------------------------------------------------------------------------
+## Drug Abuse based on gender
+Drug.Abuse.Gender <- data2019 %>%
+  select(irsex, abusealc, abusecoc, abuseher) %>%
+  pivot_longer(cols = c(abusealc, abusecoc, abuseher), names_to = "Drug", values_to = "Usage") %>%
+  filter(Usage == 1)
+ggplot(Drug.Abuse.Gender, aes(x = Drug, fill = factor(irsex)))+
+  geom_bar()
+#+geom_bar(position = "fill")
