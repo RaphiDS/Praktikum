@@ -1,53 +1,56 @@
 ---
-title: "Drogenkosnum in den USA von 2015-2019"
+title: "Drogenkonsum in den USA von 2015-2019"
 format: revealjs
 editor: visual
 author: "Lilly Barnsteiner, Denis Oluri, Sarah Puthiaparampil, Raphael Schneider"
 incremental: true
+transition: slide
 ---
 
-# Gliederung
+# Gliederung {.smaller}
 
 -   Einleitung
-
 -   Infos über Datensatz . . .
-
     -   Organisation . . .
     -   Historie
-
 -   Wer und Wie wird befragt
-
 -   Kodierung
-
 -   Demografische Faktoren
-
 -   Entwicklung von ...
 
     -   Alkohol
     -   Tabak
     -   Drogen
-
 -   Einfluss auf Mentale Gesundheit
-
 -   Fazit
 
 ## Infos über den Datensatz
+- Jährliche Befragung amerikanischer Bürger*innen ab 12
+- Hauptquelle von statisitschen Daten über den Gebruach von Tabak, Alkohol, und Drogen
+- Enthält Infos über SUDs, Behandlung von Abhängigkeit und den Zusammenhang zu mentalen Gesundheitsproblemen
 
-## Quarto
+## WER und WIE wird befragt
+- alle amerikanischen, nicht- institutionaliseriten Bürger*innen ab dem ALter von 12
+- Stichproben so gewählt, dass jede Altersgruppe als auch Geschlecht gleich vertreten wird im Datensatz
+- jeder Staat wird in SSR (state sampling Regions, 750 insgesamt) unterteilt, die geografisch gleich groß sind --> gleiche Probengröße 
 
-Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <https://quarto.org/docs/presentations/>.
+## Kritik an der Datenerhebung
+## Kodierung
+```{r, echo=FALSE}
+#ggplot
+install.packages("ggplot2")
+library (ggplot2)
+# tidyverse
+install.packages("tidyverse")
+library(tidyverse)
 
-## Bullets
+#Loads a prepared Rdata file.
+# It contains a dataset called "allfilterdata", which we also store as "drugdata".
+load("Daten bearbeitet/combi_redu_data.Rdata")
+drugdata <- allfilterdata
+```
 
-When you click the **Render** button a document will be generated that includes:
-
--   Content authored with markdown
--   Output from executable code
-
-## Code
-
-When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
-
+## Demografische Faktoren
 ```{r}
 
 ```
