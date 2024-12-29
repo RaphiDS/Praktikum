@@ -34,10 +34,13 @@ ggplot(insurance.substance, aes(x = values, fill = as.factor(values)))+
 #----------------------------------------------------------------------------------------------------
 ## Drinking in American Indian Areas (AI) ---------------> do i use rbind to join AI and other Race?
 AI.Alcohol.Usage <- data2019 %>%
-  select(MAIIN102, NEWRACE2,ALCBNG30D) %>%
-  filter (ALCBNG30D < 94)%>%
-  filter (remove(ALCBNG30D == 85)) ## wrong code
-
+  select(MAIIN102, cabingflg) %>% ## using this vauraible since more than 4/5 drinks is categorized as binge drinking
+  filter (cabingflg < 85) #%>%
+  
+ggplot(AI.Alcohol.Usage, aes(x = MAIIN102, fill = factor(cabingflg))) +
+  geom_bar(position = "fill")+
+  scale_fill_discrete(labels = c("0" = "No report of binge drinking", "1"= "Binge alcohol use on 1+ days", "11" = "Report of 4+/5+ drinks"))+
+  scale_x_discrete (name = c("1" = "lives in AI Segment", "2" = "Not in AI Segment"))
 #----------------------------------------------------------------------------------------------------
 ## Trial Mosaikplot: Cocain and Gender
 GenderCOCaine <- data2019 %>%
@@ -62,5 +65,57 @@ DrugGender
 
  mosaicplot(DrugGender, main = "Drug use dependend on gender",col = c("lavender", "skyblue"))
 
+#-----------------------------------------------------------------------------------------------
+## Drugs and Race
+ Race.Cocaine <- data2019 %>%
+   select(NEWRACE2, depndcoc)
+ 
+ggplot(Race.Cocaine, aes(x = depndcoc, fill = factor(NEWRACE2)))+
+  geom_bar(postion = "fill")
+
+## Better --> only dependt users
+Race.Coke.Dependendce <- data2019 %>%
+  select(NEWRACE2, depndcoc) %>%
+  filter( depndcoc == 1) 
+  
+
+ggplot(Race.Coke.Dependendce, aes(x = factor(NEWRACE2))) +
+  geom_bar() +
+  scale_x_discrete(
+    labels = c(
+      "1" = "White",
+      "2" = "Afr.Am",
+      "3" = "Am/AK Native",
+      "4" = "Other Pac Isl",
+      "5" = "Asian",
+      "6" = "More than one race",
+      "7" = "Hispanic"
+    ),
+    guide = guide_axis(angle = 45))
 
 
+#-----------------------------------------------------------------------------------------
+## Heroine and race 
+# ---> combine it !!!
+
+Dependency.Race <- data2019 %>%
+  select(NEWRACE2, depndcoc, depndalc, depndher) %>%
+  pivot_longer(cols = c(depndcoc,depndher, depndalc), names_to = "Drug", values_to = "Usage") %>%
+  filter(Usage == 1)
+
+ggplot(Dependency.Race , aes(x = factor(NEWRACE2), fill = factor(Drug)))+
+         geom_bar(position = "fill")+
+  scale_x_discrete(
+    labels = c(
+      "1" = "White",
+      "2" = "Afr.Am",
+      "3" = "Am/AK Native",
+      "4" = "Other Pac Isl",
+      "5" = "Asian",
+      "6" = "More than one race",
+      "7" = "Hispanic"
+    ),
+    guide = guide_axis(angle = 45))
+
+
+       
