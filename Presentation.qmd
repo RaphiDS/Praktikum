@@ -4,33 +4,10 @@ format: revealjs
 editor: visual
 author: "Lilly Barnsteiner, Denis Oluri, Sarah Puthiaparampil, Raphael Schneider"
 incremental: true
+smaller: true
 transition: slide
 ---
 
-# Gliederung {.smaller}
-
--   Einleitung
-
--   Infos über Datensatz . . .
-
-    -   Organisation . . .
-    -   Historie
-
--   Wer und Wie wird befragt
-
--   Kodierung
-
--   Demografische Faktoren
-
--   Entwicklung von ...
-
-    -   Alkohol
-    -   Tabak
-    -   Drogen
-
--   Einfluss auf Mentale Gesundheit
-
--   Fazit
 
 ## Infos über den Datensatz
 ```{r, echo=FALSE}
@@ -45,7 +22,6 @@ drugdata <- allfilterdata
 # Filter data for the year 2019
 data2019 <- allfilterdata %>%
   filter(year == 2019)
-
 ```
 
 -   Jährliche Befragung amerikanischer Bürger\*innen ab 12
@@ -59,8 +35,7 @@ data2019 <- allfilterdata %>%
 -   jeder Staat wird in SSR (state sampling Regions, 750 insgesamt) unterteilt, die geografisch gleich groß sind --\> gleiche Probengröße
 
 ---
-::: {.panel-tabset}
-### Tabelle
+
 ```{r, echo=FALSE}
 # Load necessary libraries
 library(tidyverse)
@@ -147,9 +122,6 @@ us_states <- us_states %>% filter(STUSPS %in% setdiff(state_codes, exclude_state
 us_states <- us_states %>%
   mutate(state = tolower(NAME))  # Create lowercase column for joining
 
-```
-
-```{r}
 # Join spatial data with interviews data
 map_data <- us_states %>%
   left_join(expanded_data, by = "state")
@@ -169,7 +141,6 @@ ggplot(map_data) +
 
 ggsave("interviews_by_state.png", width = 10, height = 6, dpi = 300)
 ```
-:::
 
 ## Kritik an der Datenerhebung
 
@@ -216,7 +187,6 @@ Wie viele Leute haben schonmal Drogen konsumiert (raphi)
 Wie oft wurden Drogen konsumiert(dennis)
 
 ## Sucht oder nur Hobby Konsum
-DSM-5 Kriterien
 ## Tabak
 Unterteilung Tabaks/Pfeife/Vape,..
 
@@ -238,4 +208,3 @@ Alkholkonsum wird in verschiedenen Stufen gemessen
 
 ## Heroin
 
-## Deomografie und Drogen
