@@ -123,24 +123,6 @@ ggplot(marital.status, aes(x = IRMARIT, fill = factor(IRMARIT)))+
   geom_bar()+
   scale_fill_manual(labels = c("1" = "Married", "2" = "Widowed", "3" = "Divorced or Seperated", "4" = "Never been MArried"))+
   labs(title = "Marital satus", fill = "Status")
-#------------------------------------------------------------------------------------------------------
-## college enrollment(people aged 18-2count## college enrollment(people aged 18-22, enrolled in School and College)
-college.enrollment <- data2019 %>%
-## ISSUE. not in allfilterdata --> Graph is wrong
-  select(collenrlst) %>%
-  filter(collenrlst < 5) %>%
-  pivot_longer(cols = everything(), names_to = "status", values_to = "value") %>%
-  group_by(status)
-
-#create label for the scale
-
-college.enrollment
-#graph
-ggplot(college.enrollment, aes( x = value, fill = as.factor(value)))+
-  geom_bar()+
-  ggtitle ("college enrollment status")+
-  labs(fill = "status")+
-  theme_minimal()
 
 #------------------------------------------------------------------------------------------------------
 ## Plot for Eudcation level dependend on race
