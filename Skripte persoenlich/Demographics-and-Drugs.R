@@ -186,6 +186,24 @@ Drug.Abuse.Gender <- data2019 %>%
   select(irsex, abusealc, abusecoc, abuseher) %>%
   pivot_longer(cols = c(abusealc, abusecoc, abuseher), names_to = "Drug", values_to = "Usage") %>%
   filter(Usage == 1)
+
 ggplot(Drug.Abuse.Gender, aes(x = Drug, fill = factor(irsex)))+
   geom_bar()
 #+geom_bar(position = "fill")
+
+#------------------------------------------------------------------------------------------------------------
+## Drug use based on Gender and Age
+Drug.Gender.Age <- data2019 %>%
+  select(irsex,catage, cocever, herever, alcever, smklssevr, cigever) %>%
+  filter(1 %in% c(cocever, herever, alcever, smklssevr, cigever)) %>%
+  pivot_longer(cols = c(cocever, herever,alcever,smklssevr,cigever), names_to = "Substance") %>%
+  filter (value == 1) %>%
+  group_by(irsex,catage, Substance) %>%
+  summarise(Count = n(), .groups = 'drop') %>%
+  mutate(Relative = Count / 56136) # or maybe 81878?
+
+ggplot(Drug.Gender.Age, aes(x = factor(catage),y = Relative, fill = factor (Substance)))+
+  geom_bar(stat = "identity", position = "dodge")+
+  facet_wrap(~ irsex, labeller = as_labeller(c("1"="Male", "2" = "Female")), ncol = 1)+
+  scale_fill_discrete(labels = c("alcever" = "Alcohol", "cigever" = "Cigarette", "cocever" = "Cocaine", "herever" = "Heroine", "smklssevr" = "Smokeless Tabacco"))+
+  scale_x_discrete(labels = c("1" = "12-17", "2" = "18-25", "3" = "26-34", "4" = "35+"))
