@@ -203,9 +203,9 @@ plot1 / plot2
 ## Substanzkonsum
 
 -   Ausgewählten Substanzen: Tabak, Alkohol, Cokain, Heroin
--   DIffenrzierung: 
-    - nur Cokain, nicht Coke betrachtet
-    - Tabak: normlae Zigaretten und "rauchfreie" Tabbakware wie z.b. Snus
+-   DIffenrzierung:
+    -   nur Cokain, nicht Coke betrachtet
+    -   Tabak: normlae Zigaretten und "rauchfreie" Tabbakware wie z.b. Snus
 
 ------------------------------------------------------------------------
 
