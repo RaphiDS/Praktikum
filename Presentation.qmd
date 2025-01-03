@@ -29,6 +29,10 @@ transition: slide
 
 ## Infos über den Datensatz
 
+-   "National Survey on Drug USe and Health", unterstützt von SAMHSA und orgnaisiert von CBHSQ
+-   Hauptquelle zum Konsum von Alkohol, Tabbak, verschriebenen Drogen Es werden auch Fragen in Bezug auf Mentale Gesundheit gestellt
+-   (Enthält Infos über SUDs, Behandlung von Abhängigkeit und den Zusammenhang zu mentalen Gesundheitsproblemen)
+
 ```{r, echo=FALSE}
 # Load libraries
 library(ggplot2)
@@ -44,15 +48,16 @@ data2019 <- allfilterdata %>%
   filter(year == 2019)
 ```
 
--   Jährliche Befragung amerikanischer Bürger\*innen ab 12
--   Hauptquelle von statisitschen Daten über den Gebruach von Tabak, Alkohol, und Drogen
--   Enthält Infos über SUDs, Behandlung von Abhängigkeit und den Zusammenhang zu mentalen Gesundheitsproblemen
-
 ## WER und WIE wird befragt
 
--   alle amerikanischen, nicht- institutionaliseriten Bürger\*innen ab dem ALter von 12
--   Stichproben so gewählt, dass jede Altersgruppe als auch Geschlecht gleich vertreten wird im Datensatz
--   jeder Staat wird in SSR (state sampling Regions, 750 insgesamt) unterteilt, die geografisch gleich groß sind --\> gleiche Probengröße
+-   alle amerikanischen, nicht-institutionalisierten Bürger\*innen ab dem ALter von 12 (insgesamt 67.625)
+    -   ausgeschlossen: Obdachlose, Personen aktiv im Militär, Gefängnisse und Krankenhäuser
+-   Stichprobe basiert auf einer unabhängigen,mehrstufigen Gebietswahrscheinlichkeitsstichprobe (vllt lieber engl. Name) -jeder Staat (1 Ebene) wird in SSR (2 Ebene, 750 insgesamt) unterteilt,diese Gruppen werden nochmal unterteilt in Census Blocks (3 Ebene), mit gleicher Populationsgröße --\> nochmal unterteilt ( insgesamt 6 Ebenen) --\> gleiche Probengröße der DU von bis zu 2 Befragten, die mind. 12 Jahre alt sind
+-   Stichproben so gewählt, dass...
+    -   sie mehr proportional zu den staatlichen Populationsgrößen sind
+    -   jede Altersgruppe als auch Geschlecht gleich vertreten wird im Datensatz
+-   es wurden im Jahr in jedem Segment 4 Umfragen gehalten (mit einer Bearbeitungszeit von 3 Monaten)
+-   Auszahlung von 30 \$
 
 ------------------------------------------------------------------------
 
@@ -164,7 +169,14 @@ ggplot(map_data) +
 
 ## Kritik an der Datenerhebung
 
+-   Alle Infos beheben sich auf Selbsteinschätzung der Befragten: Ehrlichkeit trotz Anonymität?
+-   Cross-sectionale Datenerhebung statt longtudinal: Jede Person wurde für ein JAhr nur einmal befragt: man bekommt einen Überblick über aktuelle Lage, nicht wie sich der Drogenkonsum über die Zeit entwickelt für ein einzelnes Individuum
+
 ## Kodierung
+
+Mentale Gesundheit: Fragen variieren je nach Alter: es ist schwer die Stärke der Krankheit einzustufen
+
+Alkhol und Drogen: es gibt bestimmte Schwellenwerte um die Intensität und art des Konsums zu messen (Unterscheidung Dpendence und Abuse)
 
 ## Demografische Faktoren
 
@@ -239,4 +251,12 @@ Alkholkonsum wird in verschiedenen Stufen gemessen
 
 ## Heroin
 
-### Fazit
+## Fazit
+
+## Mentale Gesundheit: Einflüsse und Behandlung
+
+Einstufung für SMI (serious mental Illness):
+
+-   Personen ab 18+, die momentan oder irngedwann im letzten Jahr eine diagnostizierte Mentale-, Verhaltens- oder Emotions-Krankheit hatten und die Kriterien von DSM-III-R erfüllten
+-   Substanzkonsum wurde mitgemessen, wenn es gleichzeitig mit ernsten mentalen Gesundheitsbeschwerden miteintritt
+-   diese Krankheiten haben die Individuuen stark in ihrem Alttag eingeschränkt (privat als auch davon in der Gesellschaft teilnehmen zu können)
