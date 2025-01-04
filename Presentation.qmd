@@ -8,6 +8,37 @@ smaller: true
 transition: slide
 ---
 
+```{r setup}
+#| include: false
+#| label: set-up
+
+# List of required packages
+required_packages <- c("ggplot2", "tidyverse", "patchwork", "gridExtra", "sf", "tigris")
+
+# Install missing packages
+install_missing <- function(packages) {
+  installed <- installed.packages()
+  for (pkg in packages) {
+    if (!pkg %in% installed) {
+      install.packages(pkg)
+    }
+  }
+}
+
+install_missing(required_packages)
+
+# Load the packages
+lapply(required_packages, library, character.only = TRUE)
+
+# Load the prepared dataset
+load("Daten bearbeitet/combi_redu_data.Rdata")
+drugdata <- allfilterdata
+
+# Filter data for the year 2019
+data2019 <- allfilterdata %>%
+  filter(year == 2019)
+```
+
 ## Gliederung
 
 -   Allgemeine Infos über den Datensatz
@@ -33,20 +64,7 @@ transition: slide
 -   Hauptquelle zum Konsum von Alkohol, Tabbak, verschriebenen Drogen Es werden auch Fragen in Bezug auf Mentale Gesundheit gestellt
 -   (Enthält Infos über SUDs, Behandlung von Abhängigkeit und den Zusammenhang zu mentalen Gesundheitsproblemen)
 
-```{r, echo=FALSE}
-# Load libraries
-library(ggplot2)
-library(tidyverse)
-library(patchwork)
 
-# Load the prepared dataset
-load("Daten bearbeitet/combi_redu_data.Rdata")
-drugdata <- allfilterdata
-
-# Filter data for the year 2019
-data2019 <- allfilterdata %>%
-  filter(year == 2019)
-```
 
 ## WER und WIE wird befragt
 
@@ -61,13 +79,10 @@ data2019 <- allfilterdata %>%
 
 ------------------------------------------------------------------------
 
-```{r, echo=FALSE, include=FALSE}
-# Load necessary libraries
-library(tidyverse)
-library(sf)
-library(tigris)
-library(ggplot2)
-
+```{r}
+#| echo: false
+#| include: false
+#| label: Karte-Setup
 state_data <- data.frame(
   state = c(
     "California", "Texas", "Florida", "New York", "Pennsylvania",
@@ -155,6 +170,8 @@ map_data <- us_states %>%
 ### Landkarte
 
 ```{r}
+#| label: Karte-Befragten
+
 ggplot(map_data) +
   geom_sf(aes(fill = interviews), color = "white", size = 0.2) +  # Fill states by interviews
   scale_fill_viridis_c(option = "plasma", direction = -1, name = "Total Interviews") +  # Color scale
@@ -180,7 +197,10 @@ Alkhol und Drogen: es gibt bestimmte Schwellenwerte um die Intensität und art d
 
 ## Demografische Faktoren
 
-```{r, echo=FALSE}
+```{r}
+#| echo: false
+#| label: Daten-Alter
+
 age.grouped <- data2019 %>%
   select(catage) %>%
   pivot_longer(cols = everything(), names_to = "variable", values_to = "group") %>%
@@ -194,7 +214,11 @@ age.ratio.levels <- data2019 %>%
   summarize(count =n()/56136)
 ```
 
-```{r, fig.width= 9, fig.height=5}
+```{r}
+#| label: Grafen-Altersverteilung
+#| fig-width: 9
+#| fig-height: 5
+
 plot1<- ggplot(age.grouped, aes(x= group,y = count, fill = factor(group)))+
   geom_col()+
   scale_fill_discrete(labels = c("1" = "12-17", "2" = "18-25", "3" = "26-34", "4" = "35+"))+

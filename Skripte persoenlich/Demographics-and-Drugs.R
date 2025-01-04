@@ -72,7 +72,7 @@ DrugGender
                                     count()), nrow = 2), row.names = c("Used Ever Yes", "Used Ever No")) %>%
    rename ("Drug Abuser" = X1, "Not Drug Abuser" = X2)
  cocaine.Use.Dependency
- mosaicplot(cocaine.Use.Dependency, main = "Drug Abuse if you ever tried cocaine", col = c("skyblue", "darkgreen"))  ##WRONG
+ mosaicplot(cocaine.Use.Dependency, main = "Drug Abuse if you ever tried cocaine", col = c("skyblue", "darkgreen"))  ##WRONG, Zahlen stimmen schon nicht
 #-----------------------------------------------------------------------------------------------
 
 #-----------------------------------------------------------------------------------------
@@ -207,3 +207,4 @@ ggplot(Drug.Gender.Age, aes(x = factor(catage),y = Relative, fill = factor (Subs
   facet_wrap(~ irsex, labeller = as_labeller(c("1"="Male", "2" = "Female")), ncol = 1)+
   scale_fill_discrete(labels = c("alcever" = "Alcohol", "cigever" = "Cigarette", "cocever" = "Cocaine", "herever" = "Heroine", "smklssevr" = "Smokeless Tabacco"))+
   scale_x_discrete(labels = c("1" = "12-17", "2" = "18-25", "3" = "26-34", "4" = "35+"))
+
