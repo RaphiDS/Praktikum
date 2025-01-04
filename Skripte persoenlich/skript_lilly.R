@@ -50,7 +50,7 @@ state_data <- state_data %>%
 state_data
 
 ###US MAP ONLY INTERVIEWS ABSOLUT
-install.packages(c("sf", "tigris", "ggplot2", "dplyr"))
+#install.packages(c("sf", "tigris", "ggplot2", "dplyr"))
 library(sf)
 library(tigris)
 library(ggplot2)
@@ -379,3 +379,4 @@ ggplot(valid_data, aes(x = Response, y = Relative_Frequency, fill = Response)) +
     panel.grid.minor = element_blank(),
     legend.position = "none"
   )
+

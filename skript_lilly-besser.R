@@ -1,7 +1,7 @@
 ### last try to work with the real data set
 
 extract_and_analyze <- function(column_name, decoded_values = NULL) {
-  data <- NSDUH_2019  # Use NSDUH_2019 as the default dataset
+  data <- data2019  # Use NSDUH_2019 as the default dataset
   
   # Check if the column exists
   if (!column_name %in% colnames(data)) {
@@ -95,3 +95,4 @@ decoded_values <- c(
 )
 
 extract_and_analyze("ADDPDISC", decoded_values)
+
