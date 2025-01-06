@@ -40,16 +40,7 @@ ggplot(age.ratio.levels, aes(x = group, y = count, fill = factor(group)))+
   labs(title = "age in levels of three")
 
 #------------------------
-## ages properly distinct --> NOT Neccesary
-#true.age <- data2019 %>%
-  select(CATAG7) %>%
-  pivot_longer(cols = everything(), names_to = "variable", values_to = "group") %>%
-  group_by(group) %>%
-  summarize(count =n()/56136)
 
-#ggplot(true.age, aes(x = group, y = count, fill = factor(group)))+
-  geom_col()+
-  scale_y_continuous(labels = scales::percent) ## improvemnt: create stacked bar plots of level 3?
 #------------------------------------------------------------------------------------------------------
 ## combine Variables to find out who was employed the last 12 Months (or self employed)
 ### categorized into yes,no or no answer/NA
@@ -113,18 +104,26 @@ ggplot(gender,aes(x = gender, y = count, fill = factor(gender)))+
   theme_minimal()
 
 #------------------------------------------------------------------------------------------------------
-## MArital Stauts 
-## ISSUE not in allfilterdata
-marital.status <- data2019 %>%
-  select (IRMARIT) %>%
-  filter (IRMARIT < 99)
-
-ggplot(marital.status, aes(x = IRMARIT, fill = factor(IRMARIT)))+
-  geom_bar()+
-  scale_fill_manual(labels = c("1" = "Married", "2" = "Widowed", "3" = "Divorced or Seperated", "4" = "Never been MArried"))+
-  labs(title = "Marital satus", fill = "Status")
 
 #------------------------------------------------------------------------------------------------------
+## Destribution Race
+Race.Destr <- data2019 %>%
+  select(NEWRACE2) %>%
+  pivot_longer(cols = everything(), names_to = "Var", values_to = "Answer") %>%
+  group_by(Answer) %>%
+  summarize(count = n()) %>%
+  mutate(count = count/56136)
+
+ggplot(Race.Destr, aes(x = factor(Answer), y = count, fill = factor(Answer)))+
+  geom_col()+
+  scale_x_discrete(labels = c("1" = "White", "2" = "Afr.Am", "3" = "Am/AK Native", "4" ="Other Pac Isl", "5" = " Asian", "6" = "more than one Race", "7" = "Hispamic"),
+                   guide = guide_axis(angle = 45))+
+  labs(title = "Race ", y = "Percentage", x = "Background")
+
+## Race and Gender
+
+#-----------------------------------------------------------------------------------------------------
+
 ## Plot for Eudcation level dependend on race
 ## --> diskrete Farbskala besser
 Racial.Background <- data2019 %>%
