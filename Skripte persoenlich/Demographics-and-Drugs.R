@@ -7,24 +7,8 @@ library(tidyverse)
 data2019 <- allfilterdata %>%
   filter (year == 2019)
 #--------------------------------------------------------------------------------------
-
-
 #------------------------------------------------------------------------------------------------------
 ## represent number of people who get health care for substance abuse
-# categorize into yes(1), no(2), don't know (94), skip (prvhlthin = 2 --> no private insurance!, 97/98)
-insurance.substance <- data2019 %>%
-  select(hltinalc,hltindrg)%>%
-  filter(hltinalc < 3 & hltindrg < 3) %>%
-  pivot_longer(cols = everything(), names_to = "variable", values_to = "values") 
-
-## plot comparing the values
-ggplot(insurance.substance, aes(x = values, fill = as.factor(values)))+
-  geom_bar()+
-  facet_wrap( ~ variable)+
-  scale_fill_manual (values = c("1" = "red", "2" = "turquoise"), labels = c("1" = "Yes", "2" = "No"))+
-  scale_x_discrete(labels = c("1" = "Yes", "2" = "No")) +
-  labs( title = "Drug and alcohol abuse covered by private Insurance", fill = " Insurance status", x = "Status")
-
 
 #----------------------------------------------------------------------------------------------------
 ## Drinking in American Indian Areas (AI) ---------------> do i use rbind to join AI and other Race?
