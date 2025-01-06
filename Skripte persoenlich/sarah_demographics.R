@@ -121,7 +121,14 @@ ggplot(Race.Destr, aes(x = factor(Answer), y = count, fill = factor(Answer)))+
   labs(title = "Race ", y = "Percentage", x = "Background")
 
 ## Race and Gender
-
+Race.Gender <- data2019 %>%
+  select(NEWRACE2, irsex)
+ggplot(Race.Gender, aes(x = factor(NEWRACE2), fill = factor(irsex)))+
+  geom_bar(position = "fill")+
+  geom_hline(yintercept = 0.5, color = "black", linetype = "dashed") +
+  scale_x_discrete(labels = c("1" = "White", "2" = "Afr.Am", "3" = "Am/AK Native", "4" ="Other Pac Isl", "5" = " Asian", "6" = "more than one Race", "7" = "Hispamic"),
+                   guide = guide_axis(angle = 45))+
+  labs(title = "Race and Gender ", y = "Percentage", x = "Background")
 #-----------------------------------------------------------------------------------------------------
 
 ## Plot for Eudcation level dependend on race
