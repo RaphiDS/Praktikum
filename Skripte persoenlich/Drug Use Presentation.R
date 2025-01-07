@@ -85,7 +85,7 @@ tobacco30 <- as.data.frame(
 # 1) Plot: "Ever used" – 4 major drugs
 ggplot(fourdrugsever, aes(x = Year, y = .data[["Rel. share"]], color = Drug, shape = Drug)) +
   geom_point(size = 3) +
-  geom_line(size = 1) +
+  geom_line(linewidth = 1) +
   theme_light() +
   labs(
     title = "Relative share of people who have ever used certain drugs",

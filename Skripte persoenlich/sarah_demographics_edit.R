@@ -1,4 +1,10 @@
 
+# themenfrage: -	Wie hängt der Konsum im Jahr 2019 mit demographischen Merkmalen zusammen?
+## datensatz: demografische Faktoren ahnschauen
+
+## installing rquired packages
+library(tidyverse)
+
 ## create new, cleaned dataset for 2019 for everyone to use
 data2019 <- allfilterdata %>%
   filter (year == 2019)
@@ -8,16 +14,20 @@ data2019 <- allfilterdata %>%
 ## AGE grouped into allocated Categories of NSDUH
 age.grouped <- data2019 %>%
   select(catage) %>%
-  pivot_longer(cols = everything(), names_to = "variable", values_to = "group") %>%
-  group_by(group) %>%
+  pivot_longer(cols = everything(), names_to = "variable", values_to = "Group") %>%
+  group_by(Group) %>%
   summarize(count =n()/56136)
 
-ggplot(age.grouped, aes(x= group,y = count, fill = factor(group)))+
-  geom_col()+
-  scale_fill_discrete(labels = c("1" = "12-17", "2" = "18-25", "3" = "26-34", "4" = "35+"))+
-  scale_y_continuous(labels = scales::percent)+
-  labs(title = "Age in allocated Groups", y = "Percentage")
-
+ggplot(age.grouped, aes(x= factor(Group),y = count, fill = factor(Group, labels = c("12-17", "18-25", "26-34", "35+")))) +
+  geom_col() +
+  labs(title = "Age in allocated Groups", y = "Percentage", fill = "Age groups", x = "Group") +
+  theme_light() +
+  theme(
+    axis.title = element_text(size = 20),  # Achsentitel
+    axis.text  = element_text(size = 20),  # Achsbeschriftungen
+    legend.position = "none"  # Legendentext
+  ) +
+  scale_x_discrete(labels = c("12-17", "18-25", "26-34", "35+"))
 #---------------------
 # age in propertion
 age.ratio.levels <- data2019 %>%
@@ -26,45 +36,25 @@ age.ratio.levels <- data2019 %>%
   group_by(group) %>%
   summarize(count =n()/56136)
 
-ggplot(age.ratio.levels, aes(x = group, y = count, fill = factor(group)))+
+ggplot(age.ratio.levels, aes(x = factor(group), y = count, fill = factor(group)))+
   geom_col()+
-  scale_fill_discrete(labels = c("1" = "12-17", "2" = "18-25", "3" ="26+"))+
-  scale_y_continuous(labels = scales::percent)+
-  labs(title = "age in levels of three")
+  scale_fill_discrete(labels = c("1" = "12-17", "2" = "18-25", "3" ="26+")) +
+  labs(title = "age in levels of three", x = "Group", y = "Percentage") +
+  theme_light() +
+  theme(
+    axis.title = element_text(size = 20),  # Achsentitel
+    axis.text  = element_text(size = 20),  # Achsbeschriftungen
+    legend.position = "none"  # Legendentext
+  ) +
+  scale_x_discrete(labels = c("12-17", "18-25", "26+"))
 
 
-ggplot(true.age, aes(x = group, y = count, fill = factor(group))) +
-geom_col() +
-scale_y_continuous(labels = scales::percent) ## improvemnt: create stacked bar plots of level 3?
+#------------------------
+
 #------------------------------------------------------------------------------------------------------
 ## combine Variables to find out who was employed the last 12 Months (or self employed)
 ### categorized into yes,no or no answer/NA
 
-general.employment <- data2019%>%
-  select(wrkdpstyr, wrkselfem) %>%                          #select needed variables
-  filter(wrkdpstyr %in% c(1,2) | wrkselfem %in% c(1,2)) %>%
-  pivot_longer(cols = everything(), names_to = "variable", values_to = "value") %>% #rearange table to fit values for barplot
-  group_by(variable,value) %>%
-  summarise(count = n()/56136, .groups = 'drop') %>%          # group to find summarized values for the bar
-  filter (value < 94)                                # getting rid of NAs --> NOT working
-
-general.employment
-
-## graph
-
-#manual scale name
-employment.scale.manual <- c("1" = "Yes",
-                             "2" = "No")
-
-employment.bar <- ggplot(general.employment, aes(x = as.factor(value), y = count, fill = factor(value)))+
-  geom_bar(stat = "identity") +
-  facet_wrap(~ variable)+
-  scale_x_discrete(labels = employment.scale.manual)+
-  scale_fill_manual(values = c("1" = "blue", "2" = "red"), labels = employment.scale.manual)+
-  scale_y_continuous(labels = scales::percent)+
-  labs(title = "Employed either at a business or selfemployed", x = " ")
-
-employment.bar
 
 ## BUT in the Skript they use antoher Variable
 
@@ -78,10 +68,14 @@ imputed.employment18 <- data2019 %>%
 
 ggplot(imputed.employment18, aes(x = factor(number), y = count, fill = factor(number))) +
   geom_bar(stat = "identity")+
-  scale_x_discrete(labels = c("1" = "EMployed full-time", "2" = "Employed part-time", "3" = "Unemployed", "4" = "not in labour force"))+
-  scale_y_continuous(labels = scales::percent)+
+  scale_x_discrete(labels = c("1" = "Employed full-time", "2" = "Employed part-time", "3" = "Unemployed", "4" = "not in labour force"))+
   labs(title = "Employment status of People 18+", x = "Employment Status", y = "Percentage")+
-  theme_minimal()
+  theme_light() +
+  theme(
+    axis.title = element_text(size = 20),  # Achsentitel
+    axis.text  = element_text(size = 20),  # Achsbeschriftungen
+    legend.position = "none"  # Legendentext
+  )
 
 #----------------------------------------------------------------------------------------------------
 ## sexual Identity
@@ -91,26 +85,45 @@ gender <- data2019 %>%
   group_by(gender) %>%
   summarize(count = n()/56136)
 
-ggplot(gender,aes(x = gender, y = count, fill = factor(gender)))+
+ggplot(gender,aes(x = factor(gender, levels = 1:2, labels = c("Male", "Female")), y = count, fill = factor(gender)))+
   geom_col()+
   scale_fill_manual(values = c("1" = "blue", "2" = "red"), labels = c("1" = "Male", "2" = "Female"))+
-  scale_y_continuous(labels = scales::percent)+
-  labs(title = "Gender", y = "Percentage", fill = "Identity")+
-  theme_minimal()
+  labs(title = "Gender", y = "Percentage", fill = "Identity", x = "") +
+  theme_light() +
+  theme(
+    axis.title = element_text(size = 20),  # Achsentitel
+    axis.text  = element_text(size = 20),  # Achsbeschriftungen
+    legend.position = "none"  # Legendentext
+  )
+
+#---------------------------------#---------------------------------#------------------------------------------------------------------------------------------------------
 
 #------------------------------------------------------------------------------------------------------
-## MArital Stauts 
-## ISSUE not in allfilterdata
-marital.status <- data2019 %>%
-  select (IRMARIT) %>%
-  filter (IRMARIT < 99)
+## Destribution Race
+Race.Destr <- data2019 %>%
+  select(NEWRACE2) %>%
+  pivot_longer(cols = everything(), names_to = "Var", values_to = "Answer") %>%
+  group_by(Answer) %>%
+  summarize(count = n()) %>%
+  mutate(count = count/56136)
 
-ggplot(marital.status, aes(x = IRMARIT, fill = factor(IRMARIT)))+
-  geom_bar()+
-  scale_fill_manual(labels = c("1" = "Married", "2" = "Widowed", "3" = "Divorced or Seperated", "4" = "Never been MArried"))+
-  labs(title = "Marital satus", fill = "Status")
+ggplot(Race.Destr, aes(x = factor(Answer), y = count, fill = factor(Answer)))+
+  geom_col()+
+  scale_x_discrete(labels = c("1" = "White", "2" = "Afr.Am", "3" = "Am/AK Native", "4" ="Other Pac Isl", "5" = " Asian", "6" = "more than one Race", "7" = "Hispamic"),
+                   guide = guide_axis(angle = 45)) +
+  labs(title = "Race ", y = "Percentage", x = "Background") +
+  theme_light() +
+  theme(
+    axis.title = element_text(size = 20),  # Achsentitel
+    axis.text  = element_text(size = 20),  # Achsbeschriftungen
+    legend.position = "none"  # Legendentext
+  )
 
-#------------------------------------------------------------------------------------------------------
+
+## Race and Gender
+
+#-----------------------------------------------------------------------------------------------------
+
 ## Plot for Eudcation level dependend on race
 ## --> diskrete Farbskala besser
 Racial.Background <- data2019 %>%
@@ -125,15 +138,3 @@ ggplot(Racial.Background, aes(x = NEWRACE2, fill = factor(eduhighcat)))+
   scale_fill_discrete(labels = c("1" = "some High School", "2"= "HIgh School Grad", "3" ="Some coll/Assoc Dg", "4"= "College graduate"))+
   theme_light()+
   labs(title = "Education achieved by each Race")
-
-
-## maybe better: Ireduhighst2: genauer Klassenabschluss also 5,6,7 ... college und weiter
-Racial.Background2 <- data2019 %>%
-  select(NEWRACE2, IREDUHIGHST2) 
-
-ggplot(Racial.Background2, aes(x = NEWRACE2, fill = factor(IREDUHIGHST2)))+
-  geom_bar(position = "fill")+
-  theme_light()+
-  scale_fill_discrete(labels = c("1" = "5th", "2"= "6th", "3" ="7th", "4"= "8th", "5" ="9th", "6" = "10th", "7" = "11/12th grade", "8" = "GED", "9" = "some college credit", "10" = "Associate's degree", "11" = "college graduate or higher"))+
-  scale_y_continuous(labels = scales::percent)+ 
-  labs(title = "Class finished by each Race")
