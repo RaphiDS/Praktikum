@@ -64,8 +64,6 @@ data2019 <- allfilterdata %>%
 -   Hauptquelle zum Konsum von Alkohol, Tabbak, verschriebenen Drogen Es werden auch Fragen in Bezug auf Mentale Gesundheit gestellt
 -   (Enthält Infos über SUDs, Behandlung von Abhängigkeit und den Zusammenhang zu mentalen Gesundheitsproblemen)
 
-
-
 ## WER und WIE wird befragt
 
 -   alle amerikanischen, nicht-institutionalisierten Bürger\*innen ab dem ALter von 12 (insgesamt 67.625)
