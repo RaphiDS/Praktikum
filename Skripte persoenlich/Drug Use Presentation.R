@@ -99,14 +99,8 @@ ggplot(fourdrugsever, aes(x = Year, y = .data[["Rel. share"]], color = Drug, sha
     legend.text =  element_text(size = 20),  # Legendentext
   ) + scale_y_continuous(limits = c(0, NA)) +
   scale_color_manual(values = c("#0072B2", "#009E73", "#E69F00", "#CC79A7")) +
-<<<<<<< HEAD
   scale_shape_manual(values = c(15:18))# beliebige Form-Codes
-=======
   scale_shape_manual(values = c(15:18)) # beliebige Form-Codes
->>>>>>> 4d07c48c481666be8c1b03ccfc323ccb82133414
-
-ggsave(filename = "four_drugs_ever.png", path = "Presentation_files/presentation_plots")
-
 
 # 2) Plot: "In the last 30 days" – 4 major drugs
 ggplot(fourdrugs30, aes(x = Year, y = .data[["Rel. share"]], color = Drug, shape = Drug)) +
@@ -127,9 +121,6 @@ ggplot(fourdrugs30, aes(x = Year, y = .data[["Rel. share"]], color = Drug, shape
   scale_y_continuous(limits = c(0, NA)) +
   scale_color_manual(values = c("#0072B2", "#009E73", "#E69F00", "#CC79A7")) +
   scale_shape_manual(values = c(15:18))  # beliebige Form-Codes
-
-ggsave(filename = "four_drugs_30.png", path = "Presentation_files/presentation_plots")
-
 
 # 3) Plot: "Have ever used tobacco products"
 ggplot(tobaccoever, aes(x = Year, y = .data[["Rel. share"]], color = Drug, shape = Drug)) +
@@ -157,8 +148,6 @@ ggplot(tobaccoever, aes(x = Year, y = .data[["Rel. share"]], color = Drug, shape
     breaks = c("Cigarettes", "Cigar", "Smokeless Tobacco", "Pipe")
   )
 
-ggsave(filename = "four_tobacco_ever.png", path = "Presentation_files/presentation_plots")
-
 # 4) Plot: "In the last 30 days" – tobacco products
 ggplot(tobacco30, aes(x = Year, y = .data[["Rel. share"]], color = Drug, shape = Drug)) +
   geom_point(size = 3) +
@@ -184,9 +173,6 @@ ggplot(tobacco30, aes(x = Year, y = .data[["Rel. share"]], color = Drug, shape =
     values = c(15, 16, 17, 18),
     breaks = c("Cigarettes", "Cigar", "Smokeless Tobacco", "Pipe")
   )
-
-ggsave(filename = "four_tobacco_30.png", path = "Presentation_files/presentation_plots")
-
 
 histogram_fun_2015 <- function(datacol, drug_name, limit, colorcode) {
   data <- drugdata %>%
@@ -254,34 +240,17 @@ histogram_fun_2019 <- function(datacol, drug_name, limit, colorcode) {
 
 
 # Example calls
-
-
 histogram_fun_2015("alcdays", "Alcohol", 0.085, "#0072B2")
-ggsave(filename = "alcohol_days_30_2015.png", path = "Presentation_files/presentation_plots")
-
 histogram_fun_2019("alcdays", "Alcohol", 0.085, "#0072B2")
-ggsave(filename = "alcohol_days_30_2019.png", path = "Presentation_files/presentation_plots")
-
 
 histogram_fun_2015("CIG30USE", "Cigarettes", 0.12, "#009E73")
-ggsave(filename = "cigarette_days_30_2015.png", path = "Presentation_files/presentation_plots")
-
-
 histogram_fun_2019("CIG30USE", "Cigarettes", 0.12, "#009E73")
-ggsave(filename = "cigarette_days_30_2019.png", path = "Presentation_files/presentation_plots")
-
 
 histogram_fun_2015("COCUS30A", "Cocaine", 0.003, "#E69F00")
-ggsave(filename = "cocaine_days_30_2015.png", path = "Presentation_files/presentation_plots")
-
 histogram_fun_2019("COCUS30A", "Cocaine", 0.003, "#E69F00")
-ggsave(filename = "cigarette_days_30_2019.png", path = "Presentation_files/presentation_plots")
 
 histogram_fun_2019("HER30USE", "Heroin", 0.0004, "#CC79A7")
-ggsave(filename = "heroin_days_30_2015.png", path = "Presentation_files/presentation_plots")
-
 histogram_fun_2015("HER30USE", "Heroin", 0.0004, "#CC79A7")
-ggsave(filename = "heroin_days_30_2019.png", path = "Presentation_files/presentation_plots")
 
 ##########################
 # Function: Mosaic Plot for Bivariate Data (values 1 and 2)
