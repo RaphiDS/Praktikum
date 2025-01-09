@@ -297,7 +297,7 @@ density_fun("HER30USE", "Heroin")
 # => auch mit heatmap noch nicht gut 
 #===============================================================================
 
-# Funktion zur Datenaufbereitung
+# Funktion zur Datenaufbereitung 
 prepare_jointdata <- function() {
   drugusedata %>%
     mutate(
