@@ -99,7 +99,7 @@ ggplot(fourdrugsever, aes(x = Year, y = .data[["Rel. share"]], color = Drug, sha
     legend.text =  element_text(size = 20),  # Legendentext
   ) + scale_y_continuous(limits = c(0, NA)) +
   scale_color_manual(values = c("#0072B2", "#009E73", "#E69F00", "#CC79A7")) +
-  scale_shape_manual(values = c(15:18))  # beliebige Form-Codes
+  scale_shape_manual(values = c(15:18)) # beliebige Form-Codes
 
 
 
