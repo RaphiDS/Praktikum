@@ -57,10 +57,31 @@ DrugGender
  cocaine.Use.Dependency
  mosaicplot(cocaine.Use.Dependency, main = "Drug Abuse if you ever tried cocaine", col = c("skyblue", "darkgreen"))  ##WRONG, Zahlen stimmen schon nicht
 #-----------------------------------------------------------------------------------------------
-## Nikotine Dependency Gender
+## Nicotine Dependency Gender
+ Nic.Dependency.Gender <- data2019 %>%
+   select(ndssdnsp,irsex) %>%
+   filter(ndssdnsp == 1) %>%
+   group_by(irsex) %>%
+   summarize(count = n()) %>%
+   mutate(count = count/56136)
  
-## Nicotine Dependency Age
+ ggplot(Nic.Dependency.Gender, aes(x = factor(irsex), y = count))+
+   geom_col()+
+   scale_x_discrete(labels =c("1" = "male", "2" = "Female"))+
+   labs(title = "Nikotin Abhängigkeit von Frauen und Männern", x = "Geschlecht")
  
+-## Nicotine Dependency Age
+Nic.Dependency.Age <- data2019 %>%
+   select(catage, ndssdnsp) %>%
+   filter(ndssdnsp == 1) %>%
+   group_by(catage)%>%
+   summarise(count = n()) %>%
+   mutate(count = count /56136)
+ 
+ggplot(Nic.Dependency.Age, aes(x = factor(catage, y = count)))+
+   geom_col()+
+   scale_x_discrete(labels = c("1" = "12-17", "2" = "18-25", "3" = "26-34", "4" = "35+"))+
+   labs(title = "Nikotin Abhängigkeit von den Altersgruppen", x = "Gruppe")
 #------------------------------------------------------------------------------------------------------------
 ## Drug Dependency based on gender
 Drug.Dependency.Gender <-data2019 %>%
@@ -193,8 +214,8 @@ ggplot(Dependent.Users.Race , aes(x = factor(NEWRACE2), fill = factor(Drug)))+
 #-----------------------------------------------------------------------------------------
 ## Nikotin Dependency (last month) and Race
 Nikotin.Dependence.Race <- data2019 %>%
-  select(NEWRACE2, dnicnsp) %>%
-  filter (dnicnsp == 1)
+  select(NEWRACE2, ndssdnsp) %>%
+  filter (ndssdnsp == 1)
 
 ggplot(Nikotin.Dependence.Race, aes(x = factor(NEWRACE2)))+
   geom_bar()+

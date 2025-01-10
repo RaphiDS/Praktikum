@@ -57,12 +57,15 @@ ggplot(AMI.Age, aes(x = factor(catage), y = count, fill = factor(catage)))+
   geom_col()+
   scale_x_discrete(labels = c("2" = "18-25", "3" = "26-34", "4" = "35+"))
 
+#RAUS
 ## age Destribution AMI, SMI, LMMI
 
 ##------------------------------------------------------------------------
 # Mental Health and Drugs
 #--> compare them with other variables related to SMI/suizide
 # only counts people > 17
+
+
 MH.Substance <- data2019 %>%
   select(smisudpy, amisudpy, lmmisudpy) %>%
   pivot_longer(cols = everything(), names_to = "Type", values_to = "Response") %>%

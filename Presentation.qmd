@@ -326,7 +326,6 @@ tobacco30 <- as.data.frame(
 
 ```
 
-plot: Have u ever used any of these Drugs?
 
 ![](Presentation_files/presentation_plots/four_drugs_ever.png){width = 50 %} {height = 70 %}
 
