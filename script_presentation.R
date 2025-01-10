@@ -3,59 +3,9 @@ library(tidyverse)
 load("Daten bearbeitet/combi_redu_data.Rdata")
 drugdata <- allfilterdata
 
-age.grouped <- data2019 %>%
-  select(catage) %>%
-  pivot_longer(cols = everything(), names_to = "variable", values_to = "Group") %>%
-  group_by(Group) %>%
-  summarize(count =n()/56136)
+data2019 <- allfilterdata %>%
+  filter(year == 2019)
 
-ggplot(age.grouped, aes(x= factor(Group),y = count, fill = factor(Group, labels = c("12-17", "18-25", "26-34", "35+")))) +
-  geom_col() +
-  labs(title = "Age in allocated Groups", y = "Percentage", fill = "Age groups", x = "Group") +
-  theme_light() +
-  theme(
-    axis.title = element_text(size = 20),  # Achsentitel
-    axis.text  = element_text(size = 20),  # Achsbeschriftungen
-    legend.position = "none"  # Legendentext
-  ) +
-  scale_x_discrete(labels = c("12-17", "18-25", "26-34", "35+"))
-
-
-imputed.employment18 <- data2019 %>%
-  select (IRWRKSTAT18) %>%
-  filter (IRWRKSTAT18 < 99) %>%
-  pivot_longer(cols = everything(), names_to = "status", values_to = "number")%>%
-  group_by(status, number) %>%
-  summarise(count = n()/56136, .groups = 'drop')
-
-
-ggplot(imputed.employment18, aes(x = factor(number), y = count, fill = factor(number))) +
-  geom_bar(stat = "identity")+
-  scale_x_discrete(labels = c("1" = "Employed full-time", "2" = "Employed part-time", "3" = "Unemployed", "4" = "not in labour force"))+
-  labs(title = "Employment status of People 18+", x = "Employment Status", y = "Percentage")+
-  theme_light() +
-  theme(
-    axis.title = element_text(size = 20),  # Achsentitel
-    axis.text  = element_text(size = 20),  # Achsbeschriftungen
-    legend.position = "none"  # Legendentext
-  )
-
-gender <- data2019 %>%
-  select(irsex) %>%
-  pivot_longer(cols = everything(), names_to = "variable", values_to = "gender") %>%
-  group_by(gender) %>%
-  summarize(count = n()/56136)
-
-ggplot(gender,aes(x = factor(gender, levels = 1:2, labels = c("Male", "Female")), y = count, fill = factor(gender)))+
-  geom_col()+
-  scale_fill_manual(values = c("1" = "blue", "2" = "red"), labels = c("1" = "Male", "2" = "Female"))+
-  labs(title = "Gender", y = "Percentage", fill = "Identity", x = "") +
-  theme_light() +
-  theme(
-    axis.title = element_text(size = 20),  # Achsentitel
-    axis.text  = element_text(size = 20),  # Achsbeschriftungen
-    legend.position = "none"  # Legendentext
-  )
 
 Race.Destr <- data2019 %>%
   select(NEWRACE2) %>%
@@ -66,28 +16,28 @@ Race.Destr <- data2019 %>%
 
 ggplot(Race.Destr, aes(x = factor(Answer), y = count, fill = factor(Answer)))+
   geom_col()+
-  scale_x_discrete(labels = c("1" = "White", "2" = "Afr.Am", "3" = "Am/AK Native", "4" ="Other Pac Isl", "5" = " Asian", "6" = "more than one Race", "7" = "Hispamic"),
+  scale_x_discrete(labels = c("1" = "Weisse",
+                              "2" = "Schwarze
+                              Afroamerikaner",
+                              "3" = "Am/Ak Indigene",
+                              "4" = "Indigene Hawaii
+                              /Paz. Inseln",
+                              "5" = "Asiaten",
+                              "6" = "Gemischt",
+                              "7" = "Hispanisch"),
                    guide = guide_axis(angle = 45)) +
-  labs(title = "Race ", y = "Percentage", x = "Background") +
+  labs(y = "Anteil", x = "Ethnische Zugehörigkeit") +
   theme_light() +
   theme(
-    axis.title = element_text(size = 20),  # Achsentitel
-    axis.text  = element_text(size = 20),  # Achsbeschriftungen
+    axis.title.x = element_text(margin = margin(t = -50)),
+    axis.title = element_text(size = 15),  # Achsentitel
+    axis.text  = element_text(size = 15),  # Achsbeschriftungen
     legend.position = "none"  # Legendentext
   )
 
 Racial.Background <- data2019 %>%
   select (NEWRACE2, eduhighcat) %>% ## selected AI regions, racial background and education level
   filter(eduhighcat <5)       ## wert 5 streichen? --> Leute unter 17 kein Abschluss, zählen nicht
-
-
-ggplot(Racial.Background, aes(x = NEWRACE2, fill = factor(eduhighcat)))+
-  geom_bar(position = "fill")+
-  scale_y_continuous(labels = scales::percent) +
-  scale_x_discrete(labels = c("1" = "White", "2" = "Afr.Am", "3" = "Am/AK Native", "4" ="Other Pac Isl", "5" = " Asian", "6" = "more than one Race", "7" = "Hispamic"))+
-  scale_fill_discrete(labels = c("1" = "some High School", "2"= "HIgh School Grad", "3" ="Some coll/Assoc Dg", "4"= "College graduate"))+
-  theme_light()+
-  labs(title = "Education achieved by each Race")
 
 ##### Drugs Denis Raphael
 
@@ -186,7 +136,6 @@ ggplot(fourdrugsever, aes(x = Year, y = .data[["Rel. share"]], color = Drug, sha
   ) + scale_y_continuous(limits = c(0, NA)) +
   scale_color_manual(values = c("#0072B2", "#009E73", "#E69F00", "#CC79A7")) +
   scale_shape_manual(values = c(15:18))# beliebige Form-Codes
-scale_shape_manual(values = c(15:18)) # beliebige Form-Codes
 
 # 2) Plot: "In the last 30 days" – 4 major drugs
 ggplot(fourdrugs30, aes(x = Year, y = .data[["Rel. share"]], color = Drug, shape = Drug)) +
@@ -225,13 +174,9 @@ ggplot(tobaccoever, aes(x = Year, y = .data[["Rel. share"]], color = Drug, shape
     legend.text = element_text(size = 20)
   ) +
   scale_y_continuous(limits = c(0, NA)) +
-  scale_color_brewer(
-    palette = "Dark2",
-    breaks = c("Cigarettes", "Cigar", "Smokeless Tobacco", "Pipe")
-  ) +
+  scale_color_manual(values = c("#0072B2", "#009E73", "#E69F00", "#CC79A7")) +
   scale_shape_manual(
-    values = c(15, 16, 17, 18),
-    breaks = c("Cigarettes", "Cigar", "Smokeless Tobacco", "Pipe")
+    values = c(15, 16, 17, 18)
   )
 
 # 4) Plot: "In the last 30 days" – tobacco products
@@ -526,3 +471,42 @@ ggplot(Nikotin.Dependence.Race, aes(x = factor(NEWRACE2)))+
     ),
     guide = guide_axis(angle = 45))+
   labs(title = "Nicotine Dependency by Race")
+
+
+
+
+age.grouped <- data2019 %>%
+  select(catage) %>%
+  pivot_longer(cols = everything(), names_to = "variable", values_to = "Group") %>%
+  group_by(Group) %>%
+  summarize(count =n()/56136)
+
+ggplot(age.grouped, aes(x= factor(Group),y = count, fill = factor(Group, labels = c("12-17", "18-25", "26-34", "35+")))) +
+  geom_col() +
+  labs(y = "Anteil", fill = "Age groups", x = "Altersgruppen") +
+  theme_light() +
+  theme(
+    axis.title = element_text(size = 15),  # Achsentitel
+    axis.text  = element_text(size = 15),  # Achsbeschriftungen
+    legend.position = "none"  # Legendentext
+  ) +
+  scale_x_discrete(labels = c("12-17", "18-25", "26-34", "35+"))
+
+imputed.employment18 <- data2019 %>%
+  select (IRWRKSTAT18) %>%
+  filter (IRWRKSTAT18 < 99) %>%
+  pivot_longer(cols = everything(), names_to = "status", values_to = "number")%>%
+  group_by(status, number) %>%
+  summarise(count = n()/56136, .groups = 'drop')
+
+
+ggplot(imputed.employment18, aes(x = factor(number), y = count, fill = factor(number))) +
+  geom_bar(stat = "identity")+
+  scale_x_discrete(labels = c("1" = "Employed full-time", "2" = "Employed part-time", "3" = "Unemployed", "4" = "not in labour force"))+
+  labs(title = "Employment status of People 18+", x = "Employment Status", y = "Percentage")+
+  theme_light() +
+  theme(
+    axis.title = element_text(size = 20),  # Achsentitel
+    axis.text  = element_text(size = 20),  # Achsbeschriftungen
+    legend.position = "none"  # Legendentext
+  )

@@ -24,9 +24,6 @@ Treatment.recieved <- data2019%>%
 ggplot(Treatment.recieved, aes(x = auunmtyr, y = answer))+
   geom_col()
 
-# Recoded
-recoded.
-select(AHMRX2)
 #------------------------------------------------------------------------
 ## Why didn't you receive Treatment?
 
