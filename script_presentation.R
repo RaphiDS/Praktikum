@@ -367,27 +367,6 @@ mosaicfun30("CIG30USE", "COCUS30A", "Cigarettes", "Cocaine")
 
 
 ##### Demographics Drugs
-GenderCOCaine <- data2019 %>%
-  select(irsex, cocever) %>%
-  filter(cocever < 94)%>%
-  group_by(irsex) %>%
-  summarize(usage = sum(cocever ==1), clean = sum(cocever ==2))
-
-
-
-DrugGender <-data.frame(matrix(c(data2019 %>%
-                                   filter(irsex ==1 & cocever == 1) %>%
-                                   count(), data2019 %>%
-                                   filter(irsex == 1 & cocever == 2) %>%
-                                   count(), data2019 %>%
-                                   filter(irsex == 2 & cocever ==1) %>%
-                                   count(), data2019 %>%
-                                   filter(irsex == 2 & cocever == 2) %>%
-                                   count ()), nrow =2), row.names = c("Cocain Yes", "Cocain No")) %>%
-  rename("Male" = X1, "Female" = X2)
-DrugGender
-
-mosaicplot(DrugGender, main = "Drug use dependend on gender",col = c("lavender", "skyblue"))
 
 Drug.Dependency.Gender <-data2019 %>%
   select(irsex, depndcoc, depndalc, depndher) %>%
@@ -416,20 +395,6 @@ ggplot(Drug.Dependency.Age, aes(x = factor(catage), y = count, fill = factor(Dru
   scale_x_discrete(labels = c("1" = "12-17", "2" = "18-25", "3" = "26-34", "4" = "35+"))+
   labs(title = "Drug Dependency by age group", x = "Age Group")
 
-Drug.Gender.Age <- data2019 %>%
-  select(irsex,catage, cocever, herever, alcever, smklssevr, cigever) %>%
-  filter(1 %in% c(cocever, herever, alcever, smklssevr, cigever)) %>%
-  pivot_longer(cols = c(cocever, herever,alcever,smklssevr,cigever), names_to = "Substance") %>%
-  filter (value == 1) %>%
-  group_by(irsex,catage, Substance) %>%
-  summarise(Count = n(), .groups = 'drop') %>%
-  mutate(Relative = Count / 56136) # or maybe 81878?
-
-ggplot(Drug.Gender.Age, aes(x = factor(catage),y = Relative, fill = factor (Substance)))+
-  geom_bar(stat = "identity", position = "dodge")+
-  facet_wrap(~ irsex, labeller = as_labeller(c("1"="Male", "2" = "Female")), ncol = 1)+
-  scale_fill_discrete(labels = c("alcever" = "Alcohol", "cigever" = "Cigarette", "cocever" = "Cocaine", "herever" = "Heroine", "smklssevr" = "Smokeless Tabacco"))+
-  scale_x_discrete(labels = c("1" = "12-17", "2" = "18-25", "3" = "26-34", "4" = "35+"))
 
 Dependent.Users.Race <- data2019 %>%
   select(NEWRACE2, depndcoc, depndalc, depndher) %>%
@@ -471,9 +436,6 @@ ggplot(Nikotin.Dependence.Race, aes(x = factor(NEWRACE2)))+
     ),
     guide = guide_axis(angle = 45))+
   labs(title = "Nicotine Dependency by Race")
-
-
-
 
 age.grouped <- data2019 %>%
   select(catage) %>%
