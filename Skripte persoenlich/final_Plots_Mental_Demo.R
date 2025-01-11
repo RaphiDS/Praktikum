@@ -83,6 +83,8 @@ ggplot(Nikotin.Dependence.Race, aes(x = factor(NEWRACE2)))+
     guide = guide_axis(angle = 45))+
   labs(title = "Nicotine Dependency by Race")
 #-------------------------------------------------------------------------------
+##Generell Drug Dependency / Abuse
+Drug.Dependency.Abuse <- data2019
 ## Drug Dependency based on gender
 Drug.Dependency.Gender <-data2019 %>%
   select(irsex, depndcoc, depndalc, depndher) %>%
@@ -229,7 +231,6 @@ ggplot(Youth.Treatment, aes(x = factor(Drug), fill = factor(Treatment)))+
   labs(title = "SUbstanzkonsum und Art der Behandlung YOUTH", x = "SUbstanz")  ## Kein Heroin --> stimmt das?
 ##------------------------------------------------------------------------------
 ## MDE and Drugs Youth
-
 Youth.MDE.Drugs <- data2019 %>%
     select(ymdeyr, depndalc,depndcoc,depndher)%>%
     pivot_longer(cols =c(depndalc, depndcoc, depndher), names_to = "Drug", values_to = "Response") %>%
