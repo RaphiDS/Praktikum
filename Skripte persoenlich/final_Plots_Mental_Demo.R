@@ -103,14 +103,12 @@ ggplot(Drug.Dependency.Gender, aes(x = Drug, fill = factor(irsex)))+
 Drug.Dependency.Age <- data2019 %>%
   select(catage,depndcoc,depndher, depndalc) %>%
   pivot_longer(cols = c(depndcoc, depndher, depndalc), names_to = "Drug", values_to = "Usage") %>%
-  filter (Usage == 1) %>%
-  group_by(catage, Drug) %>%
-  summarise(count = n()) %>%
-  mutate(count = count/56136)
+  filter (Usage == 1) 
 
-ggplot(Drug.Dependency.Age, aes(x = factor(catage), y = count, fill = factor(Drug)))+
-  geom_col(position = "dodge")+
-  scale_x_discrete(labels = c("1" = "12-17", "2" = "18-25", "3" = "26-34", "4" = "35+"))+
+ggplot(Drug.Dependency.Age, aes(x = factor(Drug), fill = factor(catage)))+
+  geom_bar(position = "fill")+
+  scale_x_discrete(labels = c("depndalc" = "Alkhol","depndcoc" = "Cokain", "depndher" = "Heroin"))+
+  scale_fill_discrete(labels = c("1" = "12-17", "2" = "18-25", "3" = "26-34", "4" = "35+"))+
   labs(title = "Drug Dependency by age group", x = "Age Group")
 #------------------------------------------------------------------------------
 ## Drug Dependency and Race
@@ -136,10 +134,38 @@ ggplot(Dependent.Users.Race , aes(x = factor(NEWRACE2), fill = factor(Drug)))+
     ),
     guide = guide_axis(angle = 45))+
   labs(title = "Percentage of dependent Users of each Race")
+#-------------------------------------------------------------------------------
+## Youth Risk awareness and dependency
+Youth.Risk.Dependency <- data2019 %>%
+  select(depndalc, depndcoc, PRTALK3) %>%
+  pivot_longer(cols = c(depndalc, depndcoc), names_to = "Drug", values_to = "Response") %>%
+  filter (Response == 1, PRTALK3 > 0)
+
+ggplot(Youth.Risk.Dependency, aes(x = factor(Drug), fill = factor(PRTALK3)))+
+  geom_bar(position = "fill")+
+  scale_x_discrete(labels = c("depndalc" = "Alkohol", "depndcoc" = "Cokain"))+
+  scale_fill_discrete(labels = c("1" = "Gespräch mit Eltern", "2" = "Keine Meinung von Daheim"))+
+  labs(title = "Substanzkonsum trotz Aufklärung daheim", x = "Substanz")
 ##############
 #Mental Health
 ##############
-## Drug Dependency and Degree of Mental illness
+## Overall Substance Dependence/Abuse and MI
+Adult.MI.Substance <- data2019 %>%
+  select(smisudpy, amisudpy, lmmisudpy) %>%
+  pivot_longer(cols = everything(), names_to = "Type", values_to = "Response") %>%
+  filter(Response == 1)%>%
+  group_by(Type) %>%
+  summarize(count = n()) %>%
+  mutate(count = count/56136)
+
+ggplot(Adult.MI.Substance, aes(x = Type, y = count))+
+  geom_col()+
+  scale_x_discrete(labels = c("smisudpy" = "SMI", "amisudpy" ="AMI", "lmmisudpy" = "LMMI"),
+                   guide = guide_axis(angle = 45))+
+  labs(title = "Mentale Gesundheit Substanz-Abhäniger Personen", x = "Abstufung der Mentalen Gesundheit", y = "Percentage")
+
+#-------------------------------------------------------------------------------
+## Drug Dependency and 'Degree' of Mental illness
 Drug.Dependency.MI <- data2019 %>%
   select(depndalc,depndcoc,depndher,MI_CAT_U) %>%
   filter (MI_CAT_U >= 0) %>%
@@ -158,22 +184,6 @@ ggplot(Drug.Dependency.MI, aes(x = factor(Drug), fill = factor(MI_CAT_U)))+
   scale_x_discrete(labels = c("depndalc" = "Alkohol", "depndcoc" = "Cokain","depndher" = "Heroin"))+
   labs(title = "Substanzkonsum und Mentale Gesundheit", x = " Substanz")+
   scale_fill_discrete(labels = c("0" = "Keine Mentalen Gesundheitsprobleme" , "1" = "'Milde' Mentale Erkrankung", "2" = " 'Moderate' Mentale Erkrankung", "3" = "Ernste Mentale Erkrankungen"))
-
-#-------------------------------------------------------------------------------
-## Overall Substance Dependence/Abuse and MI
-MH.Substance <- data2019 %>%
-  select(smisudpy, amisudpy, lmmisudpy) %>%
-  pivot_longer(cols = everything(), names_to = "Type", values_to = "Response") %>%
-  filter(Response == 1)%>%
-  group_by(Type) %>%
-  summarize(count = n()) %>%
-  mutate(count = count/56136)
-
-ggplot(MH.Substance, aes(x = Type, y = count))+
-  geom_col()+
-  scale_x_discrete(labels = c("smisudpy" = "Serious Mental Health", "amisudpy" ="Any Mental Health", "lmmisudpy" = "Light to medium Mental health"),
-                   guide = guide_axis(angle = 45))+
-  labs(title = "Mental Health Issues and Drug/Alcohol Dependence or Abuse", x = "Degree of Issues", y = "Percentage")
 
 #-------------------------------------------------------------------------------
 ## Adult Mental Heath / Substance Treatment
@@ -197,7 +207,15 @@ ggplot(Adult.Treatment, aes(x = factor(Treatment), fill = factor(Drug)))+
 #######
 #YOUTH
 ######
+#Overall Substance and Mental Health
 
+## SEVERE MDE with role impairment and ALcohol or (illicit) Substance Abuse
+# Normal MDE nicht in ALlfilterdata!
+Youth.MDE.Substance <- data2019 %>%
+  select(ymdeimaud, ymdeimudpy) ## Daten fehlen!
+
+#-------------------------------------------------------------------------------
+## Mental Health Treatment and Substance Abuse Treatment
 Youth.Treatment <-data2019 %>%
   select(ymhnsptx, ysptxnmh, ymhasptx, depndalc, depndcoc, depndher) %>%
   pivot_longer(cols = c(depndalc, depndcoc, depndher), names_to = "Drug", values_to = "Answer") %>%
@@ -209,3 +227,19 @@ ggplot(Youth.Treatment, aes(x = factor(Drug), fill = factor(Treatment)))+
   scale_x_discrete(labels = c("depndalc" = "Alkhol","depndcoc" = "Cokain", "depndher" = "Heroin"))+
   scale_fill_discrete(labels = c("ymhnsptx" = "Behandlung für MI", "ysptxnmh" = "Behandlung für Substanzkonsum", "ymhasptx" = "Behandlung für beides"))
   labs(title = "SUbstanzkonsum und Art der Behandlung YOUTH", x = "SUbstanz")  ## Kein Heroin --> stimmt das?
+##------------------------------------------------------------------------------
+## MDE and Drugs Youth
+
+Youth.MDE.Drugs <- data2019 %>%
+    select(ymdeyr, depndalc,depndcoc,depndher)%>%
+    pivot_longer(cols =c(depndalc, depndcoc, depndher), names_to = "Drug", values_to = "Response") %>%
+    filter(Response == 1, ymdeyr == 1) %>%
+    group_by(Drug) %>%
+    summarize(count = n())%>%
+    mutate(count = count/56136)
+
+  ggplot(Youth.MDE.Drugs, aes(x = factor(Drug), y = count))+
+    geom_col()+
+    scale_x_discrete(labels = c("depndalc" = "Alkhol","depndcoc" = "Cokain", "depndher" = "Heroin"))+
+    labs(title = "MDE und Substanzkonsum", x = "Substanz")
+  
