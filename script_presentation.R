@@ -429,18 +429,24 @@ Dependent.Users.Race <- data2019 %>%
 Dependent.Users.Race %>%
   ggplot(aes(x = factor(NEWRACE2), fill = factor(Drug)))+
   geom_bar(position = "fill")+
-  scale_x_discrete(
-    labels = c(
-      "1" = "White",
-      "2" = "Afr.Am",
-      "3" = "Am/AK Native",
-      "4" = "Other Pac Isl",
-      "5" = "Asian",
-      "6" = "More than one race",
-      "7" = "Hispanic"
-    ),
-    guide = guide_axis(angle = 45))+
-  labs(title = "Percentage of dependent Users of each Race")
+  scale_x_discrete(labels = c("1" = "Weisse",
+                              "2" = "Schwarze
+                              Afroamerikaner",
+                              "3" = "Am/Ak Indigene",
+                              "4" = "Indigene Hawaii
+                              /Paz. Inseln",
+                              "5" = "Asiaten",
+                              "6" = "Gemischt",
+                              "7" = "Hispanisch"),
+                   guide = guide_axis(angle = 45)) +
+  labs(y = "Anteil", x = "Ethnische Zugehörigkeit") +
+  theme_light() +
+  theme(
+    axis.title.x = element_text(margin = margin(t = -50)),
+    axis.title = element_text(size = 15),  # Achsentitel
+    axis.text  = element_text(size = 15),  # Achsbeschriftungen
+    legend.position = "none"  # Legendentext
+  )
 
 
 Nikotin.Dependence.Race <- data2019 %>%
