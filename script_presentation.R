@@ -6,6 +6,23 @@ drugdata <- allfilterdata
 data2019 <- allfilterdata %>%
   filter(year == 2019)
 
+### Demographics
+age.grouped <- data2019 %>%
+  select(catage) %>%
+  pivot_longer(cols = everything(), names_to = "variable", values_to = "Group") %>%
+  group_by(Group) %>%
+  summarize(count =n()/56136)
+
+ggplot(age.grouped, aes(x= factor(Group),y = count, fill = factor(Group, labels = c("12-17", "18-25", "26-34", "35+")))) +
+  geom_col() +
+  labs(y = "Anteil", fill = "Age groups", x = "Altersgruppen") +
+  theme_light() +
+  theme(
+    axis.title = element_text(size = 15),  # Achsentitel
+    axis.text  = element_text(size = 15),  # Achsbeschriftungen
+    legend.position = "none"  # Legendentext
+  ) +
+  scale_x_discrete(labels = c("12-17", "18-25", "26-34", "35+"))
 
 Race.Destr <- data2019 %>%
   select(NEWRACE2) %>%
@@ -35,9 +52,7 @@ ggplot(Race.Destr, aes(x = factor(Answer), y = count, fill = factor(Answer)))+
     legend.position = "none"  # Legendentext
   )
 
-Racial.Background <- data2019 %>%
-  select (NEWRACE2, eduhighcat) %>% ## selected AI regions, racial background and education level
-  filter(eduhighcat <5)       ## wert 5 streichen? --> Leute unter 17 kein Abschluss, zählen nicht
+
 
 ##### Drugs Denis Raphael
 
@@ -365,37 +380,47 @@ mosaicfun30 <- function(var1, var2, varname1, varname2) {
 # Example call: Mosaic plot for the last 30 days
 mosaicfun30("CIG30USE", "COCUS30A", "Cigarettes", "Cocaine")
 
+####################
+#Demographics Drugs
+####################
 
-##### Demographics Drugs
-
+## Drug Dependency and Gender
 Drug.Dependency.Gender <-data2019 %>%
   select(irsex, depndcoc, depndalc, depndher) %>%
   pivot_longer(cols = c(depndcoc,depndher, depndalc), names_to = "Drug", values_to = "Usage") %>%
   filter(Usage == 1)
 
-ggplot(Drug.Dependency.Gender, aes(x = Drug, fill = factor(irsex)))+
-  geom_bar(position = "fill")
-
-ggplot(Drug.Dependency.Gender, aes(x = Drug, fill = factor(irsex)))+
+ggplot(Drug.Dependency.Gender, aes(x = factor(Drug), fill = factor(irsex)))+
   geom_bar()+
   labs(title = "Drug Dependency by Gender")+
   scale_x_discrete(labels = c("depndalc" = "Alcohol dependency", "depndcoc" = "Cocaine Dependency", "depndher" = "Heroine Dependency"))+
-  scale_fill_discrete(labels = c("1" = "Male", "2" = "Female"))
+  scale_fill_discrete(labels = c("1" = "Male", "2" = "Female"))+
+  theme_light() +
+  theme(
+    axis.title = element_text(size = 20),  # Achsentitel
+    axis.text  = element_text(size = 20),  # Achsbeschriftungen
+    legend.position = "none"  # Legendentext
+  )
 
+## Drug Dependency by age group
 Drug.Dependency.Age <- data2019 %>%
   select(catage,depndcoc,depndher, depndalc) %>%
   pivot_longer(cols = c(depndcoc, depndher, depndalc), names_to = "Drug", values_to = "Usage") %>%
-  filter (Usage == 1) %>%
-  group_by(catage, Drug) %>%
-  summarise(count = n()) %>%
-  mutate(count = count/56136)
+  filter (Usage == 1) 
 
-ggplot(Drug.Dependency.Age, aes(x = factor(catage), y = count, fill = factor(Drug)))+
-  geom_col(position = "dodge")+
-  scale_x_discrete(labels = c("1" = "12-17", "2" = "18-25", "3" = "26-34", "4" = "35+"))+
-  labs(title = "Drug Dependency by age group", x = "Age Group")
+ggplot(Drug.Dependency.Age, aes(x = factor(Drug), fill = factor(catage)))+
+  geom_bar(position = "fill")+
+  scale_x_discrete(labels = c("depndalc" = "Alkhol","depndcoc" = "Cokain", "depndher" = "Heroin"))+
+  scale_fill_discrete(labels = c("1" = "12-17", "2" = "18-25", "3" = "26-34", "4" = "35+"))+
+  labs(title = "Drogenabhängigkeit der Altersgruppen", x = "Altersgruppen")+
+  theme_light() +
+  theme(
+    axis.title = element_text(size = 20),  # Achsentitel
+    axis.text  = element_text(size = 20),  # Achsbeschriftungen
+    legend.position = "none"  # Legendentext
+  )
 
-
+## Drug Dependency and Race
 Dependent.Users.Race <- data2019 %>%
   select(NEWRACE2, depndcoc, depndalc, depndher) %>%
   pivot_longer(cols = c(depndcoc,depndher, depndalc), names_to = "Drug", values_to = "Usage") %>%
@@ -437,22 +462,6 @@ ggplot(Nikotin.Dependence.Race, aes(x = factor(NEWRACE2)))+
     guide = guide_axis(angle = 45))+
   labs(title = "Nicotine Dependency by Race")
 
-age.grouped <- data2019 %>%
-  select(catage) %>%
-  pivot_longer(cols = everything(), names_to = "variable", values_to = "Group") %>%
-  group_by(Group) %>%
-  summarize(count =n()/56136)
-
-ggplot(age.grouped, aes(x= factor(Group),y = count, fill = factor(Group, labels = c("12-17", "18-25", "26-34", "35+")))) +
-  geom_col() +
-  labs(y = "Anteil", fill = "Age groups", x = "Altersgruppen") +
-  theme_light() +
-  theme(
-    axis.title = element_text(size = 15),  # Achsentitel
-    axis.text  = element_text(size = 15),  # Achsbeschriftungen
-    legend.position = "none"  # Legendentext
-  ) +
-  scale_x_discrete(labels = c("12-17", "18-25", "26-34", "35+"))
 
 imputed.employment18 <- data2019 %>%
   select (IRWRKSTAT18) %>%
@@ -464,8 +473,8 @@ imputed.employment18 <- data2019 %>%
 
 ggplot(imputed.employment18, aes(x = factor(number), y = count, fill = factor(number))) +
   geom_bar(stat = "identity")+
-  scale_x_discrete(labels = c("1" = "Employed full-time", "2" = "Employed part-time", "3" = "Unemployed", "4" = "not in labour force"))+
-  labs(title = "Employment status of People 18+", x = "Employment Status", y = "Percentage")+
+  scale_x_discrete(labels = c("1" = "Vollzeit", "2" = "Teilzeit", "3" = "Arbeitslos", "4" = "Nicht arbeitsfähig"))+
+  labs(title = "Anstellung Personen 18+", x = "Arbeitstatus", y = "Anteil")+
   theme_light() +
   theme(
     axis.title = element_text(size = 20),  # Achsentitel

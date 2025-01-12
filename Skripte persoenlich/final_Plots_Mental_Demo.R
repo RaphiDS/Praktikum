@@ -91,11 +91,8 @@ Drug.Dependency.Gender <-data2019 %>%
   pivot_longer(cols = c(depndcoc,depndher, depndalc), names_to = "Drug", values_to = "Usage") %>%
   filter(Usage == 1)
 
-ggplot(Drug.Dependency.Gender, aes(x = Drug, fill = factor(irsex)))+
-  geom_bar(position = "fill")
-
-ggplot(Drug.Dependency.Gender, aes(x = Drug, fill = factor(irsex)))+
-  geom_bar()+
+ggplot(Drug.Dependency.Gender, aes(x = factor(Drug), fill = factor(irsex)))+
+  geom_bar(position = "fill")+
   labs(title = "Drug Dependency by Gender")+
   scale_x_discrete(labels = c("depndalc" = "Alcohol dependency", "depndcoc" = "Cocaine Dependency", "depndher" = "Heroine Dependency"))+
   scale_fill_discrete(labels = c("1" = "Male", "2" = "Female"))
