@@ -573,27 +573,90 @@ histogram_fun_2015("HER30USE", "Heroin", 0.0004, "#CC79A7")
 :::
 
 
-## Demografische Merkmale bei Drogenkonsum
+## Demografische Merkmale und Substanzkonsum
 
-### Alkohol
+```{r, echo=FALSE}
+## Drug Dependency / Abuse
+Drug.Dependency.Abuse <- data2019 %>%
+  select(alcyr, cocyr, heryr, depndalc, depndcoc, depndher, abusealc, abusecoc,abuseher) %>%
+  mutate(ID = row_number()) %>%  # Add an ID column for pivoting
+  pivot_longer(cols = -ID, names_to = "Variable", values_to = "Value") %>%
+  mutate(
+    Substance = case_when(
+      str_detect(Variable, "alc") ~ "Alkohol",
+      str_detect(Variable, "coc") ~ "Cokain",
+      str_detect(Variable, "her") ~ "Heroin"
+    ),
+    Condition = case_when(
+      str_detect(Variable, "depnd") ~ "Dependent",
+      str_detect(Variable, "abuse") ~ "Abuse",
+      str_detect(Variable, "yr") ~ "Use"
+    )
+  ) %>%
+  filter(Value == 1)  # Keep only cases where the flag is 1 (indicating presence)
 
-Alkholkonsum wird in verschiedenen Stufen gemessen
+```
 
-::::: columns
-::: {.column width="40%"}
--   **Binge drinking**: Wenn man zu einem Zeitpunkt (zu einem bestimmten Moment oder innerhalb weniger Stunden voneinander) mehr als 4/5 Getränke konsumiert.
-:::
+```{r}
+ggplot(Drug.Dependency.Abuse, aes(x = Substance, fill = Condition)) +
+  geom_bar(position = "fill") +
+  labs(title = "Substanzkonsum, Abhängigkeit und Missbrauch im letzten Jahr",
+       x = "Substanz")+
+  theme_light() +
+  theme(
+    axis.title = element_text(size = 20),  # Achsentitel
+    axis.text  = element_text(size = 15),  # Achsbeschriftungen
+    legend.position = "none"  # Legendentext
+  )
+```
 
-::: {.column width="60%"}
--   **Heavy Drinking**: 4/5+ Getränke an 5 Tagen am Stück oder mehr innerhalb von 30 Tagen. Heavy Drinkers sind auch Binge Drinkers!
-:::
-:::::
 
-## Tabak
+### Geschlecht
 
-## Cokain
+```{r, echo=FALSE}
+Drug.Dependency.Gender <-data2019 %>%
+  select(irsex, depndcoc, depndalc, depndher) %>%
+  pivot_longer(cols = c(depndcoc,depndher, depndalc), names_to = "Drug", values_to = "Usage") %>%
+  filter(Usage == 1)
+```
 
-## Heroin
+```{r}
+ggplot(Drug.Dependency.Gender, aes(x = factor(Drug), fill = factor(irsex)))+
+  geom_bar(position = "fill")+
+  labs(title = "Drug Dependency by Gender")+
+  scale_x_discrete(labels = c("depndalc" = "Alkohol", "depndcoc" = "Cokain", "depndher" = "Heroin"))+
+  scale_fill_manual(labels = c("1" = "Männer", "2" = "Frauen"), values =c("1" = "darkblue", "2" = "maroon"))+
+  labs(title = "Abhängigkeit von Männern und Frauen", x = "Substanz")+
+  theme_light() +
+  theme(
+    axis.title = element_text(size = 15),  # Achsentitel
+    axis.text  = element_text(size = 15),  # Achsbeschriftungen
+  )
+```
+
+### Alter
+```{r, echo=FALSE}
+Drug.Dependency.Age <- data2019 %>%
+  select(catage,depndcoc,depndher, depndalc) %>%
+  pivot_longer(cols = c(depndcoc, depndher, depndalc), names_to = "Drug", values_to = "Usage") %>%
+  filter (Usage == 1)
+```
+
+```{r}
+ggplot(Drug.Dependency.Age, aes(x = factor(catage), fill = factor(Drug)))+
+  geom_bar(position = "fill")+
+  scale_fill_discrete(name = "Drogen",labels = c("depndalc" = "Alkhol","depndcoc" = "Cokain", "depndher" = "Heroin"))+
+  scale_x_discrete(labels = c("1" = "12-17", "2" = "18-25", "3" = "26-34", "4" = "35+"))+
+  labs(title = "Abhängigkeit der Altersgruppen", x = "Gruppierung")+
+  theme_light() +
+  theme(
+    axis.title = element_text(size = 20),  # Achsentitel
+    axis.text  = element_text(size = 15),  # Achsbeschriftungen
+    legend.position = "bottom"  # Legendentext
+  )
+
+```
+
 
 ## Mentale Gesundheit: Einflüsse und Behandlung
 

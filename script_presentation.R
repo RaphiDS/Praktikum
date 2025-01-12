@@ -384,7 +384,7 @@ mosaicfun30("CIG30USE", "COCUS30A", "Cigarettes", "Cocaine")
 ####################
 #Demographics Drugs
 ####################
-##Generel Drug Dependency / Abuse
+## Drug Dependency / Abuse
 Drug.Dependency.Abuse <- data2019 %>%
   select(alcyr, cocyr, heryr, depndalc, depndcoc, depndher, abusealc, abusecoc,abuseher) %>%
   mutate(ID = row_number()) %>%  # Add an ID column for pivoting
