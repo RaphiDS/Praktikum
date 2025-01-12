@@ -94,15 +94,12 @@ Nikotin.Dependence.Race <- data2019 %>%
 ggplot(Nikotin.Dependence.Race, aes(x = factor(NEWRACE2), y = count))+
   geom_col()+
   scale_x_discrete(labels = c("1" = "Weisse",
-                              "2" = "Schwarze
-                              Afroamerikaner",
-                              "3" = "Am/Ak Indigene",
-                              "4" = "Indigene Hawaii
-                              /Paz. Inseln",
+                              "2" = "Afro- \nAmerikaner",
+                              "3" = "Am/Ak \nIndigene",
+                              "4" = "Indigene \nHawaii \n/Paz. Inseln",
                               "5" = "Asiaten",
                               "6" = "Gemischt",
-                              "7" = "Hispanisch"),
-                   guide = guide_axis(angle = 45))+
+                              "7" = "Hispanisch"))+
   labs(title = "Nikotin Abhängigkeit der verschieden Kulturen")+
   theme_light() +
   theme(
@@ -188,83 +185,23 @@ Dependent.Users.Race <- data2019 %>%
 ggplot(Dependent.Users.Race , aes(x = factor(NEWRACE2), fill = factor(Drug)))+
   geom_bar(position = "fill")+
   scale_x_discrete(labels = c("1" = "Weisse",
-                              "2" = "Schwarze
-                              Afroamerikaner",
-                              "3" = "Am/Ak Indigene",
-                              "4" = "Indigene Hawaii
-                              /Paz. Inseln",
+                              "2" = "Afro \nAmerikaner",
+                              "3" = "Am/Ak \nIndigene",
+                              "4" = "Indigene Hawaii \n/Paz. Inseln",
                               "5" = "Asiaten",
                               "6" = "Gemischt",
-                              "7" = "Hispanisch"),
-                   guide = guide_axis(angle = 45)) +
+                              "7" = "Hispanisch")) +
   scale_fill_discrete(name = "Drogen",labels = c("depndalc" = "Alkhol","depndcoc" = "Cokain", "depndher" = "Heroin"))+
   labs(title = "Abhängigkeit der Ethnien", x = "Gruppen")+theme_light() +
   theme(
     axis.title = element_text(size = 15),  # Achsentitel
     axis.text  = element_text(size = 15),  # Achsbeschriftungen
-    legend.position = "right"  # Legendentext
-  )
-#-------------------------------------------------------------------------------
-## Youth Risk awareness and dependency
-Youth.Risk.Dependency <- data2019 %>%
-  select(depndalc, depndcoc, PRTALK3) %>%
-  pivot_longer(cols = c(depndalc, depndcoc), names_to = "Drug", values_to = "Response") %>%
-  filter (Response == 1, PRTALK3 > 0)
-
-ggplot(Youth.Risk.Dependency, aes(x = factor(Drug), fill = factor(PRTALK3)))+
-  geom_bar(position = "fill")+
-  scale_x_discrete(labels = c("depndalc" = "Alkohol", "depndcoc" = "Cokain"))+
-  scale_fill_discrete(name = "Wurde das Thema daheim besprochen?",
-                      labels = c("1" = "Gespräch mit Eltern", "2" = "Keine Meinung von Daheim"))+
-  labs(title = "Substanzkonsum trotz Aufklärung daheim", x = "Substanz")+theme_light() +
-  theme(
-    axis.title = element_text(size = 20),  # Achsentitel
-    axis.text  = element_text(size = 20),  # Achsbeschriftungen
     legend.position = "bottom"  # Legendentext
   )
-
-## Abhängigkeit und Armut
-Drug.Dependency.Poverty <- data2019 %>%
-  select(depndalc, depndcoc, depndher,POVERTY3) %>%
-  pivot_longer(cols = c(depndalc, depndcoc), names_to = "Drug", values_to = "Response") %>%
-  filter(Response == 1, POVERTY3 > 0)
-
-ggplot(Drug.Dependency.Poverty, aes(x = Drug, fill = factor(POVERTY3)))+
-  geom_bar(position = "fill")+
-  scale_x_discrete(labels = c("depndalc" = "Alkohol", "depndcoc" = "Cokain", "depndher" = "Heroin"))+
-  scale_fill_discrete(name = "",labels = c("1" = "Armutsbetroffen", "2" = " Einkommen von bis zu 2x Fed. Pov. THresh.", "3" = "Mehr als 2x Fed. Pov. THresh"))+
-  labs(title = "Armutsskala (ausgenommen: Studenten)", x = "Substanz")+
-  theme_light() +
-  theme(
-    axis.title = element_text(size = 20),  # Achsentitel
-    axis.text  = element_text(size = 20),  # Achsbeschriftungen
-    legend.position = "bottom"  # Legendentext
-  )
-
+#------------------------------------------------------------------------------
 ##############
-#Mental Health
-##############
-
-## Overall Substance Dependence/Abuse and MI
-Adult.MI.Substance <- data2019 %>%
-  select(smisudpy, amisudpy, lmmisudpy) %>%
-  pivot_longer(cols = everything(), names_to = "Type", values_to = "Response") %>%
-  filter(Response == 1)%>%
-  group_by(Type) %>%
-  summarize(count = n()) %>%
-  mutate(count = count/56136)
-
-ggplot(Adult.MI.Substance, aes(x = Type, y = count))+
-  geom_col()+
-  scale_x_discrete(labels = c("smisudpy" = "SMI", "amisudpy" ="AMI", "lmmisudpy" = "LMMI"),
-                   guide = guide_axis(angle = 45))+
-  labs(title = "Mentale Gesundheit Substanz-Abhäniger Personen", x = "Abstufung der Mentalen Gesundheit", y = "Percentage")+
-  theme_light() +
-  theme(
-    axis.title = element_text(size = 20),  # Achsentitel
-    axis.text  = element_text(size = 20),  # Achsbeschriftunge
-  )
-
+#MENTAL HEALTH
+#############
 #-------------------------------------------------------------------------------
 ## Drug Dependency and 'Degree' of Mental illness
 Drug.Dependency.MI <- data2019 %>%
@@ -275,7 +212,7 @@ Drug.Dependency.MI <- data2019 %>%
 
 ggplot(Drug.Dependency.MI, aes( x = factor(MI_CAT_U), fill = factor(Drug)))+
   geom_bar(position = "fill")+
-  scale_x_discrete(labels = c("0" = "Keine Mentalen Gesundheitsprobleme" , "1" = "'Milde' Mentale Erkrankung", "2" = " 'Moderate' Mentale Erkrankung", "3" = "Ernste Mentale Erkrankungen"),
+  scale_x_discrete(labels = c("0" = "Keine Mentalen \nGesundheitsprobleme" , "1" = "'Milde' Mentale \nErkrankung", "2" = " 'Moderate' Mentale \nErkrankung", "3" = "Ernste Mentale \nErkrankungen"),
                    guide = guide_axis(angle = 45))+
   labs(x = "Art der Erkrankung", y = "Anteil")
 
