@@ -15,7 +15,7 @@ Race.Distribution <- data2019 %>%
 
 ggplot(Race.Distribution, aes(x = factor(Answer,
                               levels = c(1, 7, 2, 5, 6, 3, 4)),
-                              y = count, fill = factor(Answer)))+
+                              y = count))+
   geom_col()+
   scale_x_discrete(labels = c("1" = "Weisse",
                               "2" = "Schwarze \nAfroamerikaner",
@@ -300,7 +300,7 @@ Nikotin.Dependence.Race <- data2019 %>%
 ggplot(Nikotin.Dependence.Race, aes(x = factor(NEWRACE2,
                                                levels = c(1, 7, 2, 5, 6, 3, 4)),
                                     y = count))+
-  geom_col(fill = "#009E73")+
+  geom_col(fill = "#009E73") +
   scale_x_discrete(labels = c("1" = "Weisse",
                               "2" = "Afro- \nAmerikaner",
                               "3" = "Am/Ak \nIndigene",
@@ -326,9 +326,10 @@ Drug.Dependency.Age <- data2019 %>%
 
 ggplot(Drug.Dependency.Age, aes(x = factor(catage), fill = factor(Drug)))+
   geom_bar(position = "fill")+
-  scale_fill_manual(name = "Drogen",labels = c("depndalc" = "Alkohol","depndcoc" = "Kokain", "depndher" = "Heroin"))+
+  scale_fill_manual(name = "Drogen",labels = c("depndalc" = "Alkohol","depndcoc" = "Kokain", "depndher" = "Heroin"),
+                    values = c("#0072B2","#E69F00", "#CC79A7")) +
   scale_x_discrete(labels = c("1" = "12-17", "2" = "18-25", "3" = "26-34", "4" = "35+"))+
-  labs(title = "Abhängigkeit der Altersgruppen", x = "Gruppierung")+
+  labs(title = "Abhängigkeit der Altersgruppen", x = "Gruppierung", y = "Anteil")+
   theme_light() +
   theme(
     axis.title = element_text(size = 20),  # Achsentitel
@@ -342,7 +343,7 @@ Dependent.Users.Race <- data2019 %>%
   pivot_longer(cols = c(depndcoc,depndher, depndalc), names_to = "Drug", values_to = "Usage") %>%
   filter(Usage == 1)
 
-ggplot(Dependent.Users.Race , aes(x = factor(NEWRACE2), fill = factor(Drug)))+
+ggplot(Dependent.Users.Race , aes(x = factor(NEWRACE2, levels = c(1, 7, 2, 5, 6, 3, 4)), fill = factor(Drug)))+
   geom_bar(position = "fill")+
   scale_x_discrete(labels = c("1" = "Weisse",
                               "2" = "Afro \nAmerikaner",
@@ -351,8 +352,10 @@ ggplot(Dependent.Users.Race , aes(x = factor(NEWRACE2), fill = factor(Drug)))+
                               "5" = "Asiaten",
                               "6" = "Gemischt",
                               "7" = "Hispanisch")) +
-  scale_fill_discrete(name = "Drogen",labels = c("depndalc" = "Alkhol","depndcoc" = "Cokain", "depndher" = "Heroin"))+
-  labs(title = "Abhängigkeit der Ethnien", x = "Gruppen")+
+  scale_fill_manual(name = "Drogen",
+                    labels = c("depndalc" = "Alkohol","depndcoc" = "Kokain", "depndher" = "Heroin"),
+                    values = c("#0072B2","#E69F00", "#CC79A7"))+
+  labs(title = "Abhängigkeit der Ethnien", x = "Gruppen", y = "Anteil")+
   theme_light() +
   theme(
     axis.title = element_text(size = 15),  # Achsentitel
