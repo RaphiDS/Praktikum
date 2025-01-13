@@ -6,7 +6,7 @@ drugdata <- allfilterdata
 data2019 <- allfilterdata %>%
   filter(year == 2019)
 
-Race.Destr <- data2019 %>%
+Race.Distribution <- data2019 %>%
   select(NEWRACE2) %>%
   pivot_longer(cols = everything(), names_to = "Var", values_to = "Answer") %>%
   group_by(Answer) %>%
@@ -389,8 +389,6 @@ ggplot(Nikotin.Dependence.Race, aes(x = factor(NEWRACE2)))+
     ),
     guide = guide_axis(angle = 45))+
   labs(title = "Nicotine Dependency by Race")
-
-
 
 
 age.grouped <- data2019 %>%
