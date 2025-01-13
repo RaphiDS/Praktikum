@@ -234,7 +234,7 @@ histogram_fun <- function(datacol, drug_name, limit, colorcode, yearplot) {
       legend.text = element_text(size = 20)
     ) +
     scale_x_discrete(breaks = c("1", "5", "10", "15", "20", "25", "30"), drop = FALSE) +
-    scale_y_continuous(limits = c(0, limit))
+    scale_y_continuous(limits = c(0, limit), labels = scales::label_number())
 }
 
 
@@ -260,7 +260,7 @@ histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2019")
 histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2015")
 histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2016")
 histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2017")
-histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2018")
+xhistogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2018")
 histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2019")
 
 ###################################
@@ -362,3 +362,6 @@ ggplot(Dependent.Users.Race , aes(x = factor(NEWRACE2, levels = c(1, 7, 2, 5, 6,
     axis.text  = element_text(size = 15),  # Achsbeschriftungen
     legend.position = "bottom"  # Legendentext
   )
+
+
+########################################################################################################################################
