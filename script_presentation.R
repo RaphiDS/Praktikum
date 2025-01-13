@@ -205,13 +205,13 @@ ggplot(tobacco30, aes(x = Year, y = .data[["Anteil"]],
     values = c(16, 15, 17, 18)
   )
 
-histogram_fun_2015 <- function(datacol, drug_name, limit, colorcode) {
+histogram_fun <- function(datacol, drug_name, limit, colorcode, yearplot) {
   data <- drugdata %>%
     group_by(year) %>%
     count(day = .data[[datacol]]) %>%
     mutate(`Relative share` = n / sum(n)) %>%
     filter(day >= 1 & day <= 30) %>%
-    filter(year == 2015) %>%
+    filter(year == yearplot) %>%
     ungroup() %>%
     mutate(
       Drug = drug_name,
@@ -237,52 +237,32 @@ histogram_fun_2015 <- function(datacol, drug_name, limit, colorcode) {
     scale_y_continuous(limits = c(0, limit))
 }
 
-histogram_fun_2019 <- function(datacol, drug_name, limit, colorcode) {
-  data <- drugdata %>%
-    group_by(year) %>%
-    count(day = .data[[datacol]]) %>%
-    mutate("Relative share" = n / sum(n), "n" = sum(n)) %>%
-    filter(day >= 1 & day <= 30) %>%
-    filter(year == 2019) %>%
-    ungroup() %>%
-    mutate(
-      Drug = drug_name,
-      # Hier explizit alle Levels 1:30 setzen:
-      day  = factor(day, levels = as.character(1:30))
-    )
-  
-  ggplot(data, aes(x = day, y = `Relative share`)) +
-    geom_col(fill = colorcode, color = "black") +
-    theme_light() +
-    labs(
-      title = paste0("Distribution of usage days for ", drug_name),
-      x = "Anzahl der Konsumtage in den letzten 30 Tagen",
-      y = "Anteil"
-    ) +
-    theme(
-      axis.title = element_text(size = 20),
-      axis.text  = element_text(size = 20),
-      legend.title = element_text(size = 20),
-      legend.text = element_text(size = 20)
-    ) +
-    scale_x_discrete(breaks = c("1", "5", "10", "15", "20", "25", "30"), drop = FALSE) +
-    scale_y_continuous(limits = c(0, limit))
-}
-
 
 # Example calls
-histogram_fun_2015("alcdays", "Alcohol", 0.085, "#0072B2")
-histogram_fun_2019("alcdays", "Alcohol", 0.085, "#0072B2")
+histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2015")
+histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2016")
+histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2017")
+histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2018")
+histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2019")
 
-histogram_fun_2015("CIG30USE", "Cigarettes", 0.12, "#009E73")
-histogram_fun_2019("CIG30USE", "Cigarettes", 0.12, "#009E73")
+histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2015")
+histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2016")
+histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2017")
+histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2018")
+histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2019")
 
-histogram_fun_2015("COCUS30A", "Cocaine", 0.003, "#E69F00")
-histogram_fun_2019("COCUS30A", "Cocaine", 0.003, "#E69F00")
+histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2015")
+histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2016")
+histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2017")
+histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2018")
+histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2019")
 
-histogram_fun_2019("HER30USE", "Heroin", 0.0004, "#CC79A7")
-histogram_fun_2015("HER30USE", "Heroin", 0.0004, "#CC79A7")
 
+histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2015")
+histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2016")
+histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2017")
+histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2018")
+histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2019")
 
 ###################################
 #Demographics and Drugs / Nicotine
