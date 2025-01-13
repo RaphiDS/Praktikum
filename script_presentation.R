@@ -613,6 +613,7 @@ ggplot(Adult.Treatment, aes(x = factor(Drug), fill = factor(Treatment)))+
 #######
 #YOUTH
 ######
+
 #Overall Substance and Mental Health
 
 ## SEVERE MDE with role impairment and ALcohol or (illicit) Substance Abuse
@@ -642,6 +643,26 @@ labs(title = "SUbstanzkonsum und Art der Behandlung YOUTH", x = "SUbstanz")+
 
 
 ##-----------------------------------------------------------------------------
+## MDE Age Distribution
+MDE.Age <- data2019 %>%
+  select(amdeyr,ymdeyr, catage) %>%
+  pivot_longer(cols =c(amdeyr,ymdeyr), names_to = "MDE", values_to = "Answer") %>%
+  filter(Answer == 1) %>%
+  group_by(catage) %>%
+  summarise(count = n()) %>%
+  mutate(count = count/56136)
+
+ggplot(MDE.Age, aes(x = factor(catage), y = count))+
+  geom_col()+
+  scale_x_discrete(labels = c("1"= "12-17", "2" = "18-25", "3" = "26-34", "4" = "35+"))+
+  labs( title = "MDE der Altersgruppem", x = "Altersgruppen", y = "Anteil")+
+  theme_light() +
+  theme(
+    axis.title = element_text(size = 15),  # Achsentitel
+    axis.text  = element_text(size = 20),  # Achsbeschriftungen
+    legend.position = "bottom"  # Legendentext
+  )
+
 ## MDE and Drugs Youth
 Youth.MDE.Drugs <- data2019 %>%
   select(ymdeyr, depndalc,depndcoc,depndher)%>%
@@ -655,3 +676,10 @@ ggplot(Youth.MDE.Drugs, aes(x = factor(Drug), y = count))+
   geom_col()+
   scale_x_discrete(labels = c("depndalc" = "Alkhol","depndcoc" = "Cokain", "depndher" = "Heroin"))+
   labs(title = "MDE und Substanzkonsum", x = "Substanz")
+
+########## 
+# APPENDIX
+##########
+
+SUD.MI.Treatment <- data2019 %>%
+  select(depndalc,depndcoc,depndher,auunmtyr )

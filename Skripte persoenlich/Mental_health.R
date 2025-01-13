@@ -23,9 +23,6 @@ ggplot(Treatment.Denial, aes(x = Reason, y = count))+
                    guide = guide_axis(angle = 45))+
   labs(title = "Reason for not getting Med", y = "Percentage", x = "Reasons")
 
-##-------------------------------------------------------------------------
-
-
 ##------------------------------------------------------------------------
 # Mental Health and Drugs
 #--> compare them with other variables related to SMI/suizide
@@ -48,30 +45,19 @@ ggplot(MH.Substance, aes(x = Type, y = count))+
 
 #--------------------------------------------------------------------------
 ## MDE : Mayor Depressive Episode
-pastYear.MDE <- data2019 %>%
-  select(AMDEY2_U) %>%
-  filter(AMDEY2_U >= 0) %>%
-  pivot_longer(cols = everything(), names_to = "Variable", values_to = "Response") %>%
-  group_by(Response)%>%
-  summarize(count = n()) %>%
-  mutate(count = count /56136)
-
-ggplot (pastYear.MDE, aes(x = factor(Response), y = count))+
-  geom_col()+
-  scale_x_discrete(labels = c("1" = "Yes", "0" = "No"))+
-  labs(title = "Last Year MDE", x = "Response")
-
+#
 MDE.Age <- data2019 %>%
-  select(AMDEY2_U, catage) %>%
-  filter(catage > 1 & AMDEY2_U == 1) %>%
+  select(amdeyr,ymdeyr, catage) %>%
+  pivot_longer(cols =c(amdeyr,ymdeyr), names_to = "MDE", values_to = "Answer") %>%
+  filter(Answer == 1) %>%
   group_by(catage) %>%
   summarise(count = n()) %>%
   mutate(count = count/56136)
 
 ggplot(MDE.Age, aes(x = factor(catage), y = count))+
   geom_col()+
-  scale_x_discrete(labels = c("2" = "18-25", "3" = "26-34", "4" = "35+"))+
-  labs( title = "MDE Age Destribution", x = "Age groups", y = "Percentage")
+  scale_x_discrete(labels = c("1"= "12-17", "2" = "18-25", "3" = "26-34", "4" = "35+"))+
+  labs( title = "MDE der Altersgruppem", x = "Altersgruppen", y = "Anteil")
 
 #--------------------------------------------------------------------------
 ## YOUTH MENTAL HEALTH
@@ -124,3 +110,14 @@ ggplot(Youth.MDE, aes(x = Response, y = count))+
 ## YOuth with MDE and Substance Abuse
 Youth.MDE.Substance <- data2019 %>%
   select(YMDEAUDPY, ymdeimudpy, ymdeudpy) # Variable fehlt
+
+## YOuth MDE an Dependency
+
+#########
+#Appendix
+#########
+
+#No Treatment but Drugs
+TreatmentNo.Drugs <- data2019 %>%
+  select
+  
