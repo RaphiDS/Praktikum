@@ -2,7 +2,7 @@
 title: "Drogenkonsum in den USA von 2015-2019"
 format: 
   revealjs:
-    embed-resources: true
+    embed-resources: false
 editor: visual
 author: "Denis Oluri, Sarah Puthiaparampil, Raphael Schneider"
 incremental: true
@@ -302,112 +302,12 @@ Alkhol und Drogen: es gibt bestimmte Schwellenwerte um die Intensität und art d
 -   Diffenrzierung:
     -   Tabak: normale Zigaretten und "rauchfreie" Tabbakware wie z.b. Snus
 
-## Drogenkonsum in den Jahren 2015-2019
 
-```{r}
-#| echo: false
-#| label: 'generating Data Drug Development'
+## Drogenkonsum von 2015-2019
 
-# 1) Function: Generates a summarized table for a specified (drug) variable,
-#    focusing only on "Yes" answers (value == 1), referring to "ever used".
-everdatafun <- function(datacol, drug) {
-  drugdata %>%
-    group_by(year) %>%
-    count(.data[[datacol]]) %>%                # Counts how often each value appears in 'datacol' per year
-    mutate("Rel. share" = n / sum(n)) %>%       # Relative share per year
-    filter(.data[[datacol]] == 1) %>%           # Keep only "Yes" answers
-    ungroup() %>%
-    mutate(
-      Drug = drug,                              # Name of the drug in a new column
-      Year = year
-    ) %>%
-    select(Year, "Rel. share", Drug)            # Select columns in a consistent order
-}
-
-# 2) Function: Generates a summarized table for a specified (drug) variable,
-#    focusing on consumption "in the last 30 days".
-#    Values 1–30 are treated as "Yes," everything else as "No."
-datafun30 <- function(datacol, drug) {
-  drugdata %>%
-    group_by(year) %>%
-    summarise(
-      TotalPeople = n(),                                         # Total number of observations
-      Users = sum(.data[[datacol]] >= 1 & .data[[datacol]] <= 30, na.rm = TRUE),
-      "Rel. share" = Users / TotalPeople
-    ) %>%
-    mutate(Drug = drug) %>%                                      # Drug name in a new column
-    select(Year = year, "Rel. share", Drug)                      # Rename and reorder columns
-}
-
-
-# 1) "Ever used" data for 4 major drugs
-fourdrugsever <- as.data.frame(
-  rbind(
-    everdatafun("alcever", "Alcohol"),
-    everdatafun("cigever", "Cigarettes"),
-    everdatafun("cocever", "Cocaine"),
-    everdatafun("herever", "Heroin")
-  )
-)
-
-# 2) "Ever used" for various tobacco products
-tobaccoever <- as.data.frame(
-  rbind(
-    everdatafun("cigever", "Cigarettes"),
-    everdatafun("smklssevr", "Smokeless Tobacco"),
-    everdatafun("pipever", "Pipe"),
-    everdatafun("cigarevr", "Cigar")
-  )
-)
-
-# 3) "In the last 30 days" for 4 major drugs
-fourdrugs30 <- as.data.frame(
-  rbind(
-    datafun30("alcdays", "Alcohol"),
-    datafun30("CIG30USE", "Cigarettes"),
-    datafun30("COCUS30A", "Cocaine"),
-    datafun30("HER30USE", "Heroin")
-  )
-)
-
-# 4) "In the last 30 days" for various tobacco products
-tobacco30 <- as.data.frame(
-  rbind(
-    datafun30("CIG30USE", "Cigarettes"),
-    datafun30("SMKLSS30N", "Smokeless Tobacco"),
-    # For pipes, the question seems to differ, so "ever used" is being used here
-    everdatafun("PIPE30DY", "Pipe"),
-    datafun30("CGR30USE", "Cigar")
-  )
-)
-
-```
+![](Presentation_files/Pres_plots/Substanzen_Verlauf_plot.png)
 
 ------------------------------------------------------------------------
-
-```{r}
-#| label: 'Plot: In the last 30 days – 4 major drugs'
-
-ggplot(fourdrugs30, aes(x = Year, y = .data[["Rel. share"]], color = Drug, shape = Drug)) +
-  geom_point(size = 3) +
-  geom_line(size = 1) +
-  theme_light() +
-  labs(
-    title = "Relative share of people who have used certain drugs in the last 30 days",
-    x = "Year",
-    y = "Relative Share"
-  ) +
-  theme(
-    axis.title = element_text(size = 20),  # Achsentitel
-    axis.text  = element_text(size = 20),  # Achsbeschriftungen
-    legend.title = element_text(size = 20),  # Legendentitel
-    legend.text =  element_text(size = 20),  # Legendentext
-  )  +
-  scale_y_continuous(limits = c(0, NA)) +
-  scale_color_manual(values = c("#0072B2", "#009E73", "#E69F00", "#CC79A7")) +
-  scale_shape_manual(values = c(15:18))  # beliebige Form-Codes
-
-```
 
 ## Genaueres Konsumverhalten
 
