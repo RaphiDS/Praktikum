@@ -124,37 +124,10 @@ age.grouped <- data2019 %>%
   pivot_longer(cols = everything(), names_to = "variable", values_to = "Group") %>%
   group_by(Group) %>%
   summarize(count =n()/56136)
-
-#Race Destribution
-Race.Destr <- data2019 %>%
-  select(NEWRACE2) %>%
-  pivot_longer(cols = everything(), names_to = "Var", values_to = "Answer") %>%
-  group_by(Answer) %>%
-  summarize(count = n()) %>%
-  mutate(count = count/56136)
   
 ```
 
-```{r}
-#| label: PLots Verteilung Alter
-ggplot(Race.Destr,aes(x = factor(Answer), y = count))+
-  geom_col()+
-  scale_x_discrete(labels = c("1" = "Weisse",
-                              "2" = "Afro- \nAmerikaner",
-                              "3" = "Am/Ak \nIndigene",
-                              "4" = "Indigene \nHawaii \n/Paz. Inseln",
-                              "5" = "Asiaten",
-                              "6" = "Gemischt",
-                              "7" = "Hispanisch")) +
-  labs(y = "Anteil", x = "Ethnische Zugehörigkeit") +
-  theme_light() +
-  theme(
-    axis.title.x = element_text(margin = margin(t =25)),
-    axis.title = element_text(size = 15),  # Achsentitel
-    axis.text  = element_text(size = 10),  # Achsbeschriftungen
-    legend.position = "none"  # Legendentext
-  )
-```
+![](Presentation_files/Pres_plots/Ethnie_Verteilung_plot.png)
 
 ------------------------------------------------------------------------
 
@@ -425,7 +398,7 @@ histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2019")
 ```
 :::
 
-## Cokain
+## Kokain
 
 ::: panel-tabset
 ### 2015

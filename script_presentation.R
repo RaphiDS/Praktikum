@@ -31,8 +31,8 @@ ggplot(aes(x = factor(Answer,
     axis.text  = element_text(size = 15),  # Achsbeschriftungen
     legend.position = "none"  # Legendentext
   )
-ggsave("Presentation_files/Pres_plots/Substanzen_Verlauf_plot.png",
-       plot = Substanzen.Verlauf, width = 8, height = 6, dpi = 300)
+ggsave("Presentation_files/Pres_plots/Ethnie_Verteilung_plot.png",
+       plot = Race.Distribution, width = 8, height = 6, dpi = 300)
 ##### Drugs Denis Raphael
 
 # 1) Function: Generates a summarized table for a specified (drug) variable,
@@ -131,7 +131,7 @@ Substanzen.Verlauf <- ggplot(fourdrugsever, aes(x = Year, y = .data[["Anteil"]],
 
 Substanzen.Verlauf
 ggsave("Presentation_files/Pres_plots/Substanzen_Verlauf_plot.png",
-       plot = Substanzen.Verlauf, width = 8, height = 6, dpi = 300)
+       plot = Substanzen.Verlauf, width = 12, height = 8, dpi = 300)
 
 # 2) Plot: "In the last 30 days" – 4 major drugs
 ggplot(fourdrugs30, aes(x = Year, y = .data[["Anteil"]],
