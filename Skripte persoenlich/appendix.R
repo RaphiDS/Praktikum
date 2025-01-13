@@ -234,3 +234,11 @@ Youth.MDE.Substance <- data2019 %>%
 ## YOuth MDE an Dependency
 
 ## Spearman Rang versuch
+
+
+
+
+#-------------------------------------------------------------------------
+## Youth with MDE and Substance Abuse
+Youth.MDE.Substance <- data2019 %>%
+  select(YMDEAUDPY, ymdeimudpy, ymdeudpy) # Variable fehlt

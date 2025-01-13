@@ -480,10 +480,3 @@ ggplot(Youth.MDE.Drugs, aes(x = factor(Drug), y = count))+
   geom_col()+
   scale_x_discrete(labels = c("depndalc" = "Alkhol","depndcoc" = "Cokain", "depndher" = "Heroin"))+
   labs(title = "MDE und Substanzkonsum", x = "Substanz")
-
-
-
-#-------------------------------------------------------------------------
-## Youth with MDE and Substance Abuse
-Youth.MDE.Substance <- data2019 %>%
-  select(YMDEAUDPY, ymdeimudpy, ymdeudpy) # Variable fehlt
