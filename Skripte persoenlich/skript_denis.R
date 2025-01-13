@@ -580,11 +580,88 @@ ggplot(data_summary, aes(x = Status, y = Anteil, fill = factor(irsex))) +
 
 library(usmap)
 library(tidyverse)
+# install.packages("usmap")
+# install.packages("usdata")
+############################
+# Pakete laden
+############################
+library(tidyverse)  # Enthält u. a. dplyr und ggplot
+library(usmap)      # Für die USA-Karte
+library(usdata)     # Für state2abbr()
 
-plot_usmap(regions = "states") + 
-  labs(title = "U.S. States",
-       subtitle = "This is a blank map of the United States.") + 
-  theme(panel.background=element_blank())
+############################
+# 1) Daten definieren
+############################
+state_data <- data.frame(
+  state = c(
+    "California", "Texas", "Florida", "New York", "Pennsylvania",
+    "Illinois", "Ohio", "Georgia", "North Carolina", "Michigan",
+    "New Jersey", "Virginia", "Washington", "Arizona", "Massachusetts",
+    "Tennessee", "Indiana", "Missouri", "Maryland", "Wisconsin",
+    "Colorado", "Minnesota", "South Carolina", "Alabama", "Louisiana",
+    "Kentucky", "Oregon", "Oklahoma", "Connecticut", "Utah", "Iowa", "Nevada", 
+    "Arkansas", "Mississippi", "Kansas", "New Mexico", "Nebraska", "Idaho", 
+    "West Virginia", "Hawaii", "New Hampshire", "Maine", "Montana", "Rhode Island", 
+    "Delaware", "South Dakota", "North Dakota", "Alaska", "Vermont", "Wyoming"
+  ),
+  population = c(
+    39512223, 28995881, 21477737, 19453561, 12801989,
+    12671821, 11689100, 10617423, 10488084, 9986857,
+    8882190, 8535519, 7614893, 7278717, 6892503,
+    6829174, 6732219, 6137428, 6045680, 5822434,
+    5758736, 5639632, 5148714, 4903185, 4648794,
+    4467673, 4217737, 3956971, 3565287, 3205958, 3155070, 3080156,
+    3017804, 2976149, 2913314, 2096829, 1934408, 1787065,
+    1792147, 1415872, 1359711, 1344212, 1068778, 1059361,
+    973764, 884659, 762062, 731545, 623989, 578759
+  ),
+  interviews = c(
+    4560, 3300, 3300, 3300, 2400,
+    2400, 2400, 1500, 1500, 2400,
+    1500, 1500, 960, 960, 960,
+    960, 960, 960, 960, 960,
+    960, 960, 960, 960, 960,
+    960, 960, 960, 960, 960, 960, 960,
+    960, 960, 960, 960, 960, 960,
+    960, 967, 960, 960, 960, 960,
+    960, 960, 960, 960, 960, 960
+  )
+)
+
+############################
+# 2) Abkürzungen erzeugen
+############################
+# *Über* das Paket 'usdata':
+# state2abbr("California") => "CA", etc.
+state_data <- state_data %>%
+  mutate(
+    state_abbr = state2abbr(state),
+    # Beispielmetrik: Interviews pro 100.000 Einwohner
+    interviews_per_100k = (interviews / population) * 100000
+  )
+
+############################
+# 3) Choroplethen-Karte zeichnen
+############################
+plot_usmap(
+  data    = state_data,
+  regions = "states",
+  values  = "interviews_per_100k",
+  include = state_data$state_abbr  # optional: nur die definierten Staaten
+) +
+  scale_fill_continuous(
+    low   = "white",
+    high  = "darkred",
+    name  = "Interviews \n(pro 100k)",
+    label = scales::comma
+  ) +
+  labs(
+    title    = "Relative Anzahl an Interviews pro 100.000 Einwohner",
+    subtitle = "Basierend auf US Census Population und Befragungsdaten",
+    caption  = "Quelle: Eigene Daten + US-Zensus"
+  ) +
+  theme(panel.background = element_blank())
+
 
 
 
