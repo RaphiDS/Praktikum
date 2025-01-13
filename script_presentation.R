@@ -11,9 +11,8 @@ Race.Distribution <- data2019 %>%
   pivot_longer(cols = everything(), names_to = "Var", values_to = "Answer") %>%
   group_by(Answer) %>%
   summarize(count = n()) %>%
-  mutate(count = count/56136)
-
-ggplot(Race.Distribution, aes(x = factor(Answer,
+  mutate(count = count/56136) %>%
+ggplot(aes(x = factor(Answer,
                               levels = c(1, 7, 2, 5, 6, 3, 4)),
                               y = count))+
   geom_col()+
@@ -32,7 +31,8 @@ ggplot(Race.Distribution, aes(x = factor(Answer,
     axis.text  = element_text(size = 15),  # Achsbeschriftungen
     legend.position = "none"  # Legendentext
   )
-
+ggsave("Presentation_files/Pres_plots/Substanzen_Verlauf_plot.png",
+       plot = Substanzen.Verlauf, width = 8, height = 6, dpi = 300)
 ##### Drugs Denis Raphael
 
 # 1) Function: Generates a summarized table for a specified (drug) variable,
@@ -264,7 +264,7 @@ histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2019")
 histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2015")
 histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2016")
 histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2017")
-xhistogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2018")
+histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2018")
 histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2019")
 
 ###################################
