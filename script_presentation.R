@@ -6,7 +6,6 @@ drugdata <- allfilterdata
 data2019 <- allfilterdata %>%
   filter(year == 2019)
 
-
 Race.Destr <- data2019 %>%
   select(NEWRACE2) %>%
   pivot_longer(cols = everything(), names_to = "Var", values_to = "Answer") %>%
@@ -35,10 +34,6 @@ ggplot(Race.Destr, aes(x = factor(Answer), y = count, fill = factor(Answer)))+
     legend.position = "none"  # Legendentext
   )
 
-Racial.Background <- data2019 %>%
-  select (NEWRACE2, eduhighcat) %>% ## selected AI regions, racial background and education level
-  filter(eduhighcat <5)       ## wert 5 streichen? --> Leute unter 17 kein Abschluss, zählen nicht
-
 ##### Drugs Denis Raphael
 
 # 1) Function: Generates a summarized table for a specified (drug) variable,
@@ -47,16 +42,15 @@ everdatafun <- function(datacol, drug) {
   drugdata %>%
     group_by(year) %>%
     count(.data[[datacol]]) %>%                # Counts how often each value appears in 'datacol' per year
-    mutate("Rel. share" = n / sum(n)) %>%       # Relative share per year
+    mutate("Anteil" = n / sum(n)) %>%       # Relative share per year
     filter(.data[[datacol]] == 1) %>%           # Keep only "Yes" answers
     ungroup() %>%
     mutate(
       Drug = drug,                              # Name of the drug in a new column
       Year = year
     ) %>%
-    select(Year, "Rel. share", Drug)            # Select columns in a consistent order
+    select(Year, "Anteil", Drug)            # Select columns in a consistent order
 }
-
 # 2) Function: Generates a summarized table for a specified (drug) variable,
 #    focusing on consumption "in the last 30 days".
 #    Values 1–30 are treated as "Yes," everything else as "No."
@@ -66,51 +60,46 @@ datafun30 <- function(datacol, drug) {
     summarise(
       TotalPeople = n(),                                         # Total number of observations
       Users = sum(.data[[datacol]] >= 1 & .data[[datacol]] <= 30, na.rm = TRUE),
-      "Rel. share" = Users / TotalPeople
+      "Anteil" = Users / TotalPeople
     ) %>%
     mutate(Drug = drug) %>%                                      # Drug name in a new column
-    select(Year = year, "Rel. share", Drug)                      # Rename and reorder columns
+    select(Year = year, "Anteil", Drug)                      # Rename and reorder columns
 }
-
 
 # 1) "Ever used" data for 4 major drugs
 fourdrugsever <- as.data.frame(
   rbind(
-    everdatafun("alcever", "Alcohol"),
-    everdatafun("cigever", "Cigarettes"),
-    everdatafun("cocever", "Cocaine"),
+    everdatafun("alcever", "Alkohol"),
+    everdatafun("cigever", "Zigarette"),
+    everdatafun("cocever", "Kokain"),
     everdatafun("herever", "Heroin")
   )
 )
-
 # 2) "Ever used" for various tobacco products
 tobaccoever <- as.data.frame(
   rbind(
-    everdatafun("cigever", "Cigarettes"),
-    everdatafun("smklssevr", "Smokeless Tobacco"),
-    everdatafun("pipever", "Pipe"),
-    everdatafun("cigarevr", "Cigar")
+    everdatafun("cigever", "Zigarette"),
+    everdatafun("smklssevr", "Rauchfreier Tabak"),
+    everdatafun("pipever", "Pfeife"),
+    everdatafun("cigarevr", "Zigarre")
   )
 )
-
 # 3) "In the last 30 days" for 4 major drugs
 fourdrugs30 <- as.data.frame(
   rbind(
-    datafun30("alcdays", "Alcohol"),
-    datafun30("CIG30USE", "Cigarettes"),
-    datafun30("COCUS30A", "Cocaine"),
+    datafun30("alcdays", "Alkohol"),
+    datafun30("CIG30USE", "Zigarette"),
+    datafun30("COCUS30A", "Kokain"),
     datafun30("HER30USE", "Heroin")
   )
 )
-
 # 4) "In the last 30 days" for various tobacco products
 tobacco30 <- as.data.frame(
   rbind(
-    datafun30("CIG30USE", "Cigarettes"),
-    datafun30("SMKLSS30N", "Smokeless Tobacco"),
-    # For pipes, the question seems to differ, so "ever used" is being used here
-    everdatafun("PIPE30DY", "Pipe"),
-    datafun30("CGR30USE", "Cigar")
+    datafun30("CIG30USE", "Zigarette"),
+    datafun30("SMKLSS30N", "Rauchfreier Tabak"),
+    everdatafun("PIPE30DY", "Pfeife"),
+    datafun30("CGR30USE", "Zigarre")
   )
 )
 
@@ -119,14 +108,18 @@ tobacco30 <- as.data.frame(
 ##########################
 
 # 1) Plot: "Ever used" – 4 major drugs
-ggplot(fourdrugsever, aes(x = Year, y = .data[["Rel. share"]], color = Drug, shape = Drug)) +
+ggplot(fourdrugsever, aes(x = Year, y = .data[["Anteil"]],
+                          color = factor(Drug, levels = c("Alkohol", "Zigarette", "Kokain", "Heroin")),
+                          shape = factor(Drug, levels = c("Alkohol", "Zigarette", "Kokain", "Heroin")))) +
   geom_point(size = 3) +
   geom_line(linewidth = 1) +
   theme_light() +
   labs(
+    color = "Droge",
+    shape = "Droge",
     title = "Relative share of people who have ever used certain drugs",
-    x = "Year",
-    y = "Relative Share"
+    x = "Jahr",
+    y = "Anteil"
   ) +
   theme(
     axis.title = element_text(size = 20),  # Achsentitel
@@ -138,14 +131,18 @@ ggplot(fourdrugsever, aes(x = Year, y = .data[["Rel. share"]], color = Drug, sha
   scale_shape_manual(values = c(15:18))# beliebige Form-Codes
 
 # 2) Plot: "In the last 30 days" – 4 major drugs
-ggplot(fourdrugs30, aes(x = Year, y = .data[["Rel. share"]], color = Drug, shape = Drug)) +
+ggplot(fourdrugs30, aes(x = Year, y = .data[["Anteil"]],
+                        color = factor(Drug, levels = c("Alkohol", "Zigarette", "Kokain", "Heroin")),
+                        shape = factor(Drug, levels = c("Alkohol", "Zigarette", "Kokain", "Heroin")))) +
   geom_point(size = 3) +
   geom_line(size = 1) +
   theme_light() +
   labs(
     title = "Relative share of people who have used certain drugs in the last 30 days",
-    x = "Year",
-    y = "Relative Share"
+    color = "Droge",
+    shape = "Droge",
+    x = "Jahr",
+    y = "Anteil"
   ) +
   theme(
     axis.title = element_text(size = 20),  # Achsentitel
@@ -158,14 +155,19 @@ ggplot(fourdrugs30, aes(x = Year, y = .data[["Rel. share"]], color = Drug, shape
   scale_shape_manual(values = c(15:18))  # beliebige Form-Codes
 
 # 3) Plot: "Have ever used tobacco products"
-ggplot(tobaccoever, aes(x = Year, y = .data[["Rel. share"]], color = Drug, shape = Drug)) +
+ggplot(tobaccoever, aes(x = Year, y = .data[["Anteil"]],
+                        color = factor(Drug, levels = c("Zigarette", "Zigarre", "Rauchfreier Tabak", "Pfeife")),
+                        shape = factor(Drug, levels = c("Zigarette", "Zigarre", "Rauchfreier Tabak", "Pfeife")))) +
   geom_point(size = 3) +
   geom_line(size = 1) +
   theme_light() +
   labs(
+    fill = "Droge",
+    color = "Droge",
+    shape = "Droge",
     title = "Relative share of people who have ever used certain forms of tobacco",
-    x = "Year",
-    y = "Relative Share"
+    x = "Jahr",
+    y = "Anteil"
   ) +
   theme(
     axis.title = element_text(size = 20),
@@ -174,20 +176,24 @@ ggplot(tobaccoever, aes(x = Year, y = .data[["Rel. share"]], color = Drug, shape
     legend.text = element_text(size = 20)
   ) +
   scale_y_continuous(limits = c(0, NA)) +
-  scale_color_manual(values = c("#0072B2", "#009E73", "#E69F00", "#CC79A7")) +
+  scale_color_manual(values = c("#009E73", "red","lightblue", "darkgrey")) +
   scale_shape_manual(
-    values = c(15, 16, 17, 18)
+    values = c(16, 15, 17, 18)
   )
 
 # 4) Plot: "In the last 30 days" – tobacco products
-ggplot(tobacco30, aes(x = Year, y = .data[["Rel. share"]], color = Drug, shape = Drug)) +
+ggplot(tobacco30, aes(x = Year, y = .data[["Anteil"]],
+                      color = factor(Drug, levels = c("Zigarette", "Zigarre", "Rauchfreier Tabak", "Pfeife")),
+                      shape = factor(Drug, levels = c("Zigarette", "Zigarre", "Rauchfreier Tabak", "Pfeife")))) +
   geom_point(size = 3) +
   geom_line(size = 1) +
   theme_light() +
   labs(
+    color = "Droge",
+    shape = "Droge",
     title = "Relative share of people who have used certain forms of tobacco in the last 30 days",
-    x = "Year",
-    y = "Relative Share"
+    x = "Jahr",
+    y = "Anteil"
   ) +
   theme(
     axis.title = element_text(size = 20),
@@ -195,14 +201,9 @@ ggplot(tobacco30, aes(x = Year, y = .data[["Rel. share"]], color = Drug, shape =
     legend.title = element_text(size = 20),
     legend.text = element_text(size = 20)
   ) +
-  scale_y_continuous(limits = c(0, NA)) +
-  scale_color_brewer(
-    palette = "Dark2",
-    breaks = c("Cigarettes", "Cigar", "Smokeless Tobacco", "Pipe")
-  ) +
+  scale_color_manual(values = c("#009E73", "red","lightblue", "darkgrey")) +
   scale_shape_manual(
-    values = c(15, 16, 17, 18),
-    breaks = c("Cigarettes", "Cigar", "Smokeless Tobacco", "Pipe")
+    values = c(16, 15, 17, 18)
   )
 
 histogram_fun_2015 <- function(datacol, drug_name, limit, colorcode) {
@@ -224,8 +225,8 @@ histogram_fun_2015 <- function(datacol, drug_name, limit, colorcode) {
     theme_light() +
     labs(
       title = paste0("Distribution of usage days for ", drug_name),
-      x = "Number of Days Used in Last 30 Days",
-      y = "Relative Share"
+      x = paste("Anzahl der Konsumtage in den letzten 30 Tagen"),
+      y = "Anteil"
     ) +
     theme(
       axis.title = element_text(size = 20),
@@ -241,7 +242,7 @@ histogram_fun_2019 <- function(datacol, drug_name, limit, colorcode) {
   data <- drugdata %>%
     group_by(year) %>%
     count(day = .data[[datacol]]) %>%
-    mutate(`Relative share` = n / sum(n)) %>%
+    mutate("Relative share" = n / sum(n), "n" = sum(n)) %>%
     filter(day >= 1 & day <= 30) %>%
     filter(year == 2019) %>%
     ungroup() %>%
@@ -256,8 +257,8 @@ histogram_fun_2019 <- function(datacol, drug_name, limit, colorcode) {
     theme_light() +
     labs(
       title = paste0("Distribution of usage days for ", drug_name),
-      x = "Number of Days Used in Last 30 Days",
-      y = "Relative Share"
+      x = "Anzahl der Konsumtage in den letzten 30 Tagen",
+      y = "Anteil"
     ) +
     theme(
       axis.title = element_text(size = 20),
@@ -282,89 +283,6 @@ histogram_fun_2019("COCUS30A", "Cocaine", 0.003, "#E69F00")
 
 histogram_fun_2019("HER30USE", "Heroin", 0.0004, "#CC79A7")
 histogram_fun_2015("HER30USE", "Heroin", 0.0004, "#CC79A7")
-
-##########################
-# Function: Mosaic Plot for Bivariate Data (values 1 and 2)
-##########################
-
-mosaicfun <- function(var1, var2, varname1, varname2) {
-  data.frame(
-    matrix(
-      c(
-        allfilterdata %>%
-          filter(.data[[var1]] == 1 & .data[[var2]] == 1) %>%
-          count(),
-        allfilterdata %>%
-          filter(.data[[var1]] == 2 & .data[[var2]] == 1) %>%
-          count(),
-        allfilterdata %>%
-          filter(.data[[var1]] == 1 & .data[[var2]] == 2) %>%
-          count(),
-        allfilterdata %>%
-          filter(.data[[var1]] == 2 & .data[[var2]] == 2) %>%
-          count()
-      ),
-      nrow = 2
-    ),
-    row.names = c(paste(varname1, "Yes"), paste(varname1, "No"))
-  ) %>%
-    rename(
-      !!paste(varname2, "Yes") := X1,
-      !!paste(varname2, "No")  := X2
-    ) %>%
-    mosaicplot(
-      color = TRUE,
-      main = paste("Correlation between", varname1, "and", varname2),
-      cex.axis = 1.4
-    )
-}
-
-# Example calls for mosaic plots
-mosaicfun("herever", "cocever", "Heroin", "Cocaine")
-mosaicfun("cigever", "cocever", "Cigarettes", "Cocaine")
-mosaicfun("alcever", "cocever", "Alcohol", "Cocaine")
-mosaicfun("alcever", "cigever", "Alcohol", "Cigarettes")
-
-##########################
-# Extension: Mosaic Plot for "Last 30 Days"
-##########################
-
-mosaicfun30 <- function(var1, var2, varname1, varname2) {
-  
-  # Dataset in which var1 and var2 are recoded to 1 if 1-30, otherwise 2
-  allfilterdata30 <- allfilterdata %>%
-    mutate(
-      usage1 = if_else(.data[[var1]] >= 1 & .data[[var1]] <= 30, 1, 2),
-      usage2 = if_else(.data[[var2]] >= 1 & .data[[var2]] <= 30, 1, 2)
-    )
-  
-  # 2x2 table from the combinations (Yes/Yes, No/Yes, Yes/No, No/No)
-  data.frame(
-    matrix(
-      c(
-        allfilterdata30 %>% filter(usage1 == 1 & usage2 == 1) %>% count(),
-        allfilterdata30 %>% filter(usage1 == 2 & usage2 == 1) %>% count(),
-        allfilterdata30 %>% filter(usage1 == 1 & usage2 == 2) %>% count(),
-        allfilterdata30 %>% filter(usage1 == 2 & usage2 == 2) %>% count()
-      ),
-      nrow = 2
-    ),
-    row.names = c(paste(varname1, "Yes"), paste(varname1, "No"))
-  ) %>%
-    rename(
-      !!paste(varname2, "Yes") := X1,
-      !!paste(varname2, "No")  := X2
-    ) %>%
-    mosaicplot(
-      color = TRUE,
-      main = paste("Correlation between", varname1, "and", varname2, "(Last 30 Days)"),
-      cex.axis = 1.4
-    )
-}
-
-# Example call: Mosaic plot for the last 30 days
-mosaicfun30("CIG30USE", "COCUS30A", "Cigarettes", "Cocaine")
-
 
 ##### Demographics Drugs
 GenderCOCaine <- data2019 %>%
@@ -491,22 +409,3 @@ ggplot(age.grouped, aes(x= factor(Group),y = count, fill = factor(Group, labels 
     legend.position = "none"  # Legendentext
   ) +
   scale_x_discrete(labels = c("12-17", "18-25", "26-34", "35+"))
-
-imputed.employment18 <- data2019 %>%
-  select (IRWRKSTAT18) %>%
-  filter (IRWRKSTAT18 < 99) %>%
-  pivot_longer(cols = everything(), names_to = "status", values_to = "number")%>%
-  group_by(status, number) %>%
-  summarise(count = n()/56136, .groups = 'drop')
-
-
-ggplot(imputed.employment18, aes(x = factor(number), y = count, fill = factor(number))) +
-  geom_bar(stat = "identity")+
-  scale_x_discrete(labels = c("1" = "Employed full-time", "2" = "Employed part-time", "3" = "Unemployed", "4" = "not in labour force"))+
-  labs(title = "Employment status of People 18+", x = "Employment Status", y = "Percentage")+
-  theme_light() +
-  theme(
-    axis.title = element_text(size = 20),  # Achsentitel
-    axis.text  = element_text(size = 20),  # Achsbeschriftungen
-    legend.position = "none"  # Legendentext
-  )
