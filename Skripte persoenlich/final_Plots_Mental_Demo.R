@@ -296,4 +296,33 @@ Youth.MDE.Drugs <- data2019 %>%
     geom_col()+
     scale_x_discrete(labels = c("depndalc" = "Alkhol","depndcoc" = "Cokain", "depndher" = "Heroin"))+
     labs(title = "MDE und Substanzkonsum", x = "Substanz")
+
+  ## Youth MDE in the last year
+  Youth.MDE <- data2019 %>%
+    select(ymdeyr) %>%
+    filter(ymdeyr >= 0)%>%
+    pivot_longer(cols = everything(), names_to = "Var", values_to = "Response")%>%
+    group_by(Response)%>%
+    summarise(count = n())%>%
+    mutate(count = count/56136)
+  
+  ggplot(Youth.MDE, aes(x = Response, y = count))+
+    geom_col()+
+    scale_x_discrete(labels = c("1" = "Yes", "2" = "No"))+
+    labs(title = "Youth mith MDE in last Year")
+  
+  #-------------------------------------------------------------------------
+  ## YOuth with MDE and Substance Abuse
+  Youth.MDE.Substance <- data2019 %>%
+    select(YMDEAUDPY, ymdeimudpy, ymdeudpy) # Variable fehlt
+  
+  ## YOuth MDE an Dependency
+  
+  #########
+  #Appendix
+  #########
+  
+  #No Treatment but Drugs
+  TreatmentNo.Drugs <- data2019 %>%
+    select
   

@@ -440,40 +440,61 @@ ggplot(her365_box_data, aes(x = factor(year), y = UsageDays)) +
 # IRSEX Len : 1    IMPUTATION REVISED GENDER  
 
 #############################################################################################
+load("Daten bearbeitet/combi_redu_data.Rdata")
 data2019 <- allfilterdata %>%
   filter (year == 2019)
 
 
-# Sieht noch nicht gut aus 
-
-# Daten laden (falls als CSV vorhanden)
-# data2019 <- read.csv("data2019.csv")
-
-# Erstellen einer Kategorie für das Rauchverhalten basierend auf CIG30AV
+# Altersgruppen basierend auf AGE2 definieren
 data2019 <- data2019 %>%
-  mutate(Rauchstatus = case_when(
-    CIG30AV == 0 ~ "Nieraucher",
-    CIG30AV == 1 ~ "Rauchen",
-    CIG30AV %in% 2:7 ~ "Tägliches Zigarettenrauchen",
-    TRUE ~ "Unbekannt"
-  ),
-  Starker_Raucher = case_when(
-    CIG30AV >= 5 ~ "Starkes Rauchen (≥ 10 Zig./Tag)",
-    CIG30AV == 7 ~ "Starkes Rauchen (≥ 20 Zig./Tag)",
+  mutate(Altersgruppe = case_when(
+    AGE2 %in% 1:6 ~ "12-17 Jahre",
+    AGE2 %in% 7:10 ~ "18-25 Jahre",
     TRUE ~ NA_character_
-  ))
+  )) %>%
+  filter(!is.na(Altersgruppe))  # Entferne unpassende Alterswerte
 
-# Berechnung der Häufigkeiten für Jugendliche (12-17 Jahre) und Erwachsene (18-25 Jahre)
-data_summary <- data2019 %>%
-  group_by(irsex, Rauchstatus) %>%
+# Alle anderen Werte in CIG30AV als 0 interpretieren
+data2019 <- data2019 %>%
+  mutate(CIG30AV = ifelse(CIG30AV %in% 1:7, CIG30AV, 0))
+
+# Erstellen einer hierarchischen Kategorie für das Rauchverhalten
+data2019 <- data2019 %>%
+  mutate(
+    Rauchstatus = case_when(
+      CIG30AV == 0 ~ "Nieraucher",
+      CIG30AV >= 1 ~ "Raucher"
+    ),
+    Täglicher_Raucher = case_when(
+      CIG30AV >= 2 ~ "Tägliches Zigarettenrauchen"
+    ),
+    Starkes_Rauchen_10 = case_when(
+      CIG30AV >= 5 ~ "Starkes Rauchen (≥ 10 Zig./Tag)"
+    ),
+    Starkes_Rauchen_20 = case_when(
+      CIG30AV == 7 ~ "Starkes Rauchen (≥ 20 Zig./Tag)"
+    )
+  )
+
+# Datensatz für die Häufigkeitsberechnung transformieren (Pivot-Format für Hierarchie)
+data_long <- data2019 %>%
+  select(Altersgruppe, irsex, Rauchstatus, Täglicher_Raucher, Starkes_Rauchen_10, Starkes_Rauchen_20) %>%
+  pivot_longer(cols = c(Rauchstatus, Täglicher_Raucher, Starkes_Rauchen_10, Starkes_Rauchen_20),
+               names_to = "Kategorie", values_to = "Status") %>%
+  filter(!is.na(Status))  # Entferne nicht definierte Werte
+
+# Berechnung der Häufigkeiten
+data_summary <- data_long %>%
+  group_by(Altersgruppe, irsex, Status) %>%
   summarise(Anteil = n() / nrow(data2019) * 100) %>%
   ungroup()
 
-# Plot erstellen
-ggplot(data_summary, aes(x = fct_reorder(Rauchstatus, Anteil), y = Anteil, fill = factor(irsex))) +
+# Plot erstellen mit Facetten nach Altersgruppen
+ggplot(data_summary, aes(x = fct_reorder(Status, Anteil), y = Anteil, fill = factor(irsex))) +
   geom_bar(stat = "identity", position = "dodge") +
   coord_flip() +
-  labs(title = "Rauchverhalten nach Altersgruppe und Geschlecht",
+  facet_wrap(~Altersgruppe) +  # Facettierung nach Altersgruppen
+  labs(title = "Rauchverhalten (Zigaretten) in den letzten 30 Tagen nach Altersgruppe und Geschlecht",
        x = "",
        y = "Anteil in %",
        fill = "Geschlecht") +
@@ -481,5 +502,73 @@ ggplot(data_summary, aes(x = fct_reorder(Rauchstatus, Anteil), y = Anteil, fill 
   theme_minimal()
 
 
+######## 
+#        Anteile stimmen fast(noch nach geschlecht anpassen) jetzt ABER beschriftung noch nicht, da es nicht >=10 usw in der Variable ist
+########
 
 
+
+# Altersgruppen definieren
+data2019 <- data2019 %>%
+  mutate(Altersgruppe = case_when(
+    AGE2 %in% 1:6 ~ "12-17 Jahre",
+    AGE2 %in% 7:10 ~ "18-25 Jahre",
+    TRUE ~ NA_character_
+  )) %>%
+  filter(!is.na(Altersgruppe))  # Entferne unpassende Alterswerte
+
+# Alle anderen Werte in CIG30AV als 0 interpretieren (Nieraucher)
+data2019 <- data2019 %>%
+  mutate(CIG30AV = ifelse(CIG30AV %in% 1:7, CIG30AV, 0))
+
+# Hierarchische Kategorien für das Rauchverhalten erstellen
+data2019 <- data2019 %>%
+  mutate(
+    Rauchstatus = case_when(
+      CIG30AV == 0 ~ "Nieraucher",
+      CIG30AV >= 1 ~ "Raucher"
+    ),
+    Täglicher_Raucher = case_when(
+      CIG30AV >= 2 ~ "Tägliches Zigarettenrauchen"
+    ),
+    Starkes_Rauchen_10 = case_when(
+      CIG30AV >= 5 ~ "Starkes Rauchen (≥ 10 Zig./Tag)"
+    ),
+    Starkes_Rauchen_20 = case_when(
+      CIG30AV == 7 ~ "Starkes Rauchen (≥ 20 Zig./Tag)"
+    )
+  )
+
+# Daten ins Long-Format bringen
+data_long <- data2019 %>%
+  select(Altersgruppe, irsex, Rauchstatus, Täglicher_Raucher, Starkes_Rauchen_10, Starkes_Rauchen_20) %>%
+  pivot_longer(cols = c(Rauchstatus, Täglicher_Raucher, Starkes_Rauchen_10, Starkes_Rauchen_20),
+               names_to = "Kategorie", values_to = "Status") %>%
+  filter(!is.na(Status))  # Entferne nicht definierte Werte
+
+# Berechnung der Anteile **innerhalb jeder Altersgruppe**
+data_summary <- data_long %>%
+  group_by(Altersgruppe, irsex) %>%
+  mutate(Gesamt_n = n()) %>%  # Gesamtanzahl in der Altersgruppe
+  group_by(Altersgruppe, Status, irsex) %>%
+  summarise(Anzahl = n(), Gesamt_n = first(Gesamt_n), .groups = "drop") %>%
+  mutate(Anteil = (Anzahl / Gesamt_n) * 100) %>%  # Berechnung der Anteile für 100 % innerhalb Altersgruppe
+  ungroup()
+
+# Kategorien in gewünschter Reihenfolge für bessere Lesbarkeit
+data_summary$Status <- factor(data_summary$Status, levels = c(
+  "Nieraucher", "Raucher", "Tägliches Zigarettenrauchen",
+  "Starkes Rauchen (≥ 10 Zig./Tag)", "Starkes Rauchen (≥ 20 Zig./Tag)"
+))
+
+# Plot erstellen mit horizontalen Balken und nebeneinanderliegenden Geschlechtergruppen
+ggplot(data_summary, aes(x = Status, y = Anteil, fill = factor(irsex))) +
+  geom_bar(stat = "identity", position = "dodge") +
+  facet_wrap(~Altersgruppe) +  # Separate Plots für Altersgruppen
+  labs(title = "Rauchverhalten (Zigaretten) in den letzten 30 Tagen nach Altersgruppe und Geschlecht",
+       x = "",
+       y = "Anteil in %",
+       fill = "Geschlecht") +
+  scale_fill_manual(values = c("blue", "red"), labels = c("Männlich", "Weiblich")) +
+  coord_flip() +  # Horizontale Balken
+  theme_minimal()

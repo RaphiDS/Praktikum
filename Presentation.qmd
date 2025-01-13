@@ -1,6 +1,8 @@
 ---
 title: "Drogenkonsum in den USA von 2015-2019"
-format: revealjs
+format: 
+  revealjs:
+    embed-resources: true
 editor: visual
 author: "Lilly Barnsteiner, Denis Oluri, Sarah Puthiaparampil, Raphael Schneider"
 incremental: true
@@ -383,7 +385,6 @@ tobacco30 <- as.data.frame(
 
 ```
 
-
 ------------------------------------------------------------------------
 
 ```{r}
@@ -441,10 +442,9 @@ ggplot(tobaccoever, aes(x = Year, y = .data[["Rel. share"]], color = Drug, shape
   )
 ```
 
-
 ## Alkohol Konsum Entwickelung
-::: {.panel-tabset}
 
+::: panel-tabset
 ```{r, echo=FALSE}
 #| label:  Code Histograme
 
@@ -514,74 +514,81 @@ histogram_fun_2019 <- function(datacol, drug_name, limit, colorcode) {
 ```
 
 ### 2015 Histogram
+
 ```{r}
 #| label: Histogram 2015 alk
 histogram_fun_2015("alcdays", "Alcohol", 0.085, "#0072B2")
 ```
 
 ### 2019 Histogram
+
 ```{r}
 #| label: Histogram 2019 alk
 histogram_fun_2019("alcdays", "Alcohol", 0.085, "#0072B2")
 ```
-
 :::
 
 ## Tabak
-::: {.panel-tabset}
 
-### 2015 
+::: panel-tabset
+### 2015
+
 ```{r}
 #| label: Histogram 2015 Cig
 histogram_fun_2015("CIG30USE", "Cigarettes", 0.12, "#009E73")
 ```
 
-### 2019 
+### 2019
+
 ```{r}
 #| label: Histogram 2019 Cig
 histogram_fun_2019("CIG30USE", "Cigarettes", 0.12, "#009E73")
 ```
-
 :::
 
-
 ## Cokain
-::: {.panel-tabset}
 
+::: panel-tabset
 ### 2015
+
 ```{r}
 #| label: Histogram 2015 Coc
 histogram_fun_2015("COCUS30A", "Cocaine", 0.003, "#E69F00")
 ```
 
 ### 2019
+
 ```{r}
 #| label: Histogram 2019 Coc
 histogram_fun_2019("COCUS30A", "Cocaine", 0.003, "#E69F00")
 ```
-
 :::
 
-
 ## Heroin
-::: {.panel-tabset}
 
+::: panel-tabset
 ### 2015
+
 ```{r}
 #| label: Histo 2015 Her
 histogram_fun_2019("HER30USE", "Heroin", 0.0004, "#CC79A7")
 ```
 
 ### 2019
+
 ```{r}
 #| label: Histo 2019 Her
 histogram_fun_2015("HER30USE", "Heroin", 0.0004, "#CC79A7")
 ```
-
 :::
 
 ## Nikotin Konsum
 
+## Demografische Merkmale und Drogenkonsum
+
+### Nikotin Konsum
+
+::: {.panel-tabset}
 ### Geschlecht
 
 ```{r, echo=FALSE}
@@ -665,6 +672,7 @@ ggplot(Nikotin.Dependence.Race, aes(x = factor(NEWRACE2), y = count))+
     legend.position = "none"  # Legendentext
   )
 ```
+:::
 
 
 ## Demografische Merkmale und Substanzkonsum
@@ -706,8 +714,11 @@ ggplot(Drug.Dependency.Abuse, aes(x = Substance, fill = Condition)) +
   )
 ```
 
+------------------------------------------------------------------------
 
-## Geschlecht
+::: {.panel-tabset}
+
+### Geschlecht
 
 ```{r, echo=FALSE}
 #| label: Data Dependency Gender
@@ -732,8 +743,7 @@ ggplot(Drug.Dependency.Gender, aes(x = factor(Drug), fill = factor(irsex)))+
   )
 ```
 
-
-## Alter
+### Alter
 
 ```{r, echo=FALSE}
 #| label: Data Dependence Age
@@ -759,8 +769,7 @@ ggplot(Drug.Dependency.Age, aes(x = factor(catage), fill = factor(Drug)))+
 
 ```
 
-
-## Ethnie
+### Ethnie
 
 ```{r, echo=FALSE}
 #| label: Data Dependece Race
@@ -791,6 +800,7 @@ ggplot(Dependent.Users.Race , aes(x = factor(NEWRACE2), fill = factor(Drug)))+
     legend.position = "bottom"  # Legendentext
   )
 ```
+:::
 
 
 ## Mentale Gesundheit: Einflüsse und Behandlung
@@ -824,6 +834,5 @@ ggplot(Drug.Dependency.MI, aes(x = factor(Drug), fill = factor(MI_CAT_U)))+
     legend.position = "bottom"  # Legendentext
   )
 ```
-
 
 ## Fazit
