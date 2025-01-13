@@ -6,61 +6,34 @@ drugdata <- allfilterdata
 data2019 <- allfilterdata %>%
   filter(year == 2019)
 
-<<<<<<< HEAD
-=======
-#################
-### Demographics
-#################
-# Age Groups
-age.grouped <- data2019 %>%
-  select(catage) %>%
-  pivot_longer(cols = everything(), names_to = "variable", values_to = "Group") %>%
-  group_by(Group) %>%
-  summarize(count =n()/56136) %>%
-ggplot(aes(x= factor(Group),y = count, fill = factor(Group, labels = c("12-17", "18-25", "26-34", "35+")))) +
-  geom_col() +
-  labs(y = "Anteil", fill = "Age groups", x = "Altersgruppen") +
-  theme_light() +
-  theme(
-    axis.title = element_text(size = 15),  # Achsentitel
-    axis.text  = element_text(size = 15),  # Achsbeschriftungen
-    legend.position = "none"  # Legendentext
-  ) +
-  scale_x_discrete(labels = c("12-17", "18-25", "26-34", "35+"))
-
-age.grouped
-#ggsave(filename = "age_grouped_plot.png",path = "" plot = age.grouped, width = 8, height = 6, dpi = 300)
-
-#Race Destribution
->>>>>>> 41cc7389ca57895c36967e0a1b3c643cf6a285c8
 Race.Destr <- data2019 %>%
   select(NEWRACE2) %>%
   pivot_longer(cols = everything(), names_to = "Var", values_to = "Answer") %>%
   group_by(Answer) %>%
   summarize(count = n()) %>%
-  mutate(count = count/56136)%>%
-ggplot(aes(x = factor(Answer), y = count))+
+  mutate(count = count/56136)
+
+ggplot(Race.Destr, aes(x = factor(Answer), y = count, fill = factor(Answer)))+
   geom_col()+
   scale_x_discrete(labels = c("1" = "Weisse",
-                              "2" = "Afro- \nAmerikaner",
-                              "3" = "Am/Ak \nIndigene",
-                              "4" = "Indigene \nHawaii \n/Paz. Inseln",
+                              "2" = "Schwarze
+                              Afroamerikaner",
+                              "3" = "Am/Ak Indigene",
+                              "4" = "Indigene Hawaii
+                              /Paz. Inseln",
                               "5" = "Asiaten",
                               "6" = "Gemischt",
-                              "7" = "Hispanisch")) +
+                              "7" = "Hispanisch"),
+                   guide = guide_axis(angle = 45)) +
   labs(y = "Anteil", x = "Ethnische Zugehörigkeit") +
   theme_light() +
   theme(
-    axis.title.x = element_text(margin = margin(t =25)),
+    axis.title.x = element_text(margin = margin(t = -50)),
     axis.title = element_text(size = 15),  # Achsentitel
     axis.text  = element_text(size = 15),  # Achsbeschriftungen
     legend.position = "none"  # Legendentext
   )
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 41cc7389ca57895c36967e0a1b3c643cf6a285c8
 ##### Drugs Denis Raphael
 
 # 1) Function: Generates a summarized table for a specified (drug) variable,
@@ -166,15 +139,10 @@ ggplot(fourdrugs30, aes(x = Year, y = .data[["Anteil"]],
   theme_light() +
   labs(
     title = "Relative share of people who have used certain drugs in the last 30 days",
-<<<<<<< HEAD
     color = "Droge",
     shape = "Droge",
     x = "Jahr",
     y = "Anteil"
-=======
-    x = "Jahr",
-    y = "Rel. Anteil"
->>>>>>> 41cc7389ca57895c36967e0a1b3c643cf6a285c8
   ) +
   theme(
     axis.title = element_text(size = 20),  # Achsentitel
