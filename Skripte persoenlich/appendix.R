@@ -133,3 +133,72 @@ ggplot(imputed.employment18, aes(x = factor(number), y = count, fill = factor(nu
     axis.text  = element_text(size = 20),  # Achsbeschriftungen
     legend.position = "none"  # Legendentext
   )
+
+
+Nic.Dependency.Gender <- data2019 %>%
+  select(ndssdnsp,irsex) %>%
+  filter(ndssdnsp == 1) %>%
+  group_by(irsex) %>%
+  summarise(count = n()) %>%
+  mutate (count = count/56136)
+
+ggplot(Nic.Dependency.Gender, aes(x = factor(irsex), y = count))+
+  geom_col()+
+  scale_x_discrete(labels = c("1" = "Männer", "2" = "Frauen"))+
+  labs(x = "Geschlecht", y = "Anteil")+
+  theme_light() +
+  theme(
+    axis.title = element_text(size = 20),  # Achsentitel
+    axis.text  = element_text(size = 20),  # Achsbeschriftungen
+    legend.position = "none"  # Legendentext
+  )
+
+
+Drug.Dependency.Gender <-data2019 %>%
+  select(irsex, depndcoc, depndalc, depndher) %>%
+  pivot_longer(cols = c(depndcoc,depndher, depndalc), names_to = "Drug", values_to = "Usage") %>%
+  filter(Usage == 1)
+
+ggplot(Drug.Dependency.Gender, aes(x = factor(Drug), fill = factor(irsex)))+
+  geom_bar(position = "fill")+
+  #geom_line(y = 0.5)+
+  labs(title = "Drug Dependency by Gender")+
+  scale_x_discrete(labels = c("depndalc" = "Alkohol", "depndcoc" = "Cokain", "depndher" = "Heroin"))+
+  scale_fill_manual(labels = c("1" = "Männer", "2" = "Frauen"), values =c("1" = "darkblue", "2" = "maroon"))+
+  labs(title = "Abhängigkeit von Männern und Frauen", x = "Substanz")+
+  theme_light() +
+  theme(
+    axis.title = element_text(size = 15),  # Achsentitel
+    axis.text  = element_text(size = 15),  # Achsbeschriftungen
+  )
+
+#-------------------------------------------------------------------------------
+##Generel Drug Dependency / Abuse
+Drug.Dependency.Abuse <- data2019 %>%
+  select(alcyr, cocyr, heryr, depndalc, depndcoc, depndher, abusealc, abusecoc,abuseher) %>%
+  mutate(ID = row_number()) %>%  # Add an ID column for pivoting
+  pivot_longer(cols = -ID, names_to = "Variable", values_to = "Value") %>%
+  mutate(
+    Substance = case_when(
+      str_detect(Variable, "alc") ~ "Alkohol",
+      str_detect(Variable, "coc") ~ "Kokain",
+      str_detect(Variable, "her") ~ "Heroin"
+    ),
+    Condition = case_when(
+      str_detect(Variable, "depnd") ~ "Abhängigkeit",
+      str_detect(Variable, "abuse") ~ "Missbrauch",
+      str_detect(Variable, "yr") ~ "Konsum im letzten Jahr"
+    )
+  ) %>%
+  filter(Value == 1)  # Keep only cases where the flag is 1 (indicating presence)
+
+# Create stacked bar plot
+ggplot(Drug.Dependency.Abuse, aes(x = Condition, fill = Substance)) +
+  geom_bar(position = "fill") +
+  labs(title = "Substanzkonsum, Abhängigkeit und Missbrauch im letzten Jahr",
+       x = "Substanz")+
+  theme_light() +
+  theme(
+    axis.title = element_text(size = 20),  # Achsentitel
+    axis.text  = element_text(size = 15),  # Achsbeschriftungen
+  )
