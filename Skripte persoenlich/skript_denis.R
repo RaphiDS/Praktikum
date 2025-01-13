@@ -572,3 +572,26 @@ ggplot(data_summary, aes(x = Status, y = Anteil, fill = factor(irsex))) +
   scale_fill_manual(values = c("blue", "red"), labels = c("Männlich", "Weiblich")) +
   coord_flip() +  # Horizontale Balken
   theme_minimal()
+
+##################USA-Karte Versuch########################
+
+
+###########################################################
+
+library(usmap)
+library(tidyverse)
+
+plot_usmap(regions = "states") + 
+  labs(title = "U.S. States",
+       subtitle = "This is a blank map of the United States.") + 
+  theme(panel.background=element_blank())
+
+
+
+
+
+
+
+
+
+
