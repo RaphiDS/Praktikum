@@ -13,22 +13,21 @@ Race.Distribution <- data2019 %>%
   summarize(count = n()) %>%
   mutate(count = count/56136)
 
-ggplot(Race.Destr, aes(x = factor(Answer), y = count, fill = factor(Answer)))+
+ggplot(Race.Distribution, aes(x = factor(Answer,
+                              levels = c(1, 7, 2, 5, 6, 3, 4)),
+                              y = count, fill = factor(Answer)))+
   geom_col()+
   scale_x_discrete(labels = c("1" = "Weisse",
-                              "2" = "Schwarze
-                              Afroamerikaner",
+                              "2" = "Schwarze \nAfroamerikaner",
                               "3" = "Am/Ak Indigene",
-                              "4" = "Indigene Hawaii
-                              /Paz. Inseln",
+                              "4" = "Indigene Hawaii \n/Paz. Inseln",
                               "5" = "Asiaten",
                               "6" = "Gemischt",
-                              "7" = "Hispanisch"),
-                   guide = guide_axis(angle = 45)) +
+                              "7" = "Hispanisch")) +
   labs(y = "Anteil", x = "Ethnische Zugehörigkeit") +
   theme_light() +
   theme(
-    axis.title.x = element_text(margin = margin(t = -50)),
+    axis.title.x = element_text(margin = margin(t = 20)),
     axis.title = element_text(size = 15),  # Achsentitel
     axis.text  = element_text(size = 15),  # Achsbeschriftungen
     legend.position = "none"  # Legendentext
@@ -283,127 +282,3 @@ histogram_fun_2019("COCUS30A", "Cocaine", 0.003, "#E69F00")
 
 histogram_fun_2019("HER30USE", "Heroin", 0.0004, "#CC79A7")
 histogram_fun_2015("HER30USE", "Heroin", 0.0004, "#CC79A7")
-
-##### Demographics Drugs
-GenderCOCaine <- data2019 %>%
-  select(irsex, cocever) %>%
-  filter(cocever < 94)%>%
-  group_by(irsex) %>%
-  summarize(usage = sum(cocever ==1), clean = sum(cocever ==2))
-
-
-
-DrugGender <-data.frame(matrix(c(data2019 %>%
-                                   filter(irsex ==1 & cocever == 1) %>%
-                                   count(), data2019 %>%
-                                   filter(irsex == 1 & cocever == 2) %>%
-                                   count(), data2019 %>%
-                                   filter(irsex == 2 & cocever ==1) %>%
-                                   count(), data2019 %>%
-                                   filter(irsex == 2 & cocever == 2) %>%
-                                   count ()), nrow =2), row.names = c("Cocain Yes", "Cocain No")) %>%
-  rename("Male" = X1, "Female" = X2)
-DrugGender
-
-mosaicplot(DrugGender, main = "Drug use dependend on gender",col = c("lavender", "skyblue"))
-
-Drug.Dependency.Gender <-data2019 %>%
-  select(irsex, depndcoc, depndalc, depndher) %>%
-  pivot_longer(cols = c(depndcoc,depndher, depndalc), names_to = "Drug", values_to = "Usage") %>%
-  filter(Usage == 1)
-
-ggplot(Drug.Dependency.Gender, aes(x = Drug, fill = factor(irsex)))+
-  geom_bar(position = "fill")
-
-ggplot(Drug.Dependency.Gender, aes(x = Drug, fill = factor(irsex)))+
-  geom_bar()+
-  labs(title = "Drug Dependency by Gender")+
-  scale_x_discrete(labels = c("depndalc" = "Alcohol dependency", "depndcoc" = "Cocaine Dependency", "depndher" = "Heroine Dependency"))+
-  scale_fill_discrete(labels = c("1" = "Male", "2" = "Female"))
-
-Drug.Dependency.Age <- data2019 %>%
-  select(catage,depndcoc,depndher, depndalc) %>%
-  pivot_longer(cols = c(depndcoc, depndher, depndalc), names_to = "Drug", values_to = "Usage") %>%
-  filter (Usage == 1) %>%
-  group_by(catage, Drug) %>%
-  summarise(count = n()) %>%
-  mutate(count = count/56136)
-
-ggplot(Drug.Dependency.Age, aes(x = factor(catage), y = count, fill = factor(Drug)))+
-  geom_col(position = "dodge")+
-  scale_x_discrete(labels = c("1" = "12-17", "2" = "18-25", "3" = "26-34", "4" = "35+"))+
-  labs(title = "Drug Dependency by age group", x = "Age Group")
-
-Drug.Gender.Age <- data2019 %>%
-  select(irsex,catage, cocever, herever, alcever, smklssevr, cigever) %>%
-  filter(1 %in% c(cocever, herever, alcever, smklssevr, cigever)) %>%
-  pivot_longer(cols = c(cocever, herever,alcever,smklssevr,cigever), names_to = "Substance") %>%
-  filter (value == 1) %>%
-  group_by(irsex,catage, Substance) %>%
-  summarise(Count = n(), .groups = 'drop') %>%
-  mutate(Relative = Count / 56136) # or maybe 81878?
-
-ggplot(Drug.Gender.Age, aes(x = factor(catage),y = Relative, fill = factor (Substance)))+
-  geom_bar(stat = "identity", position = "dodge")+
-  facet_wrap(~ irsex, labeller = as_labeller(c("1"="Male", "2" = "Female")), ncol = 1)+
-  scale_fill_discrete(labels = c("alcever" = "Alcohol", "cigever" = "Cigarette", "cocever" = "Cocaine", "herever" = "Heroine", "smklssevr" = "Smokeless Tabacco"))+
-  scale_x_discrete(labels = c("1" = "12-17", "2" = "18-25", "3" = "26-34", "4" = "35+"))
-
-Dependent.Users.Race <- data2019 %>%
-  select(NEWRACE2, depndcoc, depndalc, depndher) %>%
-  pivot_longer(cols = c(depndcoc,depndher, depndalc), names_to = "Drug", values_to = "Usage") %>%
-  filter(Usage == 1)
-
-Dependent.Users.Race %>%
-  ggplot(aes(x = factor(NEWRACE2), fill = factor(Drug)))+
-  geom_bar(position = "fill")+
-  scale_x_discrete(
-    labels = c(
-      "1" = "White",
-      "2" = "Afr.Am",
-      "3" = "Am/AK Native",
-      "4" = "Other Pac Isl",
-      "5" = "Asian",
-      "6" = "More than one race",
-      "7" = "Hispanic"
-    ),
-    guide = guide_axis(angle = 45))+
-  labs(title = "Percentage of dependent Users of each Race")
-
-
-Nikotin.Dependence.Race <- data2019 %>%
-  select(NEWRACE2, dnicnsp) %>%
-  filter (dnicnsp == 1)
-
-ggplot(Nikotin.Dependence.Race, aes(x = factor(NEWRACE2)))+
-  geom_bar()+
-  scale_x_discrete(
-    labels = c(
-      "1" = "White",
-      "2" = "Afr.Am",
-      "3" = "Am/AK Native",
-      "4" = "Other Pac Isl",
-      "5" = "Asian",
-      "6" = "More than one race",
-      "7" = "Hispanic"
-    ),
-    guide = guide_axis(angle = 45))+
-  labs(title = "Nicotine Dependency by Race")
-
-
-age.grouped <- data2019 %>%
-  select(catage) %>%
-  pivot_longer(cols = everything(), names_to = "variable", values_to = "Group") %>%
-  group_by(Group) %>%
-  summarize(count =n()/56136)
-
-ggplot(age.grouped, aes(x= factor(Group),y = count, fill = factor(Group, labels = c("12-17", "18-25", "26-34", "35+")))) +
-  geom_col() +
-  labs(y = "Anteil", fill = "Age groups", x = "Altersgruppen") +
-  theme_light() +
-  theme(
-    axis.title = element_text(size = 15),  # Achsentitel
-    axis.text  = element_text(size = 15),  # Achsbeschriftungen
-    legend.position = "none"  # Legendentext
-  ) +
-  scale_x_discrete(labels = c("12-17", "18-25", "26-34", "35+"))
