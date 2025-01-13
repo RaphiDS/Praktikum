@@ -3,26 +3,8 @@ library(tidyverse)
 
 data2019
 
-#----------------------------------------------------------------------------
-## Overnight stay for mental/emotional health issues (excluding SUbstance Abuse!)
-Hospital.OvernightStay <-data2019 %>%
-  select(auinpyr) %>%
-  filter(auinpyr < 3) 
-
-ggplot(Hospital.OvernightStay, aes(x = auinpyr))+
-  geom_bar()
 
 #-------------------------------------------------------------------------
-## did you Need and recieve medical treatment in the last 12 months 
-Treatment.recieved <- data2019%>%
-  select(auunmtyr) %>%
-  filter(auunmtyr < 3) %>%
-  group_by(auunmtyr) %>%
-  summarise(answer = n()) %>%
-  mutate(answer = answer/56136)
-  
-ggplot(Treatment.recieved, aes(x = auunmtyr, y = answer))+
-  geom_col()
 
 #------------------------------------------------------------------------
 ## Why didn't you receive Treatment?
@@ -42,20 +24,7 @@ ggplot(Treatment.Denial, aes(x = Reason, y = count))+
   labs(title = "Reason for not getting Med", y = "Percentage", x = "Reasons")
 
 ##-------------------------------------------------------------------------
-## Age destribution of AMI
-AMI.Age <- data2019 %>%
-  select(catage, AMIYR_U) %>%
-  filter(catage > 1 & AMIYR_U > 0) %>%
-  group_by(catage) %>%
-  summarise(count = n())%>%
-  mutate(count = count/56136)
 
-ggplot(AMI.Age, aes(x = factor(catage), y = count, fill = factor(catage)))+
-  geom_col()+
-  scale_x_discrete(labels = c("2" = "18-25", "3" = "26-34", "4" = "35+"))
-
-#RAUS
-## age Destribution AMI, SMI, LMMI
 
 ##------------------------------------------------------------------------
 # Mental Health and Drugs
