@@ -320,31 +320,37 @@ ggplot(Nikotin.Dependence.Race, aes(x = factor(NEWRACE2,
 #-------------------------------------------------------------------------------
 ## Drug Dependency by age group
 Drug.Dependency.Age <- data2019 %>%
-  select(catage,depndcoc,depndher, depndalc) %>%
+  select(catage, depndcoc, depndher, depndalc) %>%
   pivot_longer(cols = c(depndcoc, depndher, depndalc), names_to = "Drug", values_to = "Usage") %>%
-  filter (Usage == 1)
+  filter(Usage == 1) %>%
+  mutate(Drug = factor(Drug, levels = c("depndher", "depndcoc", "depndalc")))  # Reihenfolge umdrehen
 
-ggplot(Drug.Dependency.Age, aes(x = factor(catage), fill = factor(Drug)))+
-  geom_bar(position = "fill")+
-  scale_fill_manual(name = "Drogen",labels = c("depndalc" = "Alkohol","depndcoc" = "Kokain", "depndher" = "Heroin"),
-                    values = c("#0072B2","#E69F00", "#CC79A7")) +
-  scale_x_discrete(labels = c("1" = "12-17", "2" = "18-25", "3" = "26-34", "4" = "35+"))+
-  labs(title = "Abhängigkeit der Altersgruppen", x = "Gruppierung", y = "Anteil")+
+ggplot(Drug.Dependency.Age, aes(x = factor(catage), fill = Drug)) +
+  geom_bar(position = "fill") +
+  scale_fill_manual(
+    name = "Drogen",
+    labels = c("depndalc" = "Alkohol", "depndcoc" = "Kokain", "depndher" = "Heroin"),
+    values = c("depndalc" = "#0072B2", "depndcoc" = "#E69F00", "depndher" = "#CC79A7")  # Farben beibehalten
+  ) +
+  scale_x_discrete(labels = c("1" = "12-17", "2" = "18-25", "3" = "26-34", "4" = "35+")) +
+  labs(title = "Abhängigkeit der Altersgruppen", x = "Gruppierung", y = "Anteil") +
   theme_light() +
   theme(
-    axis.title = element_text(size = 20),  # Achsentitel
-    axis.text  = element_text(size = 15),  # Achsbeschriftungen
-    legend.position = "bottom"  # Legendentext
+    axis.title = element_text(size = 20),
+    axis.text = element_text(size = 15),
+    legend.position = "bottom"
   )
 #------------------------------------------------------------------------------
 ## Drug Dependency and Race
 Dependent.Users.Race <- data2019 %>%
   select(NEWRACE2, depndcoc, depndalc, depndher) %>%
-  pivot_longer(cols = c(depndcoc,depndher, depndalc), names_to = "Drug", values_to = "Usage") %>%
-  filter(Usage == 1)
+  pivot_longer(cols = c(depndcoc, depndher, depndalc), names_to = "Drug", values_to = "Usage") %>%
+  filter(Usage == 1) %>%
+  mutate(Drug = factor(Drug, levels = c("depndher", "depndcoc", "depndalc")))  # Reihenfolge für ggplot
 
-ggplot(Dependent.Users.Race , aes(x = factor(NEWRACE2, levels = c(1, 7, 2, 5, 6, 3, 4)), fill = factor(Drug)))+
-  geom_bar(position = "fill")+
+ggplot(Dependent.Users.Race, aes(x = factor(NEWRACE2, levels = c(1, 7, 2, 5, 6, 3, 4)),
+                                 fill = Drug)) +  # Reihenfolge schon vorher gesetzt
+  geom_bar(position = "fill") +
   scale_x_discrete(labels = c("1" = "Weisse",
                               "2" = "Afro \nAmerikaner",
                               "3" = "Am/Ak \nIndigene",
@@ -353,9 +359,9 @@ ggplot(Dependent.Users.Race , aes(x = factor(NEWRACE2, levels = c(1, 7, 2, 5, 6,
                               "6" = "Gemischt",
                               "7" = "Hispanisch")) +
   scale_fill_manual(name = "Drogen",
-                    labels = c("depndalc" = "Alkohol","depndcoc" = "Kokain", "depndher" = "Heroin"),
-                    values = c("#0072B2","#E69F00", "#CC79A7"))+
-  labs(title = "Abhängigkeit der Ethnien", x = "Gruppen", y = "Anteil")+
+                    labels = c("depndalc" = "Alkohol", "depndcoc" = "Kokain", "depndher" = "Heroin"),
+                    values = c("depndalc" = "#0072B2", "depndcoc" = "#E69F00", "depndher" = "#CC79A7")) +  # Farben stimmen mit Reihenfolge überein
+  labs(title = "Abhängigkeit der Ethnien", x = "Gruppen", y = "Anteil") +
   theme_light() +
   theme(
     axis.title = element_text(size = 15),  # Achsentitel
