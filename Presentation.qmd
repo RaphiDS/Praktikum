@@ -4,7 +4,7 @@ format:
   revealjs:
     embed-resources: true
 editor: visual
-author: "Lilly Barnsteiner, Denis Oluri, Sarah Puthiaparampil, Raphael Schneider"
+author: "Denis Oluri, Sarah Puthiaparampil, Raphael Schneider"
 incremental: true
 smaller: true
 transition: slide
@@ -99,15 +99,14 @@ datafun30 <- function(datacol, drug) {
 
 ## Themenfragen
 
--   Wie hängt der Konsum im Jahr 2019 mit demografischen Merkmalen zusammen?
 -   Wie haben sich die Konsummuster in dem Zeitraum 2015 bis 2019 entwickelt?
+-   Wie hängt der Konsum im Jahr 2019 mit demografischen Merkmalen zusammen?
 -   Wie steht der Konsum im Jahr 2019 mit dem psychischen Gesundheitszustand der Befragten in Verbindung?
 
 ## Infos über den Datensatz
 
--   "National Survey on Drug USe and Health", unterstützt von SAMHSA und orgnaisiert von CBHSQ
+-   "National Survey on Drug USe and Health", unterstützt von SAMHSA und organisiert von CBHSQ
 -   Hauptquelle zum Konsum von Alkohol, Tabbak, verschriebenen Drogen Es werden auch Fragen in Bezug auf Mentale Gesundheit gestellt
--   (Enthält Infos über SUDs, Behandlung von Abhängigkeit und den Zusammenhang zu mentalen Gesundheitsproblemen)
 
 ## WER und WIE wird befragt
 
@@ -176,12 +175,12 @@ ggplot(age.grouped,aes(x= factor(Group),y = count, fill = factor(Group, labels =
 
 ------------------------------------------------------------------------
 
--   Stichprobe basiert auf einer unabhängigen,mehrstufigen Gebietswahrscheinlichkeitsstichprobe (vllt lieber engl. Name) -jeder Staat (1 Ebene) wird in SSR (2 Ebene, 750 insgesamt) unterteilt,diese Gruppen werden nochmal unterteilt in Census Blocks (3 Ebene), mit gleicher Populationsgröße --\> nochmal unterteilt ( insgesamt 6 Ebenen) --\> gleiche Probengröße der DU von bis zu 2 Befragten, die mind. 12 Jahre alt sind
+-   Stichprobe basiert auf einer unabhängigen,mehrstufigen Gebietswahrscheinlichkeitsstichprobe
+-   jeder Staat (1 Ebene) wird in SSR (2 Ebene, 750 insgesamt) unterteilt,diese Gruppen werden nochmal unterteilt in Census Blocks (3 Ebene), mit gleicher Populationsgröße --\> nochmal unterteilt ( insgesamt 6 Ebenen) --\> gleiche Probengröße der DU von bis zu 2 Befragten, die mind. 12 Jahre alt sind
 -   Stichproben so gewählt, dass...
     -   sie mehr proportional zu den staatlichen Populationsgrößen sind
     -   jede Altersgruppe als auch Geschlecht gleich vertreten wird im Datensatz
--   es wurden im Jahr in jedem Segment 4 Umfragen gehalten (mit einer Bearbeitungszeit von 3 Monaten)
--   Auszahlung von 30 \$
+
 
 ------------------------------------------------------------------------
 
@@ -300,9 +299,8 @@ Alkhol und Drogen: es gibt bestimmte Schwellenwerte um die Intensität und art d
 ## Substanzen
 
 -   Ausgewählten Substanzen: Tabak, Alkohol, Cokain, Heroin
--   DIffenrzierung:
-    -   nur Cokain, nicht Coke betrachtet
-    -   Tabak: normlae Zigaretten und "rauchfreie" Tabbakware wie z.b. Snus
+-   Diffenrzierung:
+    -   Tabak: normale Zigaretten und "rauchfreie" Tabbakware wie z.b. Snus
 
 ## Drogenkonsum in den Jahren 2015-2019
 
@@ -411,50 +409,18 @@ ggplot(fourdrugs30, aes(x = Year, y = .data[["Rel. share"]], color = Drug, shape
 
 ```
 
-------------------------------------------------------------------------
+## Genaueres Konsumverhalten
 
-```{r}
+```{r, echo=FALSE}
 #| label: 'Plot:Have ever used tobacco products'
 
-ggplot(tobaccoever, aes(x = Year, y = .data[["Rel. share"]], color = Drug, shape = Drug)) +
-  geom_point(size = 3) +
-  geom_line(size = 1) +
-  theme_light() +
-  labs(
-    title = "Relative share of people who have ever used certain forms of tobacco",
-    x = "Year",
-    y = "Relative Share"
-  ) +
-  theme(
-    axis.title = element_text(size = 20),
-    axis.text  = element_text(size = 20),
-    legend.title = element_text(size = 20),
-    legend.text = element_text(size = 20)
-  ) +
-  scale_y_continuous(limits = c(0, NA)) +
-  scale_color_brewer(
-    palette = "Dark2",
-    breaks = c("Cigarettes", "Cigar", "Smokeless Tobacco", "Pipe")
-  ) +
-  scale_shape_manual(
-    values = c(15, 16, 17, 18),
-    breaks = c("Cigarettes", "Cigar", "Smokeless Tobacco", "Pipe")
-  )
-```
-
-## Alkohol Konsum Entwickelung
-
-::: panel-tabset
-```{r, echo=FALSE}
-#| label:  Code Histograme
-
-histogram_fun_2015 <- function(datacol, drug_name, limit, colorcode) {
+histogram_fun <- function(datacol, drug_name, limit, colorcode, yearplot) {
   data <- drugdata %>%
     group_by(year) %>%
     count(day = .data[[datacol]]) %>%
     mutate(`Relative share` = n / sum(n)) %>%
     filter(day >= 1 & day <= 30) %>%
-    filter(year == 2015) %>%
+    filter(year == yearplot) %>%
     ungroup() %>%
     mutate(
       Drug = drug_name,
@@ -467,8 +433,8 @@ histogram_fun_2015 <- function(datacol, drug_name, limit, colorcode) {
     theme_light() +
     labs(
       title = paste0("Distribution of usage days for ", drug_name),
-      x = "Number of Days Used in Last 30 Days",
-      y = "Relative Share"
+      x = paste("Anzahl der Konsumtage in den letzten 30 Tagen"),
+      y = "Anteil"
     ) +
     theme(
       axis.title = element_text(size = 20),
@@ -480,51 +446,46 @@ histogram_fun_2015 <- function(datacol, drug_name, limit, colorcode) {
     scale_y_continuous(limits = c(0, limit))
 }
 
-histogram_fun_2019 <- function(datacol, drug_name, limit, colorcode) {
-  data <- drugdata %>%
-    group_by(year) %>%
-    count(day = .data[[datacol]]) %>%
-    mutate(`Relative share` = n / sum(n)) %>%
-    filter(day >= 1 & day <= 30) %>%
-    filter(year == 2019) %>%
-    ungroup() %>%
-    mutate(
-      Drug = drug_name,
-      # Hier explizit alle Levels 1:30 setzen:
-      day  = factor(day, levels = as.character(1:30))
-    )
-  
-  ggplot(data, aes(x = day, y = `Relative share`)) +
-    geom_col(fill = colorcode, color = "black") +
-    theme_light() +
-    labs(
-      title = paste0("Distribution of usage days for ", drug_name),
-      x = "Number of Days Used in Last 30 Days",
-      y = "Relative Share"
-    ) +
-    theme(
-      axis.title = element_text(size = 20),
-      axis.text  = element_text(size = 20),
-      legend.title = element_text(size = 20),
-      legend.text = element_text(size = 20)
-    ) +
-    scale_x_discrete(breaks = c("1", "5", "10", "15", "20", "25", "30"), drop = FALSE) +
-    scale_y_continuous(limits = c(0, limit))
-}
 ```
 
-### 2015 Histogram
+
+## Alkohol
+
+::: {.panel-tabset}
+### 2015
 
 ```{r}
 #| label: Histogram 2015 alk
-histogram_fun_2015("alcdays", "Alcohol", 0.085, "#0072B2")
+histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2015")
 ```
 
-### 2019 Histogram
+
+### 2016
+
+```{r}
+histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2016")
+```
+
+
+### 2017
+
+```{r}
+histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2017")
+```
+
+
+### 2018
+
+```{r}
+histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2018")
+```
+
+
+### 2019
 
 ```{r}
 #| label: Histogram 2019 alk
-histogram_fun_2019("alcdays", "Alcohol", 0.085, "#0072B2")
+histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2019")
 ```
 :::
 
@@ -535,14 +496,32 @@ histogram_fun_2019("alcdays", "Alcohol", 0.085, "#0072B2")
 
 ```{r}
 #| label: Histogram 2015 Cig
-histogram_fun_2015("CIG30USE", "Cigarettes", 0.12, "#009E73")
+histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2015")
+```
+
+### 2016
+
+```{r}
+histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2016")
+```
+
+### 2017
+
+```{r}
+histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2017")
+```
+
+### 2018
+
+```{r}
+histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2018")
 ```
 
 ### 2019
 
 ```{r}
 #| label: Histogram 2019 Cig
-histogram_fun_2019("CIG30USE", "Cigarettes", 0.12, "#009E73")
+histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2019")
 ```
 :::
 
@@ -553,14 +532,34 @@ histogram_fun_2019("CIG30USE", "Cigarettes", 0.12, "#009E73")
 
 ```{r}
 #| label: Histogram 2015 Coc
-histogram_fun_2015("COCUS30A", "Cocaine", 0.003, "#E69F00")
+histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00", "2015")
 ```
+
+### 2016
+
+```{r}
+histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2016")
+```
+
+### 2017
+
+```{r}
+histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2017")
+```
+
+### 2018
+
+```{r}
+histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2018")
+
+```
+
 
 ### 2019
 
 ```{r}
 #| label: Histogram 2019 Coc
-histogram_fun_2019("COCUS30A", "Cocaine", 0.003, "#E69F00")
+histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00", "2019")
 ```
 :::
 
@@ -571,20 +570,41 @@ histogram_fun_2019("COCUS30A", "Cocaine", 0.003, "#E69F00")
 
 ```{r}
 #| label: Histo 2015 Her
-histogram_fun_2019("HER30USE", "Heroin", 0.0004, "#CC79A7")
+histogram_fun("HER30USE", "Heroin", 0.0004, "#CC79A7", "2015")
 ```
+
+
+### 2016
+
+```{r}
+histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2016")
+```
+
+
+### 2017
+
+```{r}
+histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2017")
+```
+
+
+### 2018
+
+```{r}
+histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2018")
+```
+
 
 ### 2019
 
 ```{r}
 #| label: Histo 2019 Her
-histogram_fun_2015("HER30USE", "Heroin", 0.0004, "#CC79A7")
+histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2019")
 ```
 :::
 
-## Nikotin Konsum
 
-## Demografische Merkmale und Drogenkonsum
+## Demografische Merkmale und Nikotin
 
 ### Nikotin Konsum
 
@@ -715,7 +735,7 @@ ggplot(Drug.Dependency.Abuse, aes(x = Substance, fill = Condition)) +
 ```
 
 ------------------------------------------------------------------------
-
+### Zusammenhang zu demografischen Merkmalen
 ::: {.panel-tabset}
 
 ### Geschlecht
@@ -793,7 +813,7 @@ ggplot(Dependent.Users.Race , aes(x = factor(NEWRACE2), fill = factor(Drug)))+
                               "6" = "Gemischt",
                               "7" = "Hispanisch")) +
   scale_fill_discrete(name = "Drogen",labels = c("depndalc" = "Alkhol","depndcoc" = "Cokain", "depndher" = "Heroin"))+
-  labs(title = "Abhängigkeit der Ethnien", x = "Gruppen")+theme_light() +
+  labs(x = "Gruppen")+theme_light() +
   theme(
     axis.title = element_text(size = 15),  # Achsentitel
     axis.text  = element_text(size = 15),  # Achsbeschriftungen
@@ -805,11 +825,10 @@ ggplot(Dependent.Users.Race , aes(x = factor(NEWRACE2), fill = factor(Drug)))+
 
 ## Mentale Gesundheit: Einflüsse und Behandlung
 
-Einstufung für SMI (serious mental Illness):
-
--   Personen ab 18+, die momentan oder irngedwann im letzten Jahr eine diagnostizierte Mentale-, Verhaltens- oder Emotions-Krankheit hatten und die Kriterien von DSM-III-R erfüllten
--   Substanzkonsum wurde mitgemessen, wenn es gleichzeitig mit ernsten mentalen Gesundheitsbeschwerden miteintritt
--   diese Krankheiten haben die Individuuen stark in ihrem Alttag eingeschränkt (privat als auch davon in der Gesellschaft teilnehmen zu können)
+Abstufung des psychischen Gesundheitszustands
+   - SMI
+   - LMI
+   - AMI
 
 ------------------------------------------------------------------------
 
