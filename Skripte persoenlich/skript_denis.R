@@ -434,4 +434,52 @@ ggplot(her365_box_data, aes(x = factor(year), y = UsageDays)) +
 
 
 
+#############################################################################################
+# Zusammenhang Alter und Zigarettenkonsum
+
+# IRSEX Len : 1    IMPUTATION REVISED GENDER  
+
+#############################################################################################
+data2019 <- allfilterdata %>%
+  filter (year == 2019)
+
+
+# Sieht noch nicht gut aus 
+
+# Daten laden (falls als CSV vorhanden)
+# data2019 <- read.csv("data2019.csv")
+
+# Erstellen einer Kategorie für das Rauchverhalten basierend auf CIG30AV
+data2019 <- data2019 %>%
+  mutate(Rauchstatus = case_when(
+    CIG30AV == 0 ~ "Nieraucher",
+    CIG30AV == 1 ~ "Rauchen",
+    CIG30AV %in% 2:7 ~ "Tägliches Zigarettenrauchen",
+    TRUE ~ "Unbekannt"
+  ),
+  Starker_Raucher = case_when(
+    CIG30AV >= 5 ~ "Starkes Rauchen (≥ 10 Zig./Tag)",
+    CIG30AV == 7 ~ "Starkes Rauchen (≥ 20 Zig./Tag)",
+    TRUE ~ NA_character_
+  ))
+
+# Berechnung der Häufigkeiten für Jugendliche (12-17 Jahre) und Erwachsene (18-25 Jahre)
+data_summary <- data2019 %>%
+  group_by(irsex, Rauchstatus) %>%
+  summarise(Anteil = n() / nrow(data2019) * 100) %>%
+  ungroup()
+
+# Plot erstellen
+ggplot(data_summary, aes(x = fct_reorder(Rauchstatus, Anteil), y = Anteil, fill = factor(irsex))) +
+  geom_bar(stat = "identity", position = "dodge") +
+  coord_flip() +
+  labs(title = "Rauchverhalten nach Altersgruppe und Geschlecht",
+       x = "",
+       y = "Anteil in %",
+       fill = "Geschlecht") +
+  scale_fill_manual(values = c("blue", "red"), labels = c("Männlich", "Weiblich")) +
+  theme_minimal()
+
+
+
 
