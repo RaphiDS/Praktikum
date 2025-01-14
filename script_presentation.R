@@ -27,12 +27,12 @@ ggplot(aes(x = factor(Answer,
   theme_light() +
   theme(
     axis.title.x = element_text(margin = margin(t = 20)),
-    axis.title = element_text(size = 15),  # Achsentitel
-    axis.text  = element_text(size = 15),  # Achsbeschriftungen
+    axis.title = element_text(size = 20),  # Achsentitel
+    axis.text  = element_text(size = 20),  # Achsbeschriftungen
     legend.position = "none"  # Legendentext
   )
 ggsave("Presentation_files/Pres_plots/Ethnie_Verteilung_plot.png",
-       plot = Race.Distribution, width = 8, height = 6, dpi = 300)
+       plot = Race.Distribution, width = 18, height = 10, dpi = 300)
 ##### Drugs Denis Raphael
 
 # 1) Function: Generates a summarized table for a specified (drug) variable,
@@ -134,7 +134,7 @@ ggsave("Presentation_files/Pres_plots/Substanzen_Verlauf_plot.png",
        plot = Substanzen.Verlauf, width = 12, height = 8, dpi = 300)
 
 # 2) Plot: "In the last 30 days" – 4 major drugs
-ggplot(fourdrugs30, aes(x = Year, y = .data[["Anteil"]],
+Monatskonsum.Verlauf <- ggplot(fourdrugs30, aes(x = Year, y = .data[["Anteil"]],
                         color = factor(Drug, levels = c("Alkohol", "Zigarette", "Kokain", "Heroin")),
                         shape = factor(Drug, levels = c("Alkohol", "Zigarette", "Kokain", "Heroin")))) +
   geom_point(size = 3) +
@@ -157,8 +157,11 @@ ggplot(fourdrugs30, aes(x = Year, y = .data[["Anteil"]],
   scale_color_manual(values = c("#0072B2", "#009E73", "#E69F00", "#CC79A7")) +
   scale_shape_manual(values = c(15:18))  # beliebige Form-Codes
 
+ggsave("Presentation_files/Pres_plots/Monatskonsum_Verlauf_plot.png",
+  plot = Monatskonsum.Verlauf, width = 18, height = 10, dpi = 300)
+
 # 3) Plot: "Have ever used tobacco products"
-ggplot(tobaccoever, aes(x = Year, y = .data[["Anteil"]],
+Jemals.Tabbak <- ggplot(tobaccoever, aes(x = Year, y = .data[["Anteil"]],
                         color = factor(Drug, levels = c("Zigarette", "Zigarre", "Rauchfreier Tabak", "Pfeife")),
                         shape = factor(Drug, levels = c("Zigarette", "Zigarre", "Rauchfreier Tabak", "Pfeife")))) +
   geom_point(size = 3) +
@@ -184,8 +187,11 @@ ggplot(tobaccoever, aes(x = Year, y = .data[["Anteil"]],
     values = c(16, 15, 17, 18)
   )
 
+ggsave("Presentation_files/Pres_plots/Jemals_Tabbak_plot.png",
+  plot = Jemals.Tabbak, width = 18, height = 10, dpi = 300)
+
 # 4) Plot: "In the last 30 days" – tobacco products
-ggplot(tobacco30, aes(x = Year, y = .data[["Anteil"]],
+Monatskonsum.Tabbak <- ggplot(tobacco30, aes(x = Year, y = .data[["Anteil"]],
                       color = factor(Drug, levels = c("Zigarette", "Zigarre", "Rauchfreier Tabak", "Pfeife")),
                       shape = factor(Drug, levels = c("Zigarette", "Zigarre", "Rauchfreier Tabak", "Pfeife")))) +
   geom_point(size = 3) +
@@ -209,6 +215,10 @@ ggplot(tobacco30, aes(x = Year, y = .data[["Anteil"]],
     values = c(16, 15, 17, 18)
   )
 
+ggsave ("Presentation_files/Pres_plots/Monatskonsum_Tabbak_plot.png",
+  plot = Monatskonsum.Tabbak, width = 18, height = 10, dpi = 300)
+
+## Histogram Function
 histogram_fun <- function(datacol, drug_name, limit, colorcode, yearplot) {
   data <- drugdata %>%
     group_by(year) %>%
@@ -243,30 +253,86 @@ histogram_fun <- function(datacol, drug_name, limit, colorcode, yearplot) {
 
 
 # Example calls
-histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2015")
-histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2016")
-histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2017")
-histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2018")
-histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2019")
+Histo_Alk_15 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2015")
+ggsave("Presentation_files/Pres_plots/Histo_Alk_15_plot.png",
+       plot = Histo_Alk_15, width = 16, height = 9, dpi = 300)
 
-histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2015")
-histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2016")
-histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2017")
-histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2018")
-histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2019")
+Histo_Alk_16 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2016")
+ggsave("Presentation_files/Pres_plots/Histo_Alk_16_plot.png",
+        plot = Histo_Alk_16, width = 16, height = 9, dpi = 300)
 
-histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2015")
-histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2016")
-histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2017")
-histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2018")
-histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2019")
+Histo_Alk_17 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2017")
+ggsave("Presentation_files/Pres_plots/Histo_Alk_17_plot.png",
+       plot = Histo_Alk_17, width = 16, height = 9, dpi = 300)
 
-histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2015")
-histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2016")
-histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2017")
-histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2018")
-histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2019")
+Histo_Alk_18 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2018")
+ggsave("Presentation_files/Pres_plots/Histo_Alk_18_plot.png",
+       plot = Histo_Alk_18, width = 16, height = 9, dpi = 300)
 
+Histo_Alk_19 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2019")
+
+# Zigaretten
+Histo_Zig_15 <- histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2015")
+ggsave("Presentation_files/Pres_plots/Zig_15_plot.png",
+       plot = Histo_Zig_15, width = 16, height = 9, dpi = 300)
+
+Histo_Zig_16 <- histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2016")
+ggsave ("Presentation_files/Pres_plots/Zig_16_plot.png",
+        plot = Histo_Zig_16, width = 16, height = 9, dpi = 300)
+
+Histo_Zig_17 <- histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2017")
+ggsave("Presentation_files/Pres_plots/Zig_17_plot.png",
+       plot = Histo_Zig_17, width = 16, height = 9, dpi = 300)
+
+Histo_Zig_18 <- histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2018")
+ggsave("Presentation_files/Pres_plots/Zig_18_plot.png",
+       plot = Histo_Zig_18, width = 16, height = 9, dpi = 300)
+
+Histo_Zig_19 <- histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2019")
+ggsave("Presentation_files/Pres_plots/Zig_19_plot.png",
+       plot = Histo_Zig_19, width = 16, height = 9, dpi = 300)
+
+# Kokain
+Histo_Koks_15 <- histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2015")
+ggsave("Presentation_files/Pres_plots/Koks_15_plot.png",
+       plot = Histo_Koks_15, width = 16, height = 9, dpi = 300)
+
+Histo_Koks_16 <- histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2016")
+ggsave("Presentation_files/Pres_plots/Koks_15_plot.png",
+       plot = Histo_Koks_16, width = 16, height = 9, dpi = 300)
+
+Histo_Koks_17 <- histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2017")
+ggsave("Presentation_files/Pres_plots/Koks_17_plot.png",
+       plot = Histo_Koks_17, width = 16, height = 9, dpi = 300)
+
+Histo_Koks_18 <- histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2018")
+ggsave("Presentation_files/Pres_plots/Koks_18_plot.png",
+       plot = Histo_Koks_18, width = 16, height = 9, dpi = 300)
+
+Histo_Koks_19 <- histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2019")
+ggsave("Presentation_files/Pres_plots/Koks_19_plot.png",
+       plot = Histo_Zig_19, width = 16, height = 9, dpi = 300)
+
+##Heroin
+Histo_Her_15 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2015")
+ggsave("Presentation_files/Pres_plots/Her_15_plot.png",
+       plot = Histo_Her_15, width = 16, height = 9, dpi = 300)
+
+Histo_Her_16 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2016")
+ggsave("Presentation_files/Pres_plots/Her_16_plot.png",
+  plot = Histo_Her_16, width = 16, height = 9, dpi = 300)
+
+Histo_Her_17 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2017")
+ggsave("Presentation_files/Pres_plots/Her_17_plot.png",
+       plot = Histo_Her_17, width = 16, height = 9, dpi = 300)
+
+Histo_Her_18 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2018")
+ggsave("Presentation_files/Pres_plots/Her_18_plot.png",
+       plot = Histo_Her_18, width = 16, height = 9, dpi = 300)
+
+Histo_Her_19 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2019")
+ggsave("Presentation_files/Pres_plots/Her_19_plot.png",
+       plot = Histo_Her_19, width = 16, height = 9, dpi = 300)
 ###################################
 #Demographics and Drugs / Nicotine
 ###################################
