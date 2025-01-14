@@ -33,6 +33,24 @@ ggplot(aes(x = factor(Answer,
   )
 ggsave("Presentation_files/Pres_plots/Ethnie_Verteilung_plot.png",
        plot = Race.Distribution, width = 18, height = 10, dpi = 300)
+
+## ALtersverteilung
+Altersverteilung <- data2019 %>%
+  select(catage) %>%
+  pivot_longer(cols = everything(), names_to = "variable", values_to = "Group") %>%
+  group_by(Group) %>%
+  summarize(count =n()/56136)%>%
+  ggplot(aes(x= factor(Group),y = count)) +
+  geom_col() +
+  labs(x = "Gruppierung", y = "Anteil") +
+  theme_light() +
+  theme(
+    axis.title = element_text(size = 20),  # Achsentitel
+    axis.text  = element_text(size = 20)  # Achsbeschriftungen
+  ) +
+  scale_x_discrete(labels = c("12-17", "18-25", "26-34", "35+"))
+
+ggsave ("Presentation_files/Pres_plots/Altersverteilung.png", plot = Altersverteilung, width = 15, height = 10, dpi = 300)
 ##### Drugs Denis Raphael
 
 # 1) Function: Generates a summarized table for a specified (drug) variable,
@@ -406,8 +424,7 @@ Subs.Abhängig.Alter <- data2019 %>%
     axis.title = element_text(size = 20),  # Achsentitel
     axis.text  = element_text(size = 25),  # Achsbeschriftungen
     legend.text = element_text(size = 17,5),
-    legend.title = element_text(size = 17,5),
-    legend.position = "bottom"  # Legendentext
+    legend.title = element_text(size = 17,5)
   )
 ggsave("Presentation_files/Pres_plots/SubsAbhängig_Alter.png", 
        plot = Subs.Abhängig.Alter, width = 15, height = 8, dpi = 300)
@@ -435,8 +452,7 @@ Subs.Abhängig.Ethnie <- data2019 %>%
     axis.title = element_text(size = 20),  # Achsentitel
     axis.text  = element_text(size = 20),  # Achsbeschriftungen
     legend.text = element_text(size = 17,5),
-    legend.title = element_text(size = 17,5),
-    legend.position = "bottom"  # Legendentext
+    legend.title = element_text(size = 17,5)
   )
 
 ggsave("Presentation_files/Pres_plots/SubsAbhängig_Ethnie.png", 
@@ -481,8 +497,7 @@ SubsAbhängig.Gesundheit <-ggplot(Drug.Dependency.Total, aes(x = factor(Dependen
     axis.title = element_text(size = 20),
     axis.text = element_text(size = 20),
     legend.title = element_text(size = 17,5),
-    legend.text = element_text(size = 17,5),
-    legend.position = "bottom"
+    legend.text = element_text(size = 17,5)
   )
 ggsave("Presentation_files/Pres_plots/SubsAbhängig_Gesundheit.png", plot = SubsAbhängig.Gesundheit, width = 18, height = 10, dpi = 300)
 
@@ -567,3 +582,91 @@ plot_usmap(
         legend.key.size = unit(0.8, "cm")         # Größe der Farbfelder
         
   )
+
+
+# Erstellen der Kreuztabelle mit absoluten Häufigkeiten
+Drug_Addprev_Crosstab <- data2019 %>%
+  select(depndalc, depndcoc, depndher, addprev) %>%
+  filter(addprev %in% c(1, 2)) %>%  # Nur gültige Werte behalten (Ja, Nein)
+  mutate(
+    Dependency = case_when(
+      depndalc == 0 & depndcoc == 0 & depndher == 0 ~ "Keine Abhängigkeit",
+      depndalc == 1 & depndcoc == 0 & depndher == 0 ~ "Alkohol",
+      depndalc == 0 & depndcoc == 1 & depndher == 0 ~ "Kokain",
+      depndalc == 0 & depndcoc == 0 & depndher == 1 ~ "Heroin",
+      TRUE ~ "Mehrfache Abhängigkeit"  # Falls jemand mehrere Drogen konsumiert
+    )
+  ) %>%
+  group_by(addprev, Dependency) %>%
+  summarise(Frequency = n(), .groups = "drop") %>%
+  pivot_wider(names_from = Dependency, values_from = Frequency, values_fill = 0) %>%
+  mutate(addprev = recode(addprev, `1` = "Ja", `2` = "Nein")) %>%
+  column_to_rownames(var = "addprev") %>%
+  select("Keine Abhängigkeit", "Alkohol", "Kokain", "Heroin", "Mehrfache Abhängigkeit") 
+
+# Kreuztabelle anzeigen
+print(Drug_Addprev_Crosstab)
+
+# Erstellen der Kreuztabelle mit absoluten Häufigkeiten
+Drug_amdeyr_Crosstab <- data2019 %>%
+  select(depndalc, depndcoc, depndher, amdeyr) %>%
+  filter(amdeyr %in% c(1, 2)) %>%
+  mutate(
+    Dependency = case_when(
+      depndalc == 0 & depndcoc == 0 & depndher == 0 ~ "Keine Abhängigkeit",
+      depndalc == 1 & depndcoc == 0 & depndher == 0 ~ "Alkohol",
+      depndalc == 0 & depndcoc == 1 & depndher == 0 ~ "Kokain",
+      depndalc == 0 & depndcoc == 0 & depndher == 1 ~ "Heroin",
+      TRUE ~ "Mehrfache Abhängigkeit"
+    )
+  ) %>%
+  group_by(amdeyr, Dependency) %>%
+  summarise(Frequency = n(), .groups = "drop") %>%
+  pivot_wider(names_from = Dependency, values_from = Frequency, values_fill = 0) %>%
+  mutate(amdeyr = recode(amdeyr, `1` = "Depression Ja", `2` = "Depression Nein")) %>%
+  column_to_rownames(var = "amdeyr")
+
+# Berechnung der Odds und Gruppengröße
+Drug_Odds <- Drug_amdeyr_Crosstab %>%
+  t() %>%
+  as.data.frame() %>%
+  mutate(Total = `Depression Ja` + `Depression Nein`,
+         Odds_Yes = ifelse(`Depression Nein` > 0, `Depression Ja` / `Depression Nein`, NA)) %>%
+  filter(!is.na(Odds_Yes))  # Entfernt Zeilen mit NA-Werten
+
+# Gewichteter Durchschnitt der Odds berechnen
+weighted_avg_odds <- sum(Drug_Odds$Odds_Yes * Drug_Odds$Total) / sum(Drug_Odds$Total)
+
+# Berechnung der Odds Ratios relativ zum gewichteten Durchschnitt
+Drug_Odds <- Drug_Odds %>%
+  mutate(OR = Odds_Yes / weighted_avg_odds) %>%
+  rownames_to_column(var = "Dependency") %>%
+  mutate(Dependency = factor(Dependency, levels = c("Keine Abhängigkeit", "Alkohol", "Kokain", "Heroin", "Mehrfache Abhängigkeit")))  # Reihenfolge setzen
+
+# Farben für die Kategorien definieren
+drug_colors <- c("Keine Abhängigkeit" = "gray50",
+                 "Alkohol" = "#0072B2",
+                 "Kokain" = "#E69F00",
+                 "Heroin" = "#CC79A7",
+                 "Mehrfache Abhängigkeit" = "black")
+
+# Plot der Odds Ratios mit Anpassungen
+Odds.Abhängigkeit <- ggplot(Drug_Odds, aes(x = Dependency, y = OR, color = Dependency)) +
+  geom_point(size = 5) +
+  geom_hline(yintercept = 1, linetype = "dashed", color = "gray60") +  # Gesamtdurchschnittslinie in Grau
+  geom_text(aes(x = "Heroin", y = 1.05, label = "Gesamtdurchschnitt"), color = "gray60", vjust = -0.5, size = 5) +  
+  scale_color_manual(values = drug_colors) +
+  scale_y_continuous(limits = c(0.5, max(Drug_Odds$OR) * 1.2), breaks = seq(0.5, max(Drug_Odds$OR) * 1.2, by = 0.5)) +
+  labs(,
+       x = "Abhängigkeitstyp",
+       y = "Odds Ratio",
+       color = "Abhängigkeitstyp") +
+  theme_light() +
+  theme(
+    axis.title = element_text(size = 20),  # Achsentitel
+    axis.text  = element_text(size = 20),  # Achsbeschriftungen
+    legend.position = "none"  # Legendentext
+  )
+
+ggsave("Presentation_files/Pres_plots/Odds_Abhängigkeit.png", plot = Odds.Abhängigkeit, width = 18, height = 10, dpi = 300)
+
