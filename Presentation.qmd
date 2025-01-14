@@ -15,7 +15,6 @@ smaller: true
 transition: slide
 ---
 
-
 ## Gliederung
 
 -   Allgemeine Infos über den Datensatz
@@ -44,7 +43,7 @@ transition: slide
 
 ## WER und WIE wird befragt
 
--   alle amerikanischen, nicht-institutionalisierten Bürger\*innen ab 12 (insgesamt 67.625 --> Datensatz 2019: 56.136)
+-   alle amerikanischen, nicht-institutionalisierten Bürger\*innen ab 12 (insgesamt 67.625 --\> Datensatz 2019: 56.136)
     -   ausgeschlossen: Obdachlose, Personen aktiv im Militär, Gefängnisse und Krankenhäuser
 -   Stichprobe basiert auf einer unabhängigen,mehrstufigen Gebietswahrscheinlichkeitsstichprobe
 
@@ -56,32 +55,30 @@ transition: slide
 
 ------------------------------------------------------------------------
 
-::: {.nonincremental}
--   alle amerikanischen, nicht-institutionalisierten Bürger\*innen ab 12 (insgesamt 67.625 --> Datensatz 2019: 56.136)
+::: nonincremental
+-   alle amerikanischen, nicht-institutionalisierten Bürger\*innen ab 12 (insgesamt 67.625 --\> Datensatz 2019: 56.136)
     -   ausgeschlossen: Obdachlose, Personen aktiv im Militär, Gefängnisse und Krankenhäuser
 -   Stichprobe basiert auf einer unabhängigen,mehrstufigen Gebietswahrscheinlichkeitsstichprobe
-
 :::
 
 -   Querschnittsdaten
 -   Stichproben so gewählt, dass...
     -   sie proportional zu den staatlichen Populationsgrößen sind
-    -   jede Altersgruppe als auch Geschlecht gleich vertreten wird im Datensatz 
+    -   jede Altersgruppe als auch Geschlecht gleich vertreten wird im Datensatz
 
 ------------------------------------------------------------------------
 
 ### Altersgruppen
+
 ![](Presentation_files/Pres_plots/Altersverteilung.png)
 
 ------------------------------------------------------------------------
 
 ### Ethnische Zugehörigkeit der Befragten
+
 ![](Presentation_files/Pres_plots/Ethnie_Verteilung_plot.png)
 
-
 ## Terminologie
-
-
 
 ## Substanzen
 
@@ -89,12 +86,11 @@ transition: slide
 -   Differenzierung:
     -   Tabak: Zigaretten als auch "rauchfreie" Tabbakprodukte wie z.b. Snus
 
-
 ## Drogenkonsum von 2015-2019
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ### Verlauf
+
 ![](Presentation_files/Pres_plots/Substanzen_Verlauf_plot.png)
 
 ### Konsum im letzten 30 Tagen
@@ -104,21 +100,21 @@ transition: slide
 
 ## Nikotin Konsum von 2015-2019
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ### Verlauf
+
 ![](Presentation_files/Pres_plots/Jemals_Tabbak_plot.png)
 
 ### Konsum in letzten 30 Tagen
+
 ![](Presentation_files/Pres_plots/Monatskonsum_Tabbak_plot.png)
 :::
 
 ## Konsumverhalten der einzelnen Substanzen
 
-
 ## Alkohol
 
-::: {.panel-tabset}
+::: panel-tabset
 ### 2015
 
 ![](Presentation_files/Pres_plots/Alk_15_plot.png)
@@ -127,7 +123,6 @@ transition: slide
 
 ![](Presentation_files/Pres_plots/Alk_16_plot.png)
 
-
 ### 2017
 
 ![](Presentation_files/Pres_plots/Alk_17_plot.png)
@@ -135,7 +130,6 @@ transition: slide
 ### 2018
 
 ![](Presentation_files/Pres_plots/Alk_18_plot.png)
-
 
 ### 2019
 
@@ -185,7 +179,6 @@ transition: slide
 
 ![](Presentation_files/Pres_plots/Koks_18_plot.png)
 
-
 ### 2019
 
 ![](Presentation_files/Pres_plots/Koks_19_plot.png)
@@ -198,35 +191,27 @@ transition: slide
 
 ![](Presentation_files/Pres_plots/Her_15_plot.png)
 
-
 ### 2016
 
 ![](Presentation_files/Pres_plots/Her_16_plot.png)
-
 
 ### 2017
 
 ![](Presentation_files/Pres_plots/Her_17_plot.png)
 
-
 ### 2018
 
 ![](Presentation_files/Pres_plots/Her_18_plot.png)
-
 
 ### 2019
 
 ![](Presentation_files/Pres_plots/Her_19_plot.png)
 :::
 
-
 ## Demografische Merkmale und Nikotin
 
-
-::: {.panel-tabset}
+::: panel-tabset
 ### Geschlecht
-
-
 
 ### Alter
 
@@ -237,34 +222,28 @@ transition: slide
 ![](Presentation_files/Pres_plots/NikAbhängig_Ethnie.png)
 :::
 
-
 ## Demografische Merkmale und Substanzkonsum
 
-
-::: {.panel-tabset}
-
+::: panel-tabset
 ### Geschlecht
-
 
 ### Alter
 
 ![](Presentation_files/Pres_plots/SubsAbhängig_Alter.png)
-
 
 ### Ethnie
 
 ![](Presentation_files/Pres_plots/SubsAbhängig_Ethnie.png)
 :::
 
-
 ## Mentale Gesundheit: Einflüsse und Behandlung
 
--   SMI: 
+-   SMI:
 -   Abstufung des psychischen Gesundheitszustands mithilfe von Indikatoren (WHODAS)
-   - Serious Mental Illness: Schwellenwert (SMIPP_U) ab Schwellenwert von 0.236
-   - Serious to Moderate Mentall Illness: ab Schwellenwert von 0.066
-   - Any Mental Illness: ab 0.019
--   Diese Bewertung kann nur für Erwachsene angewendet werden 
+-   Serious Mental Illness: Schwellenwert (SMIPP_U) ab Schwellenwert von 0.236
+-   Serious to Moderate Mentall Illness: ab Schwellenwert von 0.066
+-   Any Mental Illness: ab 0.019
+-   Diese Bewertung kann nur für Erwachsene angewendet werden
 
 ------------------------------------------------------------------------
 
@@ -277,8 +256,8 @@ transition: slide
 ## Fazit
 
 -   Wie haben sich die Konsummuster in dem Zeitraum 2015 bis 2019 entwickelt?
-    - Nicht viel
+    -   Nicht viel
 -   Wie hängt der Konsum im Jahr 2019 mit demografischen Merkmalen zusammen?
-    - Nicht von Geschlecht, wenn dan Ethnie
+    -   Nicht von Geschlecht, wenn dan Ethnie
 -   Wie steht der Konsum im Jahr 2019 mit dem psychischen Gesundheitszustand der Befragten in Verbindung?
-    - Gestörte Leute nehmen harte Drogen
+    -   Gestörte Leute nehmen harte Drogen
