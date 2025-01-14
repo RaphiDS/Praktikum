@@ -242,3 +242,88 @@ Youth.MDE.Substance <- data2019 %>%
 ## Youth with MDE and Substance Abuse
 Youth.MDE.Substance <- data2019 %>%
   select(YMDEAUDPY, ymdeimudpy, ymdeudpy) # Variable fehlt
+
+
+
+
+
+
+Drug.Dependency.MI <- data2019 %>%
+  select(depndalc,depndcoc,depndher,MI_CAT_U) %>%
+  filter (MI_CAT_U >= 0) %>%
+  pivot_longer(cols = c(depndalc, depndcoc,depndher), names_to = "Drug", values_to = "Response") %>%
+  filter( Response == 1) 
+
+ggplot(Drug.Dependency.MI, aes( x = factor(MI_CAT_U), fill = factor(Drug)))+
+  geom_bar(position = "fill")+
+  scale_x_discrete(labels = c("0" = "Keine Mentalen \nGesundheitsprobleme" , "1" = "'Milde' Mentale \nErkrankung", "2" = " 'Moderate' Mentale \nErkrankung", "3" = "Ernste Mentale \nErkrankungen"),
+                   guide = guide_axis(angle = 45))+
+  labs(x = "Art der Erkrankung", y = "Anteil")
+
+##GLeicher Plot, nur achsen vertauscht
+ggplot(Drug.Dependency.MI, aes(x = factor(Drug), fill = factor(MI_CAT_U)))+
+  geom_bar(position = "fill")+
+  scale_x_discrete(labels = c("depndalc" = "Alkohol", "depndcoc" = "Cokain","depndher" = "Heroin"))+
+  labs(title = "Substanzabhängigkeit und Mentale Gesundheit", x = " Substanz")+
+  scale_fill_discrete(name = "",labels = c("0" = "Keine Mentalen Gesundheitsprobleme" , "1" = "'Milde' Mentale Erkrankung", "2" = " 'Moderate' Mentale Erkrankung", "3" = "Ernste Mentale Erkrankungen"))+
+  theme_light() +
+  theme(
+    axis.title = element_text(size = 15),  # Achsentitel
+    axis.text  = element_text(size = 20),  # Achsbeschriftungen
+    legend.position = "bottom"  # Legendentext
+  )
+
+#-------------------------------------------------------------------------------
+## Adult Mental Heath / Substance Treatment
+## Variable zur Rekodierung: leute die Mh Treatment bekommen haben, Treatment for Drug Use
+## Drug Dependency and 'Degree' of Mental illness
+Drug.Dependency.MI <- data2019 %>%
+  select(depndalc,depndcoc,depndher,MI_CAT_U) %>%
+  filter (MI_CAT_U >= 0) %>%
+  pivot_longer(cols = c(depndalc, depndcoc,depndher), names_to = "Drug", values_to = "Response") %>%
+  filter( Response == 1) 
+
+ggplot(Drug.Dependency.MI, aes( x = factor(MI_CAT_U), fill = factor(Drug)))+
+  geom_bar(position = "fill")+
+  scale_x_discrete(labels = c("0" = "Keine Mentalen \nGesundheitsprobleme" , "1" = "'Milde' Mentale \nErkrankung", "2" = " 'Moderate' Mentale \nErkrankung", "3" = "Ernste Mentale \nErkrankungen"),
+                   guide = guide_axis(angle = 45))+
+  labs(x = "Art der Erkrankung", y = "Anteil")
+
+##GLeicher Plot, nur achsen vertauscht
+ggplot(Drug.Dependency.MI, aes(x = factor(Drug), fill = factor(MI_CAT_U)))+
+  geom_bar(position = "fill")+
+  scale_x_discrete(labels = c("depndalc" = "Alkohol", "depndcoc" = "Cokain","depndher" = "Heroin"))+
+  labs(title = "Substanzabhängigkeit und Mentale Gesundheit", x = " Substanz")+
+  scale_fill_discrete(name = "",labels = c("0" = "Keine Mentalen Gesundheitsprobleme" , "1" = "'Milde' Mentale Erkrankung", "2" = " 'Moderate' Mentale Erkrankung", "3" = "Ernste Mentale Erkrankungen"))+
+  theme_light() +
+  theme(
+    axis.title = element_text(size = 15),  # Achsentitel
+    axis.text  = element_text(size = 20),  # Achsbeschriftungen
+    legend.position = "bottom"  # Legendentext
+  )
+
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+
+
+
+# Erstelle eine Häufigkeitstabelle für jede Kombination aus Abhängigkeitskategorie und mentaler Erkrankung
+Drug.Dependency.Table <- data2019 %>%
+  select(depndalc, depndcoc, depndher, MI_CAT_U) %>%
+  mutate(
+    Dependency = case_when(
+      depndalc == 1 & depndcoc == 0 & depndher == 0 ~ "Alkohol",
+      depndcoc == 1 & depndalc == 0 & depndher == 0 ~ "Kokain",
+      depndher == 1 & depndalc == 0 & depndcoc == 0 ~ "Heroin",
+      depndalc == 1 & depndcoc == 1 | depndalc == 1 & depndher == 1 | depndcoc == 1 & depndher == 1 ~ "Mehrfachabhängigkeit",
+      TRUE ~ "Keine Abhängigkeit"
+    )
+  ) %>%
+  filter(MI_CAT_U >= 0) %>%  # Nur gültige mentale Erkrankungen
+  group_by(Dependency, MI_CAT_U) %>%
+  summarise(Frequency = n(), .groups = "drop") %>%
+  arrange(Dependency, MI_CAT_U)
+
+# Anzeige der Tabelle in RStudio
+print(Drug.Dependency.Table)
