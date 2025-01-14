@@ -578,16 +578,11 @@ ggplot(data_summary, aes(x = Status, y = Anteil, fill = factor(irsex))) +
 
 ###########################################################
 
+install.packages("usmap")
+install.packages("usdata")
 library(usmap)
-library(tidyverse)
-# install.packages("usmap")
-# install.packages("usdata")
-############################
-# Pakete laden
-############################
-library(tidyverse)  # Enthält u. a. dplyr und ggplot
-library(usmap)      # Für die USA-Karte
-library(usdata)     # Für state2abbr()
+library(usdata)
+
 
 ############################
 # 1) Daten definieren

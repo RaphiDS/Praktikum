@@ -485,3 +485,85 @@ SubsAbhängig.Gesundheit <-ggplot(Drug.Dependency.Total, aes(x = factor(Dependen
     legend.position = "bottom"
   )
 ggsave("Presentation_files/Pres_plots/SubsAbhängig_Gesundheit.png", plot = SubsAbhängig.Gesundheit, width = 18, height = 10, dpi = 300)
+
+
+install.packages("usmap")
+install.packages("usdata")
+library(usmap)
+library(usdata)
+
+
+############################
+# 1) Daten definieren
+############################
+state_data <- data.frame(
+  state = c(
+    "California", "Texas", "Florida", "New York", "Pennsylvania",
+    "Illinois", "Ohio", "Georgia", "North Carolina", "Michigan",
+    "New Jersey", "Virginia", "Washington", "Arizona", "Massachusetts",
+    "Tennessee", "Indiana", "Missouri", "Maryland", "Wisconsin",
+    "Colorado", "Minnesota", "South Carolina", "Alabama", "Louisiana",
+    "Kentucky", "Oregon", "Oklahoma", "Connecticut", "Utah", "Iowa", "Nevada", 
+    "Arkansas", "Mississippi", "Kansas", "New Mexico", "Nebraska", "Idaho", 
+    "West Virginia", "Hawaii", "New Hampshire", "Maine", "Montana", "Rhode Island", 
+    "Delaware", "South Dakota", "North Dakota", "Alaska", "Vermont", "Wyoming"
+  ),
+  population = c(
+    39512223, 28995881, 21477737, 19453561, 12801989,
+    12671821, 11689100, 10617423, 10488084, 9986857,
+    8882190, 8535519, 7614893, 7278717, 6892503,
+    6829174, 6732219, 6137428, 6045680, 5822434,
+    5758736, 5639632, 5148714, 4903185, 4648794,
+    4467673, 4217737, 3956971, 3565287, 3205958, 3155070, 3080156,
+    3017804, 2976149, 2913314, 2096829, 1934408, 1787065,
+    1792147, 1415872, 1359711, 1344212, 1068778, 1059361,
+    973764, 884659, 762062, 731545, 623989, 578759
+  ),
+  interviews = c(
+    4560, 3300, 3300, 3300, 2400,
+    2400, 2400, 1500, 1500, 2400,
+    1500, 1500, 960, 960, 960,
+    960, 960, 960, 960, 960,
+    960, 960, 960, 960, 960,
+    960, 960, 960, 960, 960, 960, 960,
+    960, 960, 960, 960, 960, 960,
+    960, 967, 960, 960, 960, 960,
+    960, 960, 960, 960, 960, 960
+  )
+)
+
+############################
+# 2) Abkürzungen erzeugen
+############################
+# *Über* das Paket 'usdata':
+# state2abbr("California") => "CA", etc.
+state_data <- state_data %>%
+  mutate(
+    state_abbr = state2abbr(state),
+    # Beispielmetrik: Interviews pro 100.000 Einwohner
+    interviews_per_100k = (interviews / population) * 100000
+  )
+
+############################
+# 3) Choroplethen-Karte zeichnen
+############################
+plot_usmap(
+  data    = state_data,
+  regions = "states",
+  values  = "interviews_per_100k",
+  include = state_data$state_abbr  # optional: nur die definierten Staaten
+) +
+  scale_fill_continuous(
+    low   = "lightgrey",
+    high  = "black",
+    name  = "Interviews \n(pro 100k)",
+    label = scales::comma
+  ) +
+  theme(panel.background = element_blank(),
+        
+        legend.position = "right",
+        legend.title = element_text(size = 12),   # Schriftgröße des Legendentitels
+        legend.text  = element_text(size = 10),   # Schriftgröße der Legendenbeschriftungen
+        legend.key.size = unit(0.8, "cm")         # Größe der Farbfelder
+        
+  )
