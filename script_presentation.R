@@ -414,7 +414,7 @@ Subs.Abhängig.Alter <- data2019 %>%
   pivot_longer(cols = c(depndcoc, depndher, depndalc), names_to = "Drug", values_to = "Usage") %>%
   filter (Usage == 1)%>%
   ggplot(aes(x = factor(catage), fill = factor(Drug)))+
-  geom_bar(position = "fill")+
+  geom_bar(position = "dodge")+
   scale_fill_manual(name = "Drogen",labels = c("depndalc" = "Alkohol","depndcoc" = "Kokain", "depndher" = "Heroin"),
                     values = c("#0072B2","#E69F00", "#CC79A7")) +
   scale_x_discrete(labels = c("1" = "12-17", "2" = "18-25", "3" = "26-34", "4" = "35+"))+
