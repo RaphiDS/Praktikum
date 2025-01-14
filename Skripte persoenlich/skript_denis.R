@@ -655,10 +655,14 @@ plot_usmap(
     name  = "Interviews \n(pro 100k)",
     label = scales::comma
   ) +
-  labs(
-    title    = "Relative Anzahl an Interviews pro 100.000 Einwohner",
-  ) +
-  theme(panel.background = element_blank())
+  theme(panel.background = element_blank(),
+    
+    legend.position = "right",
+    legend.title = element_text(size = 12),   # Schriftgröße des Legendentitels
+    legend.text  = element_text(size = 10),   # Schriftgröße der Legendenbeschriftungen
+    legend.key.size = unit(0.8, "cm")         # Größe der Farbfelder
+    
+  )
 
 
 
