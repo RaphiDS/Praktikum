@@ -254,22 +254,24 @@ histogram_fun <- function(datacol, drug_name, limit, colorcode, yearplot) {
 
 # Example calls
 Histo_Alk_15 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2015")
-ggsave("Presentation_files/Pres_plots/Histo_Alk_15_plot.png",
+ggsave("Presentation_files/Pres_plots/Alk_15_plot.png",
        plot = Histo_Alk_15, width = 16, height = 9, dpi = 300)
 
 Histo_Alk_16 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2016")
-ggsave("Presentation_files/Pres_plots/Histo_Alk_16_plot.png",
+ggsave("Presentation_files/Pres_plots/Alk_16_plot.png",
         plot = Histo_Alk_16, width = 16, height = 9, dpi = 300)
 
 Histo_Alk_17 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2017")
-ggsave("Presentation_files/Pres_plots/Histo_Alk_17_plot.png",
+ggsave("Presentation_files/Pres_plots/Alk_17_plot.png",
        plot = Histo_Alk_17, width = 16, height = 9, dpi = 300)
 
 Histo_Alk_18 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2018")
-ggsave("Presentation_files/Pres_plots/Histo_Alk_18_plot.png",
+ggsave("Presentation_files/Pres_plots/Alk_18_plot.png",
        plot = Histo_Alk_18, width = 16, height = 9, dpi = 300)
 
 Histo_Alk_19 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2019")
+ggsave("Presentation_files/Pres_plots/Alk_19_plot.png",
+       plot = Histo_Alk_19, width = 16, height = 9, dpi = 300)
 
 # Zigaretten
 Histo_Zig_15 <- histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2015")
@@ -298,7 +300,7 @@ ggsave("Presentation_files/Pres_plots/Koks_15_plot.png",
        plot = Histo_Koks_15, width = 16, height = 9, dpi = 300)
 
 Histo_Koks_16 <- histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2016")
-ggsave("Presentation_files/Pres_plots/Koks_15_plot.png",
+ggsave("Presentation_files/Pres_plots/Koks_16_plot.png",
        plot = Histo_Koks_16, width = 16, height = 9, dpi = 300)
 
 Histo_Koks_17 <- histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2017")
@@ -311,7 +313,7 @@ ggsave("Presentation_files/Pres_plots/Koks_18_plot.png",
 
 Histo_Koks_19 <- histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2019")
 ggsave("Presentation_files/Pres_plots/Koks_19_plot.png",
-       plot = Histo_Zig_19, width = 16, height = 9, dpi = 300)
+       plot = Histo_Koks_19, width = 16, height = 9, dpi = 300)
 
 ##Heroin
 Histo_Her_15 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2015")
@@ -339,15 +341,14 @@ ggsave("Presentation_files/Pres_plots/Her_19_plot.png",
 
 #-------------------------------------------------------------------------------
 ## Nicotine Dependency Age
-Nic.Dependency.Age <- data2019 %>%
+Nik.Abhängig.Alter <- data2019 %>%
   select(catage, ndssdnsp) %>%
   group_by(catage) %>%
   mutate(total = n()) %>%  # Gesamtanzahl pro catage berechnen
   filter(ndssdnsp == 1) %>%
   summarise(count = n(), total = first(total))  %>%# count berechnen und total beibehalten
-  mutate(count = count / total)
-
-ggplot(Nic.Dependency.Age, aes(x = factor(catage), y = count))+
+  mutate(count = count / total)%>%
+  ggplot(aes(x = factor(catage), y = count))+
   geom_col(fill = "#009E73")+
   scale_x_discrete(name = "Gruppierung",labels = c("12-17", "18-25", "26-34", "35+"))+
   labs( x = " ", y = "Anteil")+
@@ -357,17 +358,18 @@ ggplot(Nic.Dependency.Age, aes(x = factor(catage), y = count))+
     axis.text  = element_text(size = 20),  # Achsbeschriftungen
     legend.position = "none"  # Legendentext
   )
+ggsave("Presentation_files/Pres_plots/NikAbhängig_Alter.png", 
+       plot = Nik.Abhängig.Alter, width = 16, height = 12, dpi = 300)
 #-------------------------------------------------------------------------------
 ## Nikotin Dependency (last month) and Race
-Nikotin.Dependence.Race <- data2019 %>%
+Nik.Abhängig.Ethnie <- data2019 %>%
   select(NEWRACE2, ndssdnsp) %>%
   group_by(NEWRACE2) %>%
   mutate(total = n()) %>%
   filter (ndssdnsp == 1)%>%
   summarise(count = n(), total = first(total))  %>%# count berechnen und total beibehalten
-  mutate(count = count /total)
-
-ggplot(Nikotin.Dependence.Race, aes(x = factor(NEWRACE2,
+  mutate(count = count /total)%>%
+  ggplot(aes(x = factor(NEWRACE2,
                                                levels = c(1, 7, 2, 5, 6, 3, 4)),
                                     y = count))+
   geom_col(fill = "#009E73") +
@@ -386,15 +388,15 @@ ggplot(Nikotin.Dependence.Race, aes(x = factor(NEWRACE2,
     legend.position = "none"  # Legendentext
   )
 
-
+ggsave("Presentation_files/Pres_plots/NikAbhängig_Ethnie.png", 
+       plot = Nik.Abhängig.Ethnie, width = 16, height = 12, dpi = 300)
 #-------------------------------------------------------------------------------
 ## Drug Dependency by age group
-Drug.Dependency.Age <- data2019 %>%
+Subs.Abhängig.Alter <- data2019 %>%
   select(catage,depndcoc,depndher, depndalc) %>%
   pivot_longer(cols = c(depndcoc, depndher, depndalc), names_to = "Drug", values_to = "Usage") %>%
-  filter (Usage == 1)
-
-ggplot(Drug.Dependency.Age, aes(x = factor(catage), fill = factor(Drug)))+
+  filter (Usage == 1)%>%
+  ggplot(aes(x = factor(catage), fill = factor(Drug)))+
   geom_bar(position = "fill")+
   scale_fill_manual(name = "Drogen",labels = c("depndalc" = "Alkohol","depndcoc" = "Kokain", "depndher" = "Heroin"),
                     values = c("#0072B2","#E69F00", "#CC79A7")) +
@@ -406,14 +408,15 @@ ggplot(Drug.Dependency.Age, aes(x = factor(catage), fill = factor(Drug)))+
     axis.text  = element_text(size = 15),  # Achsbeschriftungen
     legend.position = "bottom"  # Legendentext
   )
+ggsave("Presentation_files/Pres_plots/SubsAbhängig_Alter.png", 
+       plot = Subs.Abhängig.Alter, width = 16, height = 12, dpi = 300)
 #------------------------------------------------------------------------------
 ## Drug Dependency and Race
-Dependent.Users.Race <- data2019 %>%
+Subs.Abhängig.Ethnie <- data2019 %>%
   select(NEWRACE2, depndcoc, depndalc, depndher) %>%
   pivot_longer(cols = c(depndcoc,depndher, depndalc), names_to = "Drug", values_to = "Usage") %>%
-  filter(Usage == 1)
-
-ggplot(Dependent.Users.Race , aes(x = factor(NEWRACE2, levels = c(1, 7, 2, 5, 6, 3, 4)), fill = factor(Drug)))+
+  filter(Usage == 1)%>%
+  ggplot(aes(x = factor(NEWRACE2, levels = c(1, 7, 2, 5, 6, 3, 4)), fill = factor(Drug)))+
   geom_bar(position = "fill")+
   scale_x_discrete(labels = c("1" = "Weisse",
                               "2" = "Afro \nAmerikaner",
@@ -433,7 +436,8 @@ ggplot(Dependent.Users.Race , aes(x = factor(NEWRACE2, levels = c(1, 7, 2, 5, 6,
     legend.position = "bottom"  # Legendentext
   )
 
-
+ggsave("Presentation_files/Pres_plots/SubsAbhängig_Ethnie.png", 
+       plot = Subs.Abhängig.Ethnie, width = 16, height = 12, dpi = 300)
 ########################################################################################################################################
 ## MDE : Mayor Depressive Episode
 MDE.Age <- data2019 %>%

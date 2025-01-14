@@ -157,3 +157,33 @@ ggplot(Racial.Background2, aes(x = NEWRACE2, fill = factor(IREDUHIGHST2)))+
  scale_fill_discrete(labels = c("1" = "5th", "2"= "6th", "3" ="7th", "4"= "8th", "5" ="9th", "6" = "10th", "7" = "11/12th grade", "8" = "GED", "9" = "some college credit", "10" = "Associate's degree", "11" = "college graduate or higher"))+
   scale_y_continuous(labels = scales::percent)+ 
   labs(title = "Class finished by each Race")
+#######################JUST TO BE SAVE
+#| include: false
+#| label: set-up
+
+# List of required packages
+required_packages <- c("ggplot2", "tidyverse", "patchwork", "gridExtra", "sf", "tigris")
+
+# Install missing packages
+install_missing <- function(packages) {
+  installed <- installed.packages()
+  for (pkg in packages) {
+    if (!pkg %in% installed) {
+      install.packages(pkg)
+    }
+  }
+}
+
+install_missing(required_packages)
+
+# Load the packages
+lapply(required_packages, library, character.only = TRUE)
+
+# Load the prepared dataset
+load("Daten bearbeitet/combi_redu_data.Rdata")
+drugdata <- allfilterdata
+
+# Filter data for the year 2019
+data2019 <- allfilterdata %>%
+  filter(year == 2019)
+```
