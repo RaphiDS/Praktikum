@@ -107,8 +107,11 @@ ggplot(Nikotin.Dependence.Race, aes(x = factor(NEWRACE2), y = count))+
     axis.text  = element_text(size = 15),  # Achsbeschriftungen
     legend.position = "none"  # Legendentext
   )
+
+
+
 #-------------------------------------------------------------------------------
-##Generel Drug Dependency / Abuse
+##Generell Drug Dependency / Abuse
 Drug.Dependency.Abuse <- data2019 %>%
   select(alcyr, cocyr, heryr, depndalc, depndcoc, depndher, abusealc, abusecoc,abuseher) %>%
   mutate(ID = row_number()) %>%  # Add an ID column for pivoting
@@ -200,6 +203,81 @@ ggplot(Dependent.Users.Race , aes(x = factor(NEWRACE2), fill = factor(Drug)))+
     axis.text  = element_text(size = 15),  # Achsbeschriftungen
     legend.position = "bottom"  # Legendentext
   )
+
+## Drogen und Einkommen
+Drogen.Einkommen <- data2019 %>%
+  select(depndalc, depndcoc,depndher, income) %>%
+  pivot_longer(cols = c(depndcoc,depndher, depndalc), names_to = "Drug", values_to = "Usage")%>%
+  filter(Usage == 1) %>%
+  ggplot(aes(x = factor(income), fill = factor(Drug)))+
+  geom_bar(position = "fill")+
+  scale_fill_manual(name = "Drogen",
+                    labels = c("depndalc" = "Alkohol","depndcoc" = "Kokain", "depndher" = "Heroin"),
+                    values = c("#0072B2","#E69F00", "#CC79A7"))+
+  scale_x_discrete(labels = c("1" = "Weniger als 20.000", "2" = "20.000 - 49.999", "3" = "50.000 - 74.999", "4" = "75.000+"))+
+  labs(x = "Familieneinkommen in $", y = "Anteil")+
+  theme_light() +
+  theme(
+    axis.title = element_text(size = 20),  # Achsentitel
+    axis.text  = element_text(size = 20),  # Achsbeschriftungen
+    legend.title = element_text(size = 17,5),
+    legend.text = element_text(size = 10)
+  )
+
+## Drogen und Armut
+Drogen.Armut <- data2019 %>%
+  select(POVERTY3, depndalc, depndcoc, depndher) %>%
+  pivot_longer(cols = c(depndcoc,depndher, depndalc), names_to = "Drug", values_to = "Usage")%>%
+  filter(Usage == 1, POVERTY3 > 0) %>%
+  ggplot (aes(x = factor(POVERTY3), fill = factor(Drug)))+
+  geom_bar(position = "fill")+
+  scale_fill_manual(name = "Drogen",
+                    labels = c("depndalc" = "Alkohol","depndcoc" = "Kokain", "depndher" = "Heroin"),
+                    values = c("#0072B2","#E69F00", "#CC79A7"))+
+  scale_x_discrete(labels = c("1" = "Armutsbedroht", "2" = "Gehalt 2x Armutsquote", "3" = "Gehalt mehr als 2x"))+
+  labs(x = "Familieneinkommen in $", y = "Anteil")+
+  theme_light() +
+  theme(
+    axis.title = element_text(size = 25),  # Achsentitel
+    axis.text  = element_text(size = 15),  # Achsbeschriftungen
+    legend.title = element_text(size = 17,5),
+    legend.text = element_text(size = 10)
+  )
+
+## Bildungsgrad Drogen
+Substanz.Bildung <- data2019 %>%
+  select(eduhighcat, depndalc, depndcoc,depndher) %>%
+  pivot_longer(cols = c(depndcoc,depndher, depndalc), names_to = "Drug", values_to = "Usage")%>%
+  filter(Usage == 1, eduhighcat < 5) %>%
+  ggplot(aes(x = factor(eduhighcat), fill = factor(Drug)))+
+  geom_bar(position = "fill")+
+  scale_fill_manual(name = "Drogen",
+                    labels = c("depndalc" = "Alkohol","depndcoc" = "Kokain", "depndher" = "Heroin"),
+                    values = c("#0072B2","#E69F00", "#CC79A7"))+
+  scale_x_discrete(labels = c("1" = "Mittlere reife", "2" = "High School", "3" = "Uni Credits" ,"4" = "Bachelor"))+
+  labs(x = "Höchster Abschluss", y = "Anteil")+
+  theme_light() +
+  theme(
+    axis.title = element_text(size = 15),  # Achsentitel
+    axis.text  = element_text(size = 15),  # Achsbeschriftungen
+    legend.title = element_text(size = 17,5),
+    legend.text = element_text(size = 10)
+  )
+Substanz.Bildung
+
+##### ODDS
+Drogen.Gehalt.Kreuztab <- data2019%>%
+  select(depndalc, depndcoc, depndher,income) %>%
+  mutate(
+    Dependency = case_when(
+      depndalc == 0 & depndcoc == 0 & depndher == 0 ~ "Keine Abhängigkeit",
+      depndalc == 1 & depndcoc == 0 & depndher == 0 ~ "Alkohol",
+      depndalc == 0 & depndcoc == 1 & depndher == 0 ~ "Kokain",
+      depndalc == 0 & depndcoc == 0 & depndher == 1 ~ "Heroin",
+      TRUE ~ "Mehrfache Abhängigkeit"
+    )
+  ) %>%
+
 #------------------------------------------------------------------------------
 ##############
 #MENTAL HEALTH
@@ -360,7 +438,7 @@ Youth.MDE.Drugs <- data2019 %>%
   Youth.MDE.Substance <- data2019 %>%
     select(YMDEAUDPY, ymdeimudpy, ymdeudpy) # Variable fehlt
   
-  ## YOuth MDE an Dependency
+  ## Youth MDE an Dependency
   
-  ## Spearman Rang versuch
+  
   
