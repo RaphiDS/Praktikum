@@ -255,86 +255,86 @@ histogram_fun <- function(datacol, drug_name, limit, colorcode, yearplot) {
 # Example calls
 Histo_Alk_15 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2015")
 ggsave("Presentation_files/Pres_plots/Alk_15_plot.png",
-       plot = Histo_Alk_15, width = 16, height = 9, dpi = 300)
+       plot = Histo_Alk_15, width = 15, height = 7, dpi = 300)
 
 Histo_Alk_16 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2016")
 ggsave("Presentation_files/Pres_plots/Alk_16_plot.png",
-        plot = Histo_Alk_16, width = 16, height = 9, dpi = 300)
+        plot = Histo_Alk_16, width = 15, height = 7, dpi = 300)
 
 Histo_Alk_17 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2017")
 ggsave("Presentation_files/Pres_plots/Alk_17_plot.png",
-       plot = Histo_Alk_17, width = 16, height = 9, dpi = 300)
+       plot = Histo_Alk_17, width = 15, height = 7, dpi = 300)
 
 Histo_Alk_18 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2018")
 ggsave("Presentation_files/Pres_plots/Alk_18_plot.png",
-       plot = Histo_Alk_18, width = 16, height = 9, dpi = 300)
+       plot = Histo_Alk_18, width = 15, height = 7, dpi = 300)
 
 Histo_Alk_19 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2019")
 ggsave("Presentation_files/Pres_plots/Alk_19_plot.png",
-       plot = Histo_Alk_19, width = 16, height = 9, dpi = 300)
+       plot = Histo_Alk_19, width = 15, height = 7, dpi = 300)
 
 # Zigaretten
 Histo_Zig_15 <- histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2015")
 ggsave("Presentation_files/Pres_plots/Zig_15_plot.png",
-       plot = Histo_Zig_15, width = 16, height = 9, dpi = 300)
+       plot = Histo_Zig_15, width = 15, height = 7, dpi = 300)
 
 Histo_Zig_16 <- histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2016")
 ggsave ("Presentation_files/Pres_plots/Zig_16_plot.png",
-        plot = Histo_Zig_16, width = 16, height = 9, dpi = 300)
+        plot = Histo_Zig_16, width = 15, height = 7, dpi = 300)
 
 Histo_Zig_17 <- histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2017")
 ggsave("Presentation_files/Pres_plots/Zig_17_plot.png",
-       plot = Histo_Zig_17, width = 16, height = 9, dpi = 300)
+       plot = Histo_Zig_17, width = 15, height = 7, dpi = 300)
 
 Histo_Zig_18 <- histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2018")
 ggsave("Presentation_files/Pres_plots/Zig_18_plot.png",
-       plot = Histo_Zig_18, width = 16, height = 9, dpi = 300)
+       plot = Histo_Zig_18, width = 15, height = 7, dpi = 300)
 
 Histo_Zig_19 <- histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2019")
 ggsave("Presentation_files/Pres_plots/Zig_19_plot.png",
-       plot = Histo_Zig_19, width = 16, height = 9, dpi = 300)
+       plot = Histo_Zig_19, width = 15, height = 7, dpi = 300)
 
 # Kokain
 Histo_Koks_15 <- histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2015")
 ggsave("Presentation_files/Pres_plots/Koks_15_plot.png",
-       plot = Histo_Koks_15, width = 16, height = 9, dpi = 300)
+       plot = Histo_Koks_15, width = 15, height = 7, dpi = 300)
 
 Histo_Koks_16 <- histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2016")
 ggsave("Presentation_files/Pres_plots/Koks_16_plot.png",
-       plot = Histo_Koks_16, width = 16, height = 9, dpi = 300)
+       plot = Histo_Koks_16, width = 15, height = 7, dpi = 300)
 
 Histo_Koks_17 <- histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2017")
 ggsave("Presentation_files/Pres_plots/Koks_17_plot.png",
-       plot = Histo_Koks_17, width = 16, height = 9, dpi = 300)
+       plot = Histo_Koks_17, width = 15, height = 7, dpi = 300)
 
 Histo_Koks_18 <- histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2018")
 ggsave("Presentation_files/Pres_plots/Koks_18_plot.png",
-       plot = Histo_Koks_18, width = 16, height = 9, dpi = 300)
+       plot = Histo_Koks_18, width = 15, height = 7, dpi = 300)
 
 Histo_Koks_19 <- histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2019")
 ggsave("Presentation_files/Pres_plots/Koks_19_plot.png",
-       plot = Histo_Koks_19, width = 16, height = 9, dpi = 300)
+       plot = Histo_Koks_19, width = 15, height = 7, dpi = 300)
 
 ##Heroin
 Histo_Her_15 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2015")
 ggsave("Presentation_files/Pres_plots/Her_15_plot.png",
-       plot = Histo_Her_15, width = 16, height = 9, dpi = 300)
+       plot = Histo_Her_15, width = 15, height = 7, dpi = 300)
 
 Histo_Her_16 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2016")
 ggsave("Presentation_files/Pres_plots/Her_16_plot.png",
-  plot = Histo_Her_16, width = 16, height = 9, dpi = 300)
+  plot = Histo_Her_16, width = 15, height = 7, dpi = 300)
 
 Histo_Her_17 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2017")
 ggsave("Presentation_files/Pres_plots/Her_17_plot.png",
-       plot = Histo_Her_17, width = 16, height = 9, dpi = 300)
+       plot = Histo_Her_17, width = 15, height = 7, dpi = 300)
 
 Histo_Her_18 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2018")
 ggsave("Presentation_files/Pres_plots/Her_18_plot.png",
-       plot = Histo_Her_18, width = 16, height = 9, dpi = 300)
+       plot = Histo_Her_18, width = 15, height = 7, dpi = 300)
 
 Histo_Her_19 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2019")
 ggsave("Presentation_files/Pres_plots/Her_19_plot.png",
-       plot = Histo_Her_19, width = 16, height = 9, dpi = 300)
+       plot = Histo_Her_19, width = 15, height = 7, dpi = 300)
 ###################################
 #Demographics and Drugs / Nicotine
 ###################################
@@ -356,10 +356,12 @@ Nik.Abhängig.Alter <- data2019 %>%
   theme(
     axis.title = element_text(size = 20),  # Achsentitel
     axis.text  = element_text(size = 20),  # Achsbeschriftungen
+    legend.text = element_text(size = 17,5),
+    legend.title = element_text(size = 17,5),
     legend.position = "none"  # Legendentext
   )
 ggsave("Presentation_files/Pres_plots/NikAbhängig_Alter.png", 
-       plot = Nik.Abhängig.Alter, width = 16, height = 12, dpi = 300)
+       plot = Nik.Abhängig.Alter, width = 15, height = 8, dpi = 300)
 #-------------------------------------------------------------------------------
 ## Nikotin Dependency (last month) and Race
 Nik.Abhängig.Ethnie <- data2019 %>%
@@ -383,13 +385,15 @@ Nik.Abhängig.Ethnie <- data2019 %>%
   labs(x = "Ethnie", y = "Anteil")+
   theme_light() +
   theme(
-    axis.title = element_text(size = 15),  # Achsentitel
-    axis.text  = element_text(size = 15),  # Achsbeschriftungen
+    axis.title = element_text(size = 20),  # Achsentitel
+    axis.text  = element_text(size = 20),  # Achsbeschriftungen
+    legend.text = element_text(size = 17,5),
+    legend.title = element_text(size = 17,5),
     legend.position = "none"  # Legendentext
   )
 
 ggsave("Presentation_files/Pres_plots/NikAbhängig_Ethnie.png", 
-       plot = Nik.Abhängig.Ethnie, width = 16, height = 12, dpi = 300)
+       plot = Nik.Abhängig.Ethnie, width = 15, height = 8, dpi = 300)
 #-------------------------------------------------------------------------------
 ## Drug Dependency by age group
 Subs.Abhängig.Alter <- data2019 %>%
@@ -401,15 +405,17 @@ Subs.Abhängig.Alter <- data2019 %>%
   scale_fill_manual(name = "Drogen",labels = c("depndalc" = "Alkohol","depndcoc" = "Kokain", "depndher" = "Heroin"),
                     values = c("#0072B2","#E69F00", "#CC79A7")) +
   scale_x_discrete(labels = c("1" = "12-17", "2" = "18-25", "3" = "26-34", "4" = "35+"))+
-  labs(title = "Abhängigkeit der Altersgruppen", x = "Gruppierung", y = "Anteil")+
+  labs(x = "Gruppierung", y = "Anteil")+
   theme_light() +
   theme(
     axis.title = element_text(size = 20),  # Achsentitel
-    axis.text  = element_text(size = 15),  # Achsbeschriftungen
+    axis.text  = element_text(size = 25),  # Achsbeschriftungen
+    legend.text = element_text(size = 17,5),
+    legend.title = element_text(size = 17,5),
     legend.position = "bottom"  # Legendentext
   )
 ggsave("Presentation_files/Pres_plots/SubsAbhängig_Alter.png", 
-       plot = Subs.Abhängig.Alter, width = 16, height = 12, dpi = 300)
+       plot = Subs.Abhängig.Alter, width = 15, height = 8, dpi = 300)
 #------------------------------------------------------------------------------
 ## Drug Dependency and Race
 Subs.Abhängig.Ethnie <- data2019 %>%
@@ -431,25 +437,26 @@ Subs.Abhängig.Ethnie <- data2019 %>%
   labs(title = "Abhängigkeit der Ethnien", x = "Gruppen", y = "Anteil")+
   theme_light() +
   theme(
-    axis.title = element_text(size = 15),  # Achsentitel
-    axis.text  = element_text(size = 15),  # Achsbeschriftungen
+    axis.title = element_text(size = 20),  # Achsentitel
+    axis.text  = element_text(size = 20),  # Achsbeschriftungen
+    legend.text = element_text(size = 17,5),
+    legend.title = element_text(size = 17,5),
     legend.position = "bottom"  # Legendentext
   )
 
 ggsave("Presentation_files/Pres_plots/SubsAbhängig_Ethnie.png", 
-       plot = Subs.Abhängig.Ethnie, width = 16, height = 12, dpi = 300)
+       plot = Subs.Abhängig.Ethnie, width = 15, height = 8, dpi = 300)
 ########################################################################################################################################
 ## MDE : Mayor Depressive Episode
-MDE.Age <- data2019 %>%
+MDE.Alter <- data2019 %>%
   select(amdeyr,ymdeyr, catage) %>%
   pivot_longer(cols =c(amdeyr,ymdeyr), names_to = "MDE", values_to = "Answer") %>%
   group_by(catage) %>%
   mutate (total = n()) %>% 
   filter(Answer == 1) %>%
   summarise(count = n(), total = first(total)) %>%
-  mutate(count = count/total)
-
-ggplot(MDE.Age, aes(x = factor(catage), y = count))+
+  mutate(count = count/total)%>%
+  ggplot(aes(x = factor(catage), y = count))+
   geom_col()+
   scale_x_discrete(labels = c("1"= "12-17", "2" = "18-25", "3" = "26-34", "4" = "35+"))+
   labs( title = "MDE und Altersgruppen", x = "Altersgruppen", y = "Anteil")+
@@ -459,6 +466,8 @@ ggplot(MDE.Age, aes(x = factor(catage), y = count))+
     axis.text  = element_text(size = 15),  # Achsbeschriftungen
     legend.position = "bottom"  # Legendentext
   )
+
+ggsave("Presentation_files/Pres_plots/MDE_Alter.png", plot = MDE.Alter, width = 16, height = 12, dpi = 300)
 #-------------------------------------------------------------------------------
 ## Drug Dependency and 'Degree' of Mental illness
 Drug.Dependency.MI <- data2019 %>%

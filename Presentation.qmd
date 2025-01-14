@@ -10,81 +10,6 @@ smaller: true
 transition: slide
 ---
 
-```{r setup}
-#| include: false
-#| label: set-up
-
-# List of required packages
-required_packages <- c("ggplot2", "tidyverse", "patchwork", "gridExtra", "sf", "tigris")
-
-# Install missing packages
-install_missing <- function(packages) {
-  installed <- installed.packages()
-  for (pkg in packages) {
-    if (!pkg %in% installed) {
-      install.packages(pkg)
-    }
-  }
-}
-
-install_missing(required_packages)
-
-# Load the packages
-lapply(required_packages, library, character.only = TRUE)
-
-# Load the prepared dataset
-load("Daten bearbeitet/combi_redu_data.Rdata")
-drugdata <- allfilterdata
-
-# Filter data for the year 2019
-data2019 <- allfilterdata %>%
-  filter(year == 2019)
-```
-
-```{r}
-#| echo: false
-#| label: functions and Data set Up
-
-# Load the prepared dataset
-load("Daten bearbeitet/combi_redu_data.Rdata")
-drugdata <- allfilterdata
-
-# Filter data for the year 2019
-data2019 <- allfilterdata %>%
-  filter(year == 2019)
-
-# 1) Function: Generates a summarized table for a specified (drug) variable,
-#    focusing only on "Yes" answers (value == 1), referring to "ever used".
-everdatafun <- function(datacol, drug) {
-  drugdata %>%
-    group_by(year) %>%
-    count(.data[[datacol]]) %>%                # Counts how often each value appears in 'datacol' per year
-    mutate("Rel. share" = n / sum(n)) %>%       # Relative share per year
-    filter(.data[[datacol]] == 1) %>%           # Keep only "Yes" answers
-    ungroup() %>%
-    mutate(
-      Drug = drug,                              # Name of the drug in a new column
-      Year = year
-    ) %>%
-    select(Year, "Rel. share", Drug)            # Select columns in a consistent order
-}
-
-# 2) Function: Generates a summarized table for a specified (drug) variable,
-#    focusing on consumption "in the last 30 days".
-#    Values 1–30 are treated as "Yes," everything else as "No."
-datafun30 <- function(datacol, drug) {
-  drugdata %>%
-    group_by(year) %>%
-    summarise(
-      TotalPeople = n(),                                         # Total number of observations
-      Users = sum(.data[[datacol]] >= 1 & .data[[datacol]] <= 30, na.rm = TRUE),
-      "Rel. share" = Users / TotalPeople
-    ) %>%
-    mutate(Drug = drug) %>%                                      # Drug name in a new column
-    select(Year = year, "Rel. share", Drug)                      # Rename and reorder columns
-}
-
-```
 
 ## Gliederung
 
@@ -115,36 +40,10 @@ datafun30 <- function(datacol, drug) {
 
 ------------------------------------------------------------------------
 
-```{r}
-#| echo: false
-#| label: Daten-Alter
-
-age.grouped <- data2019 %>%
-  select(catage) %>%
-  pivot_longer(cols = everything(), names_to = "variable", values_to = "Group") %>%
-  group_by(Group) %>%
-  summarize(count =n()/56136)
-  
-```
-
-![](Presentation_files/Pres_plots/Ethnie_Verteilung_plot.png)
+### ALtersgruppen?
 
 ------------------------------------------------------------------------
-
-```{r}
-#| label: PLots Verteilung Ethnie
-ggplot(age.grouped,aes(x= factor(Group),y = count, fill = factor(Group, labels = c("12-17", "18-25", "26-34", "35+")))) +
-  geom_col() +
-  labs(y = "Anteil", fill = "Age groups", x = "Altersgruppen") +
-  theme_light() +
-  theme(
-    axis.title = element_text(size = 15),  # Achsentitel
-    axis.text  = element_text(size = 15),  # Achsbeschriftungen
-    legend.position = "none"  # Legendentext
-  ) +
-  scale_x_discrete(labels = c("12-17", "18-25", "26-34", "35+"))
-
-```
+![](Presentation_files/Pres_plots/Ethnie_Verteilung_plot.png)
 
 ------------------------------------------------------------------------
 
@@ -154,114 +53,6 @@ ggplot(age.grouped,aes(x= factor(Group),y = count, fill = factor(Group, labels =
     -   sie mehr proportional zu den staatlichen Populationsgrößen sind
     -   jede Altersgruppe als auch Geschlecht gleich vertreten wird im Datensatz
 
-
-------------------------------------------------------------------------
-
-```{r}
-#| echo: false
-#| include: false
-#| label: Karte-Setup
-state_data <- data.frame(
-  state = c(
-    "California", "Texas", "Florida", "New York", "Pennsylvania",
-    "Illinois", "Ohio", "Georgia", "North Carolina", "Michigan",
-    "New Jersey", "Virginia", "Washington", "Arizona", "Massachusetts",
-    "Tennessee", "Indiana", "Missouri", "Maryland", "Wisconsin",
-    "Colorado", "Minnesota", "South Carolina", "Alabama", "Louisiana",
-    "Kentucky", "Oregon", "Oklahoma", "Connecticut", "Utah", "Iowa", "Nevada", 
-    "Arkansas", "Mississippi", "Kansas", "New Mexico", "Nebraska", "Idaho", 
-    "West Virginia", "Hawaii", "New Hampshire", "Maine", "Montana", "Rhode Island", 
-    "Delaware", "South Dakota", "North Dakota", "Alaska", "Vermont", "Wyoming"
-  ),
-  population = c(
-    39512223, 28995881, 21477737, 19453561, 12801989,
-    12671821, 11689100, 10617423, 10488084, 9986857,
-    8882190, 8535519, 7614893, 7278717, 6892503,
-    6829174, 6732219, 6137428, 6045680, 5822434,
-    5758736, 5639632, 5148714, 4903185, 4648794,
-    4467673, 4217737, 3956971, 3565287, 3205958, 3155070, 3080156,
-    3017804, 2976149, 2913314, 2096829, 1934408, 1787065,
-    1792147, 1415872, 1359711, 1344212, 1068778, 1059361,
-    973764, 884659, 762062, 731545, 623989, 578759
-  ),
-  
-  interviews = c(
-    4560, 3300, 3300, 3300, 2400,
-    2400, 2400, 1500, 1500, 2400,
-    1500, 1500, 960, 960, 960,
-    960, 960, 960, 960, 960,
-    960, 960, 960, 960, 960,
-    960, 960, 960, 960, 960, 960, 960,
-    960, 960, 960, 960, 960, 960,
-    960, 967, 960, 960, 960, 960,
-    960, 960, 960, 960, 960, 960
-  )
-)
-
-# Calculate relative frequency
-state_data <- state_data %>%
-  mutate(relative_frequency = interviews / population)
-interviews_data <- data.frame(
-  state = c(
-    "California", "Florida", "New York", "Texas",
-    "Illinois", "Michigan", "Ohio", "Pennsylvania",
-    "Georgia", "New Jersey", "North Carolina", "Virginia",
-    "Hawaii", rep("Other", 37)  # 37 other states + DC
-  ),
-  interviews = c(
-    4560, 3300, 3300, 3300,  # High-tier states
-    2400, 2400, 2400, 2400,  # Medium-tier states
-    1500, 1500, 1500, 1500,  # Low-tier states
-    967, rep(960, 37)        # Hawaii and the rest
-  )
-)
-
-# Expand the "Other" category into individual states
-other_states <- setdiff(c(state.name, "District of Columbia"), interviews_data$state)
-expanded_data <- data.frame(
-  state = c(interviews_data$state[interviews_data$state != "Other"], other_states),
-  interviews = c(
-    interviews_data$interviews[interviews_data$state != "Other"], 
-    rep(mean(interviews_data$interviews[interviews_data$state == "Other"]), length(other_states))
-  )
-)
-
-#consistent formatting for state names
-expanded_data$state <- tolower(expanded_data$state)  # Lowercase for joining
-
-#state boundaries with simplified geometry
-us_states <- states(cb = TRUE)
-
-# Filter to the 48 contiguous states + DC
-state_codes <- c(state.abb, "DC")
-exclude_states <- c("HI", "AK")  # Exclude Hawaii and Alaska
-us_states <- us_states %>% filter(STUSPS %in% setdiff(state_codes, exclude_states))
-
-# Match state names to spatial data
-us_states <- us_states %>%
-  mutate(state = tolower(NAME))  # Create lowercase column for joining
-
-# Join spatial data with interviews data
-map_data <- us_states %>%
-  left_join(expanded_data, by = "state")
-```
-
-### Landkarte
-
-```{r}
-#| label: 'Karte-Befragten'
-
-ggplot(map_data) +
-  geom_sf(aes(fill = interviews), color = "white", size = 0.2) +  # Fill states by interviews
-  scale_fill_viridis_c(option = "plasma", direction = -1, name = "Total Interviews") +  # Color scale
-  theme_void() +  # Remove axes and gridlines
-  labs(title = "Number of Interviews by State") +
-  theme(
-    plot.title = element_text(hjust = 0.5, size = 20),
-    plot.subtitle = element_text(hjust = 0.5, size = 14)
-  )
-#ggsave("interviews_by_state.png", width = 10, height = 6, dpi = 300)
-```
 
 ## Kodierung
 
@@ -282,44 +73,14 @@ Alkhol und Drogen: es gibt bestimmte Schwellenwerte um die Intensität und art d
 
 ------------------------------------------------------------------------
 
+![](Presentation_files/Pres_plots/Monatskonsum_Verlauf_plot.png)
+
+
+------------------------------------------------------------------------
+
+![](Presentation_files/Pres_plots/Jemals_Tabbak_plot.png)
+![](Presentation_files/Pres_plots/Monatskonsum_Tabbak_plot.png)
 ## Genaueres Konsumverhalten
-
-```{r, echo=FALSE}
-#| label: 'Plot:Have ever used tobacco products'
-
-histogram_fun <- function(datacol, drug_name, limit, colorcode, yearplot) {
-  data <- drugdata %>%
-    group_by(year) %>%
-    count(day = .data[[datacol]]) %>%
-    mutate(`Relative share` = n / sum(n)) %>%
-    filter(day >= 1 & day <= 30) %>%
-    filter(year == yearplot) %>%
-    ungroup() %>%
-    mutate(
-      Drug = drug_name,
-      # Hier explizit alle Levels 1:30 setzen:
-      day  = factor(day, levels = as.character(1:30))
-    )
-  
-  ggplot(data, aes(x = day, y = `Relative share`)) +
-    geom_col(fill = colorcode, color = "black") +
-    theme_light() +
-    labs(
-      title = paste0("Distribution of usage days for ", drug_name),
-      x = paste("Anzahl der Konsumtage in den letzten 30 Tagen"),
-      y = "Anteil"
-    ) +
-    theme(
-      axis.title = element_text(size = 20),
-      axis.text  = element_text(size = 20),
-      legend.title = element_text(size = 20),
-      legend.text = element_text(size = 20)
-    ) +
-    scale_x_discrete(breaks = c("1", "5", "10", "15", "20", "25", "30"), drop = FALSE) +
-    scale_y_continuous(limits = c(0, limit))
-}
-
-```
 
 
 ## Alkohol
@@ -327,39 +88,25 @@ histogram_fun <- function(datacol, drug_name, limit, colorcode, yearplot) {
 ::: {.panel-tabset}
 ### 2015
 
-```{r}
-#| label: Histogram 2015 alk
-histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2015")
-```
-
+![](Presentation_files/Pres_plots/Alk_15_plot.png)
 
 ### 2016
 
-```{r}
-histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2016")
-```
+![](Presentation_files/Pres_plots/Alk_16_plot.png)
 
 
 ### 2017
 
-```{r}
-histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2017")
-```
-
+![](Presentation_files/Pres_plots/Alk_17_plot.png)
 
 ### 2018
 
-```{r}
-histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2018")
-```
+![](Presentation_files/Pres_plots/Alk_18_plot.png)
 
 
 ### 2019
 
-```{r}
-#| label: Histogram 2019 alk
-histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2019")
-```
+![](Presentation_files/Pres_plots/Alk_19_plot.png)
 :::
 
 ## Tabak
@@ -367,35 +114,23 @@ histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2019")
 ::: panel-tabset
 ### 2015
 
-```{r}
-#| label: Histogram 2015 Cig
-histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2015")
-```
+![](Presentation_files/Pres_plots/Zig_15_plot.png)
 
 ### 2016
 
-```{r}
-histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2016")
-```
+![](Presentation_files/Pres_plots/Zig_16_plot.png)
 
 ### 2017
 
-```{r}
-histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2017")
-```
+![](Presentation_files/Pres_plots/Zig_17_plot.png)
 
 ### 2018
 
-```{r}
-histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2018")
-```
+![](Presentation_files/Pres_plots/Zig_18_plot.png)
 
 ### 2019
 
-```{r}
-#| label: Histogram 2019 Cig
-histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2019")
-```
+![](Presentation_files/Pres_plots/Zig_19_plot.png)
 :::
 
 ## Kokain
@@ -403,37 +138,24 @@ histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2019")
 ::: panel-tabset
 ### 2015
 
-```{r}
-#| label: Histogram 2015 Coc
-histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00", "2015")
-```
+![](Presentation_files/Pres_plots/Koks_15_plot.png)
 
 ### 2016
 
-```{r}
-histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2016")
-```
+![](Presentation_files/Pres_plots/Koks_16_plot.png)
 
 ### 2017
 
-```{r}
-histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2017")
-```
+![](Presentation_files/Pres_plots/Koks_17_plot.png)
 
 ### 2018
 
-```{r}
-histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2018")
-
-```
+![](Presentation_files/Pres_plots/Koks_18_plot.png)
 
 
 ### 2019
 
-```{r}
-#| label: Histogram 2019 Coc
-histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00", "2019")
-```
+![](Presentation_files/Pres_plots/Koks_19_plot.png)
 :::
 
 ## Heroin
@@ -441,258 +163,68 @@ histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00", "2019")
 ::: panel-tabset
 ### 2015
 
-```{r}
-#| label: Histo 2015 Her
-histogram_fun("HER30USE", "Heroin", 0.0004, "#CC79A7", "2015")
-```
+![](Presentation_files/Pres_plots/Her_15_plot.png)
 
 
 ### 2016
 
-```{r}
-histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2016")
-```
+![](Presentation_files/Pres_plots/Her_16_plot.png)
 
 
 ### 2017
 
-```{r}
-histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2017")
-```
+![](Presentation_files/Pres_plots/Her_17_plot.png)
 
 
 ### 2018
 
-```{r}
-histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2018")
-```
+![](Presentation_files/Pres_plots/Her_18_plot.png)
 
 
 ### 2019
 
-```{r}
-#| label: Histo 2019 Her
-histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2019")
-```
+![](Presentation_files/Pres_plots/Her_19_plot.png)
 :::
 
 
 ## Demografische Merkmale und Nikotin
 
-### Nikotin Konsum
 
 ::: {.panel-tabset}
 ### Geschlecht
 
-```{r, echo=FALSE}
-#| label: Data Nic Gender
-Nic.Dependency.Gender <- data2019 %>%
-  select(ndssdnsp,irsex) %>%
-  filter(ndssdnsp == 1) %>%
-  group_by(irsex) %>%
-  summarise(count = n()) %>%
-  mutate (count = count/56136)
-```
 
-```{r}
-#| label: Nic Gender Plot
-ggplot(Nic.Dependency.Gender, aes(x = factor(irsex), y = count))+
-  geom_col()+
-  scale_x_discrete(labels = c("1" = "Männer", "2" = "Frauen"))+
-  labs( title = "Nikotionabhängigkeit der Geschlechter", x = "Geschlecht", y = "Anteil")+
-  theme_light() +
-  theme(
-    axis.title = element_text(size = 20),  # Achsentitel
-    axis.text  = element_text(size = 20),  # Achsbeschriftungen
-    legend.position = "none"  # Legendentext
-  )
-```
 
 ### Alter
 
-```{r,echo=FALSE}
-#| label: Data Nic Age
-Nic.Dependency.Age <- data2019 %>%
-  select(catage, ndssdnsp) %>%
-  filter(ndssdnsp == 1) %>%
-  group_by(catage) %>%
-  summarise(count = n()) %>%
-  mutate(count = count/56136)
-```
-
-```{r}
-#| label: Nic Age Plot
-ggplot(Nic.Dependency.Age, aes(x = factor(catage), y = count))+
-  geom_col()+
-  scale_x_discrete(name = "Gruppierung",labels = c("12-17", "18-25", "26-34", "35+"))+
-  labs(title = "Nikotinabhängigkeit der Altersgruppen", x = " ")+
-  theme_light() +
-  theme(
-    axis.title = element_text(size = 20),  # Achsentitel
-    axis.text  = element_text(size = 20),  # Achsbeschriftungen
-    legend.position = "none"  # Legendentext
-  )
-```
+![](Presentation_files/Pres_plots/NikAbhängig_Alter.png)
 
 ### Ethnie
 
-```{r, echo=FALSE}
-#| label: Data Nic Race
-Nikotin.Dependence.Race <- data2019 %>%
-  select(NEWRACE2, ndssdnsp) %>%
-  filter (ndssdnsp == 1)%>%
-  group_by(NEWRACE2) %>%
-  summarise(count = n()) %>%
-  mutate(count = count /56136)
-```
-
-```{r}
-#| label: Nic Race Plot
-ggplot(Nikotin.Dependence.Race, aes(x = factor(NEWRACE2), y = count))+
-  geom_col()+
-  scale_x_discrete(labels = c("1" = "Weisse",
-                              "2" = "Afro- \nAmerikaner",
-                              "3" = "Am/Ak \nIndigene",
-                              "4" = "Indigene \nHawaii \n/Paz. Inseln",
-                              "5" = "Asiaten",
-                              "6" = "Gemischt",
-                              "7" = "Hispanisch"))+
-  labs(title = "Nikotin Abhängigkeit der verschieden Kulturen")+
-  theme_light() +
-  theme(
-    axis.title = element_text(size = 15),  # Achsentitel
-    axis.text  = element_text(size = 15),  # Achsbeschriftungen
-    legend.position = "none"  # Legendentext
-  )
-```
+![](Presentation_files/Pres_plots/NikAbhängig_Ethnie.png)
 :::
 
 
 ## Demografische Merkmale und Substanzkonsum
 
-```{r, echo=FALSE}
-#| label: Data Dependece vs Abuse
-## Drug Dependency / Abuse
-Drug.Dependency.Abuse <- data2019 %>%
-  select(alcyr, cocyr, heryr, depndalc, depndcoc, depndher, abusealc, abusecoc,abuseher) %>%
-  mutate(ID = row_number()) %>%  # Add an ID column for pivoting
-  pivot_longer(cols = -ID, names_to = "Variable", values_to = "Value") %>%
-  mutate(
-    Substance = case_when(
-      str_detect(Variable, "alc") ~ "Alkohol",
-      str_detect(Variable, "coc") ~ "Cokain",
-      str_detect(Variable, "her") ~ "Heroin"
-    ),
-    Condition = case_when(
-      str_detect(Variable, "depnd") ~ "Dependent",
-      str_detect(Variable, "abuse") ~ "Abuse",
-      str_detect(Variable, "yr") ~ "Use"
-    )
-  ) %>%
-  filter(Value == 1)  # Keep only cases where the flag is 1 (indicating presence)
-
-```
-
-```{r}
-#| label: Dependence vs Abuse Plot
-ggplot(Drug.Dependency.Abuse, aes(x = Substance, fill = Condition)) +
-  geom_bar(position = "fill") +
-  labs(title = "Substanzkonsum, Abhängigkeit und Missbrauch im letzten Jahr",
-       x = "Substanz")+
-  theme_light() +
-  theme(
-    axis.title = element_text(size = 20),  # Achsentitel
-    axis.text  = element_text(size = 15),  # Achsbeschriftungen
-    legend.position = "none"  # Legendentext
-  )
-```
+-   Unterscheidung ziwschen -Letztes Jahr hergenommen -Abhängig - Missbrauch
 
 ------------------------------------------------------------------------
-### Zusammenhang zu demografischen Merkmalen
+
+### demografischen Merkmale
 ::: {.panel-tabset}
 
 ### Geschlecht
 
-```{r, echo=FALSE}
-#| label: Data Dependency Gender
-Drug.Dependency.Gender <-data2019 %>%
-  select(irsex, depndcoc, depndalc, depndher) %>%
-  pivot_longer(cols = c(depndcoc,depndher, depndalc), names_to = "Drug", values_to = "Usage") %>%
-  filter(Usage == 1)
-```
-
-```{r}
-#| label: Dependence Gender Plot
-ggplot(Drug.Dependency.Gender, aes(x = factor(Drug), fill = factor(irsex)))+
-  geom_bar(position = "fill")+
-  labs(title = "Drug Dependency by Gender")+
-  scale_x_discrete(labels = c("depndalc" = "Alkohol", "depndcoc" = "Cokain", "depndher" = "Heroin"))+
-  scale_fill_manual(labels = c("1" = "Männer", "2" = "Frauen"), values =c("1" = "darkblue", "2" = "maroon"))+
-  labs(title = "Abhängigkeit von Männern und Frauen", x = "Substanz")+
-  theme_light() +
-  theme(
-    axis.title = element_text(size = 15),  # Achsentitel
-    axis.text  = element_text(size = 15),  # Achsbeschriftungen
-  )
-```
 
 ### Alter
 
-```{r, echo=FALSE}
-#| label: Data Dependence Age
-Drug.Dependency.Age <- data2019 %>%
-  select(catage,depndcoc,depndher, depndalc) %>%
-  pivot_longer(cols = c(depndcoc, depndher, depndalc), names_to = "Drug", values_to = "Usage") %>%
-  filter (Usage == 1)
-```
+![](Presentation_files/Pres_plots/SubsAbhängig_Alter.png)
 
-```{r}
-#| label: Dependence Age Plot
-ggplot(Drug.Dependency.Age, aes(x = factor(catage), fill = factor(Drug)))+
-  geom_bar(position = "fill")+
-  scale_fill_discrete(name = "Drogen",labels = c("depndalc" = "Alkhol","depndcoc" = "Cokain", "depndher" = "Heroin"))+
-  scale_x_discrete(labels = c("1" = "12-17", "2" = "18-25", "3" = "26-34", "4" = "35+"))+
-  labs(title = "Abhängigkeit der Altersgruppen", x = "Gruppierung")+
-  theme_light() +
-  theme(
-    axis.title = element_text(size = 20),  # Achsentitel
-    axis.text  = element_text(size = 15),  # Achsbeschriftungen
-    legend.position = "bottom"  # Legendentext
-  )
-
-```
 
 ### Ethnie
 
-```{r, echo=FALSE}
-#| label: Data Dependece Race
-
-Dependent.Users.Race <- data2019 %>%
-  select(NEWRACE2, depndcoc, depndalc, depndher) %>%
-  pivot_longer(cols = c(depndcoc,depndher, depndalc), names_to = "Drug", values_to = "Usage") %>%
-  filter(Usage == 1)
-```
-
-```{r}
-#| label: Dependence Race Plot
-
-ggplot(Dependent.Users.Race , aes(x = factor(NEWRACE2), fill = factor(Drug)))+
-  geom_bar(position = "fill")+
-  scale_x_discrete(labels = c("1" = "Weisse",
-                              "2" = "Afro \nAmerikaner",
-                              "3" = "Am/Ak \nIndigene",
-                              "4" = "Indigene Hawaii \n/Paz. Inseln",
-                              "5" = "Asiaten",
-                              "6" = "Gemischt",
-                              "7" = "Hispanisch")) +
-  scale_fill_discrete(name = "Drogen",labels = c("depndalc" = "Alkhol","depndcoc" = "Cokain", "depndher" = "Heroin"))+
-  labs(x = "Gruppen")+theme_light() +
-  theme(
-    axis.title = element_text(size = 15),  # Achsentitel
-    axis.text  = element_text(size = 15),  # Achsbeschriftungen
-    legend.position = "bottom"  # Legendentext
-  )
-```
+![](Presentation_files/Pres_plots/SubsAbhängig_Ethnie.png)
 :::
 
 
@@ -705,26 +237,6 @@ Abstufung des psychischen Gesundheitszustands
 
 ------------------------------------------------------------------------
 
-```{r,echo=FALSE}
-Drug.Dependency.MI <- data2019 %>%
-  select(depndalc,depndcoc,depndher,MI_CAT_U) %>%
-  filter (MI_CAT_U >= 0) %>%
-  pivot_longer(cols = c(depndalc, depndcoc,depndher), names_to = "Drug", values_to = "Response") %>%
-  filter( Response == 1) 
-```
 
-```{r}
-ggplot(Drug.Dependency.MI, aes(x = factor(Drug), fill = factor(MI_CAT_U)))+
-  geom_bar(position = "fill")+
-  scale_x_discrete(labels = c("depndalc" = "Alkohol", "depndcoc" = "Cokain","depndher" = "Heroin"))+
-  labs(title = "Substanzkonsum und Mentale Gesundheit", x = " Substanz")+
-  scale_fill_discrete(name = "",labels = c("0" = "Keine Mentalen Gesundheitsprobleme" , "1" = "'Milde' Mentale Erkrankung", "2" = " 'Moderate' Mentale Erkrankung", "3" = "Ernste Mentale Erkrankungen"))+
-  theme_light() +
-  theme(
-    axis.title = element_text(size = 15),  # Achsentitel
-    axis.text  = element_text(size = 20),  # Achsbeschriftungen
-    legend.position = "bottom"  # Legendentext
-  )
-```
 
 ## Fazit
