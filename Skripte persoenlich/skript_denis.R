@@ -651,7 +651,7 @@ plot_usmap(
 ) +
   scale_fill_continuous(
     low   = "white",
-    high  = "darkred",
+    high  = "black",
     name  = "Interviews \n(pro 100k)",
     label = scales::comma
   ) +
