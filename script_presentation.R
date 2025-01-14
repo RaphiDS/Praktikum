@@ -116,7 +116,6 @@ Substanzen.Verlauf <- ggplot(fourdrugsever, aes(x = Year, y = .data[["Anteil"]],
   labs(
     color = "Droge",
     shape = "Droge",
-    title = "Relative share of people who have ever used certain drugs",
     x = "Jahr",
     y = "Anteil"
   ) +
@@ -129,9 +128,9 @@ Substanzen.Verlauf <- ggplot(fourdrugsever, aes(x = Year, y = .data[["Anteil"]],
   scale_color_manual(values = c("#0072B2", "#009E73", "#E69F00", "#CC79A7")) +
   scale_shape_manual(values = c(15:18))# beliebige Form-Codes
 
-Substanzen.Verlauf
+
 ggsave("Presentation_files/Pres_plots/Substanzen_Verlauf_plot.png",
-       plot = Substanzen.Verlauf, width = 12, height = 8, dpi = 300)
+       plot = Substanzen.Verlauf, width = 15, height = 8, dpi = 300)
 
 # 2) Plot: "In the last 30 days" – 4 major drugs
 Monatskonsum.Verlauf <- ggplot(fourdrugs30, aes(x = Year, y = .data[["Anteil"]],
@@ -141,7 +140,6 @@ Monatskonsum.Verlauf <- ggplot(fourdrugs30, aes(x = Year, y = .data[["Anteil"]],
   geom_line(size = 1) +
   theme_light() +
   labs(
-    title = "Relative share of people who have used certain drugs in the last 30 days",
     color = "Droge",
     shape = "Droge",
     x = "Jahr",
@@ -158,7 +156,7 @@ Monatskonsum.Verlauf <- ggplot(fourdrugs30, aes(x = Year, y = .data[["Anteil"]],
   scale_shape_manual(values = c(15:18))  # beliebige Form-Codes
 
 ggsave("Presentation_files/Pres_plots/Monatskonsum_Verlauf_plot.png",
-  plot = Monatskonsum.Verlauf, width = 18, height = 10, dpi = 300)
+  plot = Monatskonsum.Verlauf, width = 15, height = 8, dpi = 300)
 
 # 3) Plot: "Have ever used tobacco products"
 Jemals.Tabbak <- ggplot(tobaccoever, aes(x = Year, y = .data[["Anteil"]],
@@ -171,7 +169,6 @@ Jemals.Tabbak <- ggplot(tobaccoever, aes(x = Year, y = .data[["Anteil"]],
     fill = "Droge",
     color = "Droge",
     shape = "Droge",
-    title = "Relative share of people who have ever used certain forms of tobacco",
     x = "Jahr",
     y = "Anteil"
   ) +
@@ -188,7 +185,7 @@ Jemals.Tabbak <- ggplot(tobaccoever, aes(x = Year, y = .data[["Anteil"]],
   )
 
 ggsave("Presentation_files/Pres_plots/Jemals_Tabbak_plot.png",
-  plot = Jemals.Tabbak, width = 18, height = 10, dpi = 300)
+  plot = Jemals.Tabbak, width = 15, height = 8, dpi = 300)
 
 # 4) Plot: "In the last 30 days" – tobacco products
 Monatskonsum.Tabbak <- ggplot(tobacco30, aes(x = Year, y = .data[["Anteil"]],
@@ -200,7 +197,6 @@ Monatskonsum.Tabbak <- ggplot(tobacco30, aes(x = Year, y = .data[["Anteil"]],
   labs(
     color = "Droge",
     shape = "Droge",
-    title = "Relative share of people who have used certain forms of tobacco in the last 30 days",
     x = "Jahr",
     y = "Anteil"
   ) +
@@ -216,7 +212,7 @@ Monatskonsum.Tabbak <- ggplot(tobacco30, aes(x = Year, y = .data[["Anteil"]],
   )
 
 ggsave ("Presentation_files/Pres_plots/Monatskonsum_Tabbak_plot.png",
-  plot = Monatskonsum.Tabbak, width = 18, height = 10, dpi = 300)
+  plot = Monatskonsum.Tabbak, width = 15, height = 8, dpi = 300)
 
 ## Histogram Function
 histogram_fun <- function(datacol, drug_name, limit, colorcode, yearplot) {
@@ -237,7 +233,6 @@ histogram_fun <- function(datacol, drug_name, limit, colorcode, yearplot) {
     geom_col(fill = colorcode, color = "black") +
     theme_light() +
     labs(
-      title = paste0("Distribution of usage days for ", drug_name),
       x = paste("Anzahl der Konsumtage in den letzten 30 Tagen"),
       y = "Anteil"
     ) +
@@ -434,7 +429,7 @@ Subs.Abhängig.Ethnie <- data2019 %>%
   scale_fill_manual(name = "Drogen",
                     labels = c("depndalc" = "Alkohol","depndcoc" = "Kokain", "depndher" = "Heroin"),
                     values = c("#0072B2","#E69F00", "#CC79A7"))+
-  labs(title = "Abhängigkeit der Ethnien", x = "Gruppen", y = "Anteil")+
+  labs(x = "Gruppen", y = "Anteil")+
   theme_light() +
   theme(
     axis.title = element_text(size = 20),  # Achsentitel
@@ -447,115 +442,46 @@ Subs.Abhängig.Ethnie <- data2019 %>%
 ggsave("Presentation_files/Pres_plots/SubsAbhängig_Ethnie.png", 
        plot = Subs.Abhängig.Ethnie, width = 15, height = 8, dpi = 300)
 ########################################################################################################################################
-## MDE : Mayor Depressive Episode
-MDE.Alter <- data2019 %>%
-  select(amdeyr,ymdeyr, catage) %>%
-  pivot_longer(cols =c(amdeyr,ymdeyr), names_to = "MDE", values_to = "Answer") %>%
-  group_by(catage) %>%
-  mutate (total = n()) %>% 
-  filter(Answer == 1) %>%
-  summarise(count = n(), total = first(total)) %>%
-  mutate(count = count/total)%>%
-  ggplot(aes(x = factor(catage), y = count))+
-  geom_col()+
-  scale_x_discrete(labels = c("1"= "12-17", "2" = "18-25", "3" = "26-34", "4" = "35+"))+
-  labs( title = "MDE und Altersgruppen", x = "Altersgruppen", y = "Anteil")+
+
+## Mentale Gesundheit fertig
+# Datenaufbereitung für "Keine Abhängigkeit" vs. spezifische Substanzabhängigkeit & Mehrfachabhängigkeit
+Drug.Dependency.Total <- data2019 %>%
+  select(depndalc, depndcoc, depndher, MI_CAT_U) %>%
+  mutate(
+    Dependency = case_when(
+      depndalc == 1 & depndcoc == 0 & depndher == 0 ~ "Alkohol",
+      depndcoc == 1 & depndalc == 0 & depndher == 0 ~ "Kokain",
+      depndher == 1 & depndalc == 0 & depndcoc == 0 ~ "Heroin",
+      depndalc == 1 & depndcoc == 1 | depndalc == 1 & depndher == 1 | depndcoc == 1 & depndher == 1 ~ "Mehrfachabhängigkeit",
+      TRUE ~ "Keine Abhängigkeit"
+    )
+  ) %>%
+  filter(MI_CAT_U >= 0) %>%  # Mehrfachabhängigkeit wird jetzt nicht mehr ausgeschlossen
+  group_by(Dependency, MI_CAT_U) %>%
+  summarise(count = n(), .groups = "drop") 
+
+# Plot
+SubsAbhängig.Gesundheit <-ggplot(Drug.Dependency.Total, aes(x = factor(Dependency, levels = c("Keine Abhängigkeit", "Alkohol", "Kokain", "Heroin", "Mehrfachabhängigkeit")), 
+                                  fill = factor(MI_CAT_U))) +
+  geom_bar(stat = "identity", position = "fill", aes(y = count)) +
+  scale_x_discrete(labels = c("Keine Abhängigkeit" = "Keine \nAbhängigkeit", 
+                              "Alkohol" = "Abhängigkeit \nvon Alkohol", 
+                              "Kokain" = "Abhängigkeit \nvon Kokain", 
+                              "Heroin" = "Abhängigkeit \nvon Heroin", 
+                              "Mehrfachabhängigkeit" = "Abhängigkeit \nvon mehreren Drogen")) +
+  scale_fill_manual(name = "Mentale Erkrankungen:",
+                    labels = c("0" = "Keine", 
+                               "1" = "Milde", 
+                               "2" = "Moderate", 
+                               "3" = "Schwere"),
+                    values = c("grey80", "grey65", "grey45", "grey30")) + # Farben für Mental Health Kategorien
+  labs(x = "Kategorien", y = "Anteil") +
   theme_light() +
   theme(
-    axis.title = element_text(size = 15),  # Achsentitel
-    axis.text  = element_text(size = 15),  # Achsbeschriftungen
-    legend.position = "bottom"  # Legendentext
+    axis.title = element_text(size = 20),
+    axis.text = element_text(size = 20),
+    legend.title = element_text(size = 17,5),
+    legend.text = element_text(size = 17,5),
+    legend.position = "bottom"
   )
-
-ggsave("Presentation_files/Pres_plots/MDE_Alter.png", plot = MDE.Alter, width = 16, height = 12, dpi = 300)
-#-------------------------------------------------------------------------------
-## Drug Dependency and 'Degree' of Mental illness
-Drug.Dependency.MI <- data2019 %>%
-  select(depndalc,depndcoc,depndher,MI_CAT_U) %>%
-  filter (MI_CAT_U >= 0) %>%
-  pivot_longer(cols = c(depndalc, depndcoc,depndher), names_to = "Drug", values_to = "Response") %>%
-  filter( Response == 1) 
-
-ggplot(Drug.Dependency.MI, aes( x = factor(MI_CAT_U), fill = factor(Drug)))+
-  geom_bar(position = "fill")+
-  scale_x_discrete(labels = c("0" = "Keine Mentalen \nGesundheitsprobleme" , "1" = "'Milde' Mentale \nErkrankung", "2" = " 'Moderate' Mentale \nErkrankung", "3" = "Ernste Mentale \nErkrankungen"),
-                   guide = guide_axis(angle = 45))+
-  labs(x = "Art der Erkrankung", y = "Anteil")
-
-##GLeicher Plot, nur achsen vertauscht
-ggplot(Drug.Dependency.MI, aes(x = factor(Drug), fill = factor(MI_CAT_U)))+
-  geom_bar(position = "fill")+
-  scale_x_discrete(labels = c("depndalc" = "Alkohol", "depndcoc" = "Cokain","depndher" = "Heroin"))+
-  labs(title = "Substanzabhängigkeit und Mentale Gesundheit", x = " Substanz")+
-  scale_fill_discrete(name = "",labels = c("0" = "Keine Mentalen Gesundheitsprobleme" , "1" = "'Milde' Mentale Erkrankung", "2" = " 'Moderate' Mentale Erkrankung", "3" = "Ernste Mentale Erkrankungen"))+
-  theme_light() +
-  theme(
-    axis.title = element_text(size = 15),  # Achsentitel
-    axis.text  = element_text(size = 20),  # Achsbeschriftungen
-    legend.position = "bottom"  # Legendentext
-  )
-
-#-------------------------------------------------------------------------------
-## Adult Mental Heath / Substance Treatment
-## Variable zur Rekodierung: leute die Mh Treatment bekommen haben, Treatment for Drug Use
-Adult.Treatment <- data2019 %>%
-  select(depndalc, depndcoc, depndher,rcvmhnsptx, rcvsptxnmh, rcvmhasptx) %>%
-  pivot_longer(cols = c(depndalc, depndcoc, depndher), names_to = "Drug", values_to = "Answer") %>%
-  pivot_longer(cols = c(rcvmhnsptx, rcvsptxnmh, rcvmhasptx), names_to = "Treatment", values_to = "Response") %>%
-  filter(Answer == 1, Response == 1)
-
-ggplot(Adult.Treatment, aes(x = factor(Drug), fill = factor(Treatment)))+
-  geom_bar(position = "fill") +
-  scale_x_discrete(labels = c("depndalc" = "Alkhol","depndcoc" = "Cokain", "depndher" = "Heroin"))+
-  scale_fill_discrete(name = "", labels = c("rcvmhnsptx" = "Behandlung für MI", "rcvsptxnmh" = "Behandlung für Substanzkonsum", "rcvmhasptx" = "Behandlung beides"))+
-  labs(title = "Substanzkonsum und Art der Behandlung", x = "SUbstanz")+
-  theme_light() +
-  theme(
-    axis.title = element_text(size = 15),  # Achsentitel
-    axis.text  = element_text(size = 20),  # Achsbeschriftungen
-    legend.position = "bottom"  # Legendentext
-  )
-
-
-#######
-#YOUTH
-######
-#Overall Substance and Mental Health
-
-
-#-------------------------------------------------------------------------------
-## Mental Health Treatment and Substance Abuse Treatment
-Youth.Treatment <-data2019 %>%
-  select(ymhnsptx, ysptxnmh, ymhasptx, depndalc, depndcoc, depndher) %>%
-  pivot_longer(cols = c(depndalc, depndcoc, depndher), names_to = "Drug", values_to = "Answer") %>%
-  pivot_longer(cols = c(ymhnsptx, ysptxnmh, ymhasptx), names_to = "Treatment", values_to = "Response") %>%
-  filter(Answer == 1, Response == 1)
-
-ggplot(Youth.Treatment, aes(x = factor(Drug), fill = factor(Treatment)))+
-  geom_bar(position = "fill")+
-  scale_x_discrete(labels = c("depndalc" = "Alkhol","depndcoc" = "Cokain", "depndher" = "Heroin"))+
-  scale_fill_discrete(labels = c("ymhnsptx" = "Behandlung für MI", "ysptxnmh" = "Behandlung für Substanzkonsum", "ymhasptx" = "Behandlung für beides"))+
-  labs(title = "SUbstanzkonsum und Art der Behandlung YOUTH", x = "SUbstanz")+
-  theme_light() +
-  theme(
-    axis.title = element_text(size = 15),  # Achsentitel
-    axis.text  = element_text(size = 20),  # Achsbeschriftungen
-    legend.position = "bottom"  # Legendentext
-  )
-
-
-##-----------------------------------------------------------------------------
-## MDE and Drugs Youth
-Youth.MDE.Drugs <- data2019 %>%
-  select(ymdeyr, depndalc,depndcoc,depndher)%>%
-  pivot_longer(cols =c(depndalc, depndcoc, depndher), names_to = "Drug", values_to = "Response") %>%
-  group_by(Drug) %>%
-  mutate (total = n()) %>% 
-  filter(Response == 1, ymdeyr == 1) %>%
-  summarise(count = n(), total = first(total)) %>%
-  mutate(count = count/total)
-
-ggplot(Youth.MDE.Drugs, aes(x = factor(Drug), y = count))+
-  geom_col()+
-  scale_x_discrete(labels = c("depndalc" = "Alkhol","depndcoc" = "Cokain", "depndher" = "Heroin"))+
-  labs(title = "MDE und Substanzkonsum", x = "Substanz")
+ggsave("Presentation_files/Pres_plots/SubsAbhängig_Gesundheit.png", plot = SubsAbhängig.Gesundheit, width = 18, height = 10, dpi = 300)
