@@ -562,7 +562,7 @@ state_data <- state_data %>%
 ############################
 # 3) Choroplethen-Karte zeichnen
 ############################
-plot_usmap(
+Karte.USA <- plot_usmap(
   data    = state_data,
   regions = "states",
   values  = "interviews_per_100k",
@@ -577,12 +577,13 @@ plot_usmap(
   theme(panel.background = element_blank(),
         
         legend.position = "right",
-        legend.title = element_text(size = 12),   # Schriftgröße des Legendentitels
-        legend.text  = element_text(size = 10),   # Schriftgröße der Legendenbeschriftungen
-        legend.key.size = unit(0.8, "cm")         # Größe der Farbfelder
+        legend.title = element_text(size = 20),   # Schriftgröße des Legendentitels
+        legend.text  = element_text(size = 20),   # Schriftgröße der Legendenbeschriftungen
+        legend.key.size = unit(1.0, "cm")         # Größe der Farbfelder
         
   )
 
+ggsave("Presentation_files/Pres_plots/Karte_Verteilung.png", plot = Karte.USA, width = 18, height = 10, dpi = 300)
 
 # Erstellen der Kreuztabelle mit absoluten Häufigkeiten
 Drug_Addprev_Crosstab <- data2019 %>%
