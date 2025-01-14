@@ -650,15 +650,13 @@ plot_usmap(
   include = state_data$state_abbr  # optional: nur die definierten Staaten
 ) +
   scale_fill_continuous(
-    low   = "white",
+    low   = "lightgrey",
     high  = "black",
     name  = "Interviews \n(pro 100k)",
     label = scales::comma
   ) +
   labs(
     title    = "Relative Anzahl an Interviews pro 100.000 Einwohner",
-    subtitle = "Basierend auf US Census Population und Befragungsdaten",
-    caption  = "Quelle: Eigene Daten + US-Zensus"
   ) +
   theme(panel.background = element_blank())
 
