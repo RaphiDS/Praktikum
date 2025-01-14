@@ -1,10 +1,12 @@
 ---
 title: "Drogenkonsum in den USA von 2015-2019"
+subtitle: "Anfängerpraktikum im WS 24/25 bei  Dr. Sabine Hoffman und Helena Veit"
 format: 
   revealjs:
     embed-resources: false
 editor: visual
 author: "Denis Oluri, Sarah Puthiaparampil, Raphael Schneider"
+date: "16 Januar 2025"
 incremental: true
 smaller: true
 transition: slide
@@ -16,8 +18,10 @@ transition: slide
 -   Allgemeine Infos über den Datensatz
     -   Befragung
     -   Kodierung
--   Betrachtete Substanzen
--   Konsumverhalten in den Jahren 2015-2019
+-   Substanzen
+-   Drogenkonsum 2015-2019
+-   Nikotinkonsum 2015-2019
+-   Konsumverhalten der einzelnen Substanzen
 -   Demografischen Faktoren und Substanzkonsum
 -   Mentale Gesundheit
 -   Verbreitung und Behandlung
@@ -31,30 +35,30 @@ transition: slide
 ## Infos über den Datensatz
 
 -   "National Survey on Drug USe and Health", unterstützt von SAMHSA und organisiert von CBHSQ
--   Hauptquelle zum Konsum von Alkohol, Tabbak, verschriebenen Drogen Es werden auch Fragen in Bezug auf Mentale Gesundheit gestellt
+-   Hauptquelle zum Konsum von Alkohol, Tabbak, verschriebenen Drogen in den USA
+-   Es werden auch Fragen in Bezug auf Mentale Gesundheit gestellt
 
 ## WER und WIE wird befragt
 
--   alle amerikanischen, nicht-institutionalisierten Bürger\*innen ab dem ALter von 12 (insgesamt 67.625)
+-   alle amerikanischen, nicht-institutionalisierten Bürger\*innen ab 12 (insgesamt 67.625 --> Datensatz 2019: 56.136)
     -   ausgeschlossen: Obdachlose, Personen aktiv im Militär, Gefängnisse und Krankenhäuser
-
-------------------------------------------------------------------------
-
-### ALtersgruppen?
-
-------------------------------------------------------------------------
-![](Presentation_files/Pres_plots/Ethnie_Verteilung_plot.png)
-
-------------------------------------------------------------------------
-
 -   Stichprobe basiert auf einer unabhängigen,mehrstufigen Gebietswahrscheinlichkeitsstichprobe
 -   jeder Staat (1 Ebene) wird in SSR (2 Ebene, 750 insgesamt) unterteilt,diese Gruppen werden nochmal unterteilt in Census Blocks (3 Ebene), mit gleicher Populationsgröße --\> nochmal unterteilt ( insgesamt 6 Ebenen) --\> gleiche Probengröße der DU von bis zu 2 Befragten, die mind. 12 Jahre alt sind
 -   Stichproben so gewählt, dass...
     -   sie mehr proportional zu den staatlichen Populationsgrößen sind
     -   jede Altersgruppe als auch Geschlecht gleich vertreten wird im Datensatz
 
+------------------------------------------------------------------------
 
-## Kodierung
+### Atersgruppen
+
+------------------------------------------------------------------------
+
+### Ethnische Zugehörigkeit der Befragten
+![](Presentation_files/Pres_plots/Ethnie_Verteilung_plot.png)
+
+
+## Terminologie
 
 Mentale Gesundheit: Fragen variieren je nach Alter: es ist schwer die Stärke der Krankheit einzustufen
 
@@ -69,18 +73,28 @@ Alkhol und Drogen: es gibt bestimmte Schwellenwerte um die Intensität und art d
 
 ## Drogenkonsum von 2015-2019
 
+::: {.panel-tabset}
+
+### Verlauf
 ![](Presentation_files/Pres_plots/Substanzen_Verlauf_plot.png)
 
-------------------------------------------------------------------------
+### Konsum im letzten 30 Tagen
 
 ![](Presentation_files/Pres_plots/Monatskonsum_Verlauf_plot.png)
+:::
 
+## Nikotin Konsum von 2015-2019
 
-------------------------------------------------------------------------
+::: {.panel-tabset}
 
+### Verlauf
 ![](Presentation_files/Pres_plots/Jemals_Tabbak_plot.png)
+
+### Konsum in letzten 30 Tagen
 ![](Presentation_files/Pres_plots/Monatskonsum_Tabbak_plot.png)
-## Genaueres Konsumverhalten
+:::
+
+## Konsumverhalten der einzelnen Substanzen
 
 
 ## Alkohol
@@ -207,11 +221,7 @@ Alkhol und Drogen: es gibt bestimmte Schwellenwerte um die Intensität und art d
 
 ## Demografische Merkmale und Substanzkonsum
 
--   Unterscheidung ziwschen -Letztes Jahr hergenommen -Abhängig - Missbrauch
 
-------------------------------------------------------------------------
-
-### demografischen Merkmale
 ::: {.panel-tabset}
 
 ### Geschlecht
@@ -237,6 +247,6 @@ Abstufung des psychischen Gesundheitszustands
 
 ------------------------------------------------------------------------
 
-
+![](Presentation_files/Pres_plots/SubsAbhängig_Gesundheit.png)
 
 ## Fazit
