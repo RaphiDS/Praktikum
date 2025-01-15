@@ -17,13 +17,14 @@ ggplot(aes(x = factor(Answer,
                               y = count))+
   geom_col()+
   scale_x_discrete(labels = c("1" = "Weisse",
-                              "2" = "Schwarze \nAfroamerikaner",
-                              "3" = "Am/Ak Indigene",
-                              "4" = "Indigene Hawaii \n/Paz. Inseln",
+                              "2" = "Schwarze\nAfroamerikaner",
+                              "3" = "Am/Ak\nIndigene",
+                              "4" = "Indigene Hawaii\n/Paz. Inseln",
                               "5" = "Asiaten",
                               "6" = "Gemischt",
                               "7" = "Hispanisch")) +
   labs(y = "Anteil", x = "Ethnische Zugehörigkeit", title = "") +
+  scale_y_continuous(labels = scales::percent_format()) +
   theme_light() +
   theme(
     axis.title.x = element_text(margin = margin(t = 20)),
@@ -42,7 +43,8 @@ Altersverteilung <- data2019 %>%
   summarize(count =n()/56136)%>%
   ggplot(aes(x= factor(Group),y = count)) +
   geom_col() +
-  labs(x = "Gruppierung", y = "Anteil") +
+  labs(x = "Altersgruppen", y = "Prozent") +
+  scale_y_continuous(labels = scales::percent_format()) +
   theme_light() +
   theme(
     axis.title = element_text(size = 20),  # Achsentitel
@@ -145,14 +147,14 @@ Substanzen.Verlauf <- ggplot(fourdrugsever, aes(x = Year, y = .data[["Anteil"]],
     color = "Droge",
     shape = "Droge",
     x = "Jahr",
-    y = "Anteil"
+    y = "Prozent"
   ) +
   theme(
     axis.title = element_text(size = 20),  # Achsentitel
     axis.text  = element_text(size = 20),  # Achsbeschriftungen
     legend.title = element_text(size = 20),  # Legendentitel
     legend.text =  element_text(size = 20),  # Legendentext
-  ) + scale_y_continuous(limits = c(0, NA)) +
+  ) + scale_y_continuous(limits = c(0, 0.85), labels = scales::percent_format()) +
   scale_color_manual(values = c("#0072B2", "#009E73", "#E69F00", "#CC79A7")) +
   scale_shape_manual(values = c(15:18))# beliebige Form-Codes
 
@@ -171,7 +173,7 @@ Monatskonsum.Verlauf <- ggplot(fourdrugs30, aes(x = Year, y = .data[["Anteil"]],
     color = "Droge",
     shape = "Droge",
     x = "Jahr",
-    y = "Anteil"
+    y = "Prozent"
   ) +
   theme(
     axis.title = element_text(size = 20),  # Achsentitel
@@ -179,7 +181,7 @@ Monatskonsum.Verlauf <- ggplot(fourdrugs30, aes(x = Year, y = .data[["Anteil"]],
     legend.title = element_text(size = 20),  # Legendentitel
     legend.text =  element_text(size = 20),  # Legendentext
   )  +
-  scale_y_continuous(limits = c(0, NA)) +
+  scale_y_continuous(limits = c(0, 0.85), labels = scales::percent_format()) +
   scale_color_manual(values = c("#0072B2", "#009E73", "#E69F00", "#CC79A7")) +
   scale_shape_manual(values = c(15:18))  # beliebige Form-Codes
 
@@ -198,7 +200,7 @@ Jemals.Tabbak <- ggplot(tobaccoever, aes(x = Year, y = .data[["Anteil"]],
     color = "Droge",
     shape = "Droge",
     x = "Jahr",
-    y = "Anteil"
+    y = "Prozent"
   ) +
   theme(
     axis.title = element_text(size = 20),
@@ -206,7 +208,7 @@ Jemals.Tabbak <- ggplot(tobaccoever, aes(x = Year, y = .data[["Anteil"]],
     legend.title = element_text(size = 20),
     legend.text = element_text(size = 20)
   ) +
-  scale_y_continuous(limits = c(0, NA)) +
+  scale_y_continuous(limits = c(0, 0.6), labels = scales::percent_format()) +
   scale_color_manual(values = c("#009E73", "red","lightblue", "darkgrey")) +
   scale_shape_manual(
     values = c(16, 15, 17, 18)
@@ -226,7 +228,7 @@ Monatskonsum.Tabbak <- ggplot(tobacco30, aes(x = Year, y = .data[["Anteil"]],
     color = "Droge",
     shape = "Droge",
     x = "Jahr",
-    y = "Anteil"
+    y = "Prozent"
   ) +
   theme(
     axis.title = element_text(size = 20),
@@ -234,6 +236,7 @@ Monatskonsum.Tabbak <- ggplot(tobacco30, aes(x = Year, y = .data[["Anteil"]],
     legend.title = element_text(size = 20),
     legend.text = element_text(size = 20)
   ) +
+  scale_y_continuous(limits = c(0, 0.6), labels = scales::percent_format()) +
   scale_color_manual(values = c("#009E73", "red","lightblue", "darkgrey")) +
   scale_shape_manual(
     values = c(16, 15, 17, 18)
@@ -257,11 +260,14 @@ histogram_fun <- function(datacol, drug_name, limit, colorcode, yearplot) {
       day  = factor(day, levels = as.character(1:30))
     )
   
+  # Berechnung der Stichprobengröße
+  sample_size <- sum(data$n)
+  
   ggplot(data, aes(x = day, y = `Relative share`)) +
     geom_col(fill = colorcode, color = "black") +
     theme_light() +
     labs(
-      x = paste("Anzahl der Konsumtage in den letzten 30 Tagen"),
+      x = paste0("Anzahl der Konsumtage in den letzten 30 Tagen (n = ", sample_size, ")"),  # Stichprobengröße hinzufügen
       y = "Anteil"
     ) +
     theme(
@@ -271,7 +277,7 @@ histogram_fun <- function(datacol, drug_name, limit, colorcode, yearplot) {
       legend.text = element_text(size = 20)
     ) +
     scale_x_discrete(breaks = c("1", "5", "10", "15", "20", "25", "30"), drop = FALSE) +
-    scale_y_continuous(limits = c(0, limit), labels = scales::label_number())
+    scale_y_continuous(limits = c(0, limit), labels = scales::percent_format())
 }
 
 # 5) Abhängigkeit
@@ -285,14 +291,14 @@ Substanzen.Verlauf.Abh <- ggplot(fourdrugsdependency, aes(x = Year, y = .data[["
     color = "Droge",
     shape = "Droge",
     x = "Jahr",
-    y = "Anteil"
+    y = "Prozent"
   ) +
   theme(
     axis.title = element_text(size = 20),  # Achsentitel
     axis.text  = element_text(size = 20),  # Achsbeschriftungen
     legend.title = element_text(size = 20),  # Legendentitel
     legend.text =  element_text(size = 20),  # Legendentext
-  ) + scale_y_continuous(limits = c(0, NA)) +
+  ) + scale_y_continuous(limits = c(0, 0.08), labels = scales::percent_format()) +
   scale_color_manual(values = c("#0072B2", "#009E73", "#E69F00", "#CC79A7")) +
   scale_shape_manual(values = c(15:18))# beliebige Form-Codes
 
@@ -630,7 +636,7 @@ Karte.USA <- plot_usmap(
   scale_fill_continuous(
     low   = "lightgrey",
     high  = "black",
-    name  = "Interviews \n(pro 100k)",
+    name  = "Umfragen\n(pro 100k)",
     label = scales::comma
   ) +
   theme(panel.background = element_blank(),
