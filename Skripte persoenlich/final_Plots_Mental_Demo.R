@@ -223,7 +223,7 @@ Drogen.Einkommen <- data2019 %>%
     legend.title = element_text(size = 17,5),
     legend.text = element_text(size = 10)
   )
-
+Drogen.Einkommen
 ## Drogen und Armut
 Drogen.Armut <- data2019 %>%
   select(POVERTY3, depndalc, depndcoc, depndher) %>%
@@ -244,6 +244,7 @@ Drogen.Armut <- data2019 %>%
     legend.text = element_text(size = 10)
   )
 
+Drogen.Armut
 ## Bildungsgrad Drogen
 Substanz.Bildung <- data2019 %>%
   select(eduhighcat, depndalc, depndcoc,depndher) %>%
