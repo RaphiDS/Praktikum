@@ -209,11 +209,6 @@ ggplot(Drug.Dependency.Abuse, aes(x = Condition, fill = Substance)) +
   )
 
 
-## SEVERE MDE with role impairment and ALcohol or (illicit) Substance Abuse
-# Normal MDE nicht in ALlfilterdata!
-Youth.MDE.Substance <- data2019 %>%
-  select(ymdeimaud, ymdeimudpy) ## Daten fehlen!
-
 # Youth MDE
 ## Youth MDE in the last year
 Youth.MDE <- data2019 %>%
