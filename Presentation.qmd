@@ -23,26 +23,17 @@ transition: slide
 -   Substanzabhängigkeit und mentale Gesundheit
 -   Fazit
 
-<<<<<<< HEAD
 
 ## Datensatz: NSDUH
 
 -   "National Survey on Drug Use and Health" durchgeführt von SAMHSA
 -   Hauptquelle zu dem Konsum von Alkohol, Tabak, verschiedener Drogen und zu mentaler Gesundheit in den USA
--   alle amerikanischen, nicht-verbeamtete Bürger\*innen ab 12
-=======
-## Infos über den Datensatz
-
--   "National Survey on Drug Use and Health", unterstützt von SAMHSA
--   Hauptquelle zum Konsum von Alkohol, Tabbak, verschiedenen Drogen als auch mentale Gesundheit in den USA
--   alle amerikanischen, nicht-institutionalisierten Bürger\*innen ab 12
-    -   ausgeschlossen: Obdachlose, Personen aktiv im Militär, Gefängnisse und Krankenhäuser
->>>>>>> 1f4a987025dd55f95a1016636b9a46754fb70c27
--   Stichprobe basiert auf einer unabhängigen,mehrstufigen Gebietswahrscheinlichkeitsstichprobe
--   Querschnittsdaten
+-   GG: amerikanischen, nicht-institutionalisierten Bürger\*innen ab 12
+-   Größe: ca. 56.000 UE
+-   Querschnittsdaten: jedes Jahr neu erhobene Untersuchung
 -   Stichproben so gewählt, dass...
-    -   Geschlecht und Ethnie sind proportinal zur Bevölkerung der USA
-    -   
+    -   Geschlecht und Ethnie proportional zur Bevölkerung der USA sind
+
 
 ------------------------------------------------------------------------
 
@@ -50,33 +41,24 @@ transition: slide
 
 ![](Presentation_files/Pres_plots/Karte_Verteilung.png)
 
+
 ## Themenfragen
 
 -   "Wie haben sich die Konsummuster in dem Zeitraum 2015 bis 2019 entwickelt?"
 -   "Wie hängt der Konsum im Jahr 2019 mit demografischen Merkmalen zusammen?"
 -   "Wie steht der Konsum im Jahr 2019 mit dem psychischen Gesundheitszustand der Befragten in Verbindung?"
 
-<<<<<<< HEAD
 
 
 ## Definition
-=======
-## Terminologie
->>>>>>> 1f4a987025dd55f95a1016636b9a46754fb70c27
 
-
-<<<<<<< HEAD
 - Drogenkonsum und Abhängigkeit:
     -   Abhängigkeit ist definiert als drogensuchendes Verhalten, welches trotz bewusster und
 negativer Folgen schwer zu kontrollieren ist
     -   hält dieses Verhalten länger als einen Monat an: Drogenmissbrauch
--    Ausgewählten Substanzen: Tabak, Alkohol, Cokain, Heroin
-=======
--   Drogenkonsum und Abhängigkeit:
->>>>>>> 1f4a987025dd55f95a1016636b9a46754fb70c27
+-    Ausgewählten Substanzen: Tabak, Alkohol, Kokain, Heroin
 
-    -   Abhängigkeit ist definiert als Drogen suchendes Verhalten ,welches SChwer zu kontrollieren ist, trotz bewusster negativer Folgen
-    -   hält dieses Verhalten länger als einen Monat: Drogenmissbrauch
+
 
 ## Drogenkonsum von 2015-2019
 
@@ -88,6 +70,9 @@ negativer Folgen schwer zu kontrollieren ist
 ### Konsum im letzten 30 Tagen
 
 ![](Presentation_files/Pres_plots/Monatskonsum_Verlauf_plot.png)
+
+### Abhängigkeit
+![](Presentation_files/Pres_plots/Substanzen_Verlauf_Abhängigkeit_plot.png)
 :::
 
 ## Tabakkonsum von 2015-2019
@@ -199,8 +184,12 @@ negativer Folgen schwer zu kontrollieren ist
 ![](Presentation_files/Pres_plots/Her_19_plot.png)
 :::
 
-## Demografie - Altersgruppen
 
+### Umfragen pro 100.000 Einwohner nach Staat
+
+![](Presentation_files/Pres_plots/Karte_Verteilung.png)
+
+## Demografie - Altersgruppen
 
 ![](Presentation_files/Pres_plots/Altersverteilung.png)
 
@@ -220,13 +209,12 @@ negativer Folgen schwer zu kontrollieren ist
 ### Ethnie
 
 ![](Presentation_files/Pres_plots/NikAbhängig_Ethnie.png)
+
 ### Geschlecht
 :::
 
 ## Demografie und Substanzkonsum
-
 ::: panel-tabset
-### Geschlecht
 
 ### Alter
 
@@ -247,21 +235,25 @@ negativer Folgen schwer zu kontrollieren ist
 
 ------------------------------------------------------------------------
 
+### Abhängigkeit und MI (= Mental Illness)
+
 ![](Presentation_files/Pres_plots/SubsAbhängig_Gesundheit.png)
 
-## Odds Ratio nach Abhängigkeitstyp
+## Odds Ratio für MDE (letztes 12 Monate) nach Abhängigkeit
 
 ![](Presentation_files/Pres_plots/Odds_Abhängigkeit.png)
 
+
 ## Fazit
 
--   Wie haben sich die Konsummuster in dem Zeitraum 2015 bis 2019 entwickelt?
-    -   Nicht viel
--   Wie hängt der Konsum im Jahr 2019 mit demografischen Merkmalen zusammen?
-    -   Nicht von Geschlecht, wenn dan Ethnie
--   Wie steht der Konsum im Jahr 2019 mit dem psychischen Gesundheitszustand der Befragten in Verbindung?
-    -   Gestörte Leute nehmen harte Drogen
-    
-## Quelle
-NSDUH
+1.   Wie haben sich die Konsummuster in dem Zeitraum 2015 bis 2019 entwickelt?
+    -    Es lassen sich keine eindeutigen Trends im Konsumverhalten erkennen, mit Ausnahme des Zigarettenkonsums, der eine bemerkenswerte Veränderung zeigt.
+2.   Wie hängt der Konsum im Jahr 2019 mit demografischen Merkmalen zusammen?
+    -   Beim Geschlecht zeigen sich keine signifikanten Unterschiede im Konsumverhalten, während bei anderen demografischen Faktoren deutliche Unterschiede erkennbar sind.
+3.   Wie steht der Konsum im Jahr 2019 mit dem psychischen Gesundheitszustand der Befragten in Verbindung?
+    -   Es besteht ein erkennbarer Zusammenhang zwischen Drogenabhängigkeit und psychischen Gesundheitsproblemen, wobei Betroffene häufiger unter mentalen Belastungen leiden.
 
+## Quelle
+
+NSDUH
+usw.
