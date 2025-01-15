@@ -7,6 +7,7 @@ gender <- data2019 %>%
 
 ggplot(gender,aes(x = factor(gender, levels = 1:2, labels = c("Male", "Female")), y = count, fill = factor(gender)))+
   geom_col()+
+  scale_y_continuous(labels = scales::percent)+
   scale_fill_manual(values = c("1" = "blue", "2" = "red"), labels = c("1" = "Male", "2" = "Female"))+
   labs(title = "Gender", y = "Percentage", fill = "Identity", x = "") +
   theme_light() +
@@ -125,6 +126,7 @@ imputed.employment18 <- data2019 %>%
 
 ggplot(imputed.employment18, aes(x = factor(number), y = count, fill = factor(number))) +
   geom_bar(stat = "identity")+
+  scale_y_continuous(labels = scales::percent)+
   scale_x_discrete(labels = c("1" = "Employed full-time", "2" = "Employed part-time", "3" = "Unemployed", "4" = "not in labour force"))+
   labs(title = "Employment status of People 18+", x = "Employment Status", y = "Percentage")+
   theme_light() +
@@ -144,6 +146,7 @@ Nic.Dependency.Gender <- data2019 %>%
 
 ggplot(Nic.Dependency.Gender, aes(x = factor(irsex), y = count))+
   geom_col()+
+  scale_y_continuous(labels = scales::percent)+
   scale_x_discrete(labels = c("1" = "Männer", "2" = "Frauen"))+
   labs(x = "Geschlecht", y = "Anteil")+
   theme_light() +
@@ -163,6 +166,7 @@ ggplot(Drug.Dependency.Gender, aes(x = factor(Drug), fill = factor(irsex)))+
   geom_bar(position = "fill")+
   #geom_line(y = 0.5)+
   labs(title = "Drug Dependency by Gender")+
+  scale_y_continuous(labels = scales::percent)+
   scale_x_discrete(labels = c("depndalc" = "Alkohol", "depndcoc" = "Cokain", "depndher" = "Heroin"))+
   scale_fill_manual(labels = c("1" = "Männer", "2" = "Frauen"), values =c("1" = "darkblue", "2" = "maroon"))+
   labs(title = "Abhängigkeit von Männern und Frauen", x = "Substanz")+
@@ -197,6 +201,7 @@ ggplot(Drug.Dependency.Abuse, aes(x = Condition, fill = Substance)) +
   geom_bar(position = "fill") +
   labs(title = "Substanzkonsum, Abhängigkeit und Missbrauch im letzten Jahr",
        x = "Substanz")+
+  scale_y_continuous(labels = scales::percent)+
   theme_light() +
   theme(
     axis.title = element_text(size = 20),  # Achsentitel
@@ -256,6 +261,7 @@ Drug.Dependency.MI <- data2019 %>%
 
 ggplot(Drug.Dependency.MI, aes( x = factor(MI_CAT_U), fill = factor(Drug)))+
   geom_bar(position = "fill")+
+  scale_y_continuous(labels = scales::percent)+
   scale_x_discrete(labels = c("0" = "Keine Mentalen \nGesundheitsprobleme" , "1" = "'Milde' Mentale \nErkrankung", "2" = " 'Moderate' Mentale \nErkrankung", "3" = "Ernste Mentale \nErkrankungen"),
                    guide = guide_axis(angle = 45))+
   labs(x = "Art der Erkrankung", y = "Anteil")
@@ -263,6 +269,7 @@ ggplot(Drug.Dependency.MI, aes( x = factor(MI_CAT_U), fill = factor(Drug)))+
 ##GLeicher Plot, nur achsen vertauscht
 ggplot(Drug.Dependency.MI, aes(x = factor(Drug), fill = factor(MI_CAT_U)))+
   geom_bar(position = "fill")+
+  scale_y_continuous(labels = scales::percent)+
   scale_x_discrete(labels = c("depndalc" = "Alkohol", "depndcoc" = "Cokain","depndher" = "Heroin"))+
   labs(title = "Substanzabhängigkeit und Mentale Gesundheit", x = " Substanz")+
   scale_fill_discrete(name = "",labels = c("0" = "Keine Mentalen Gesundheitsprobleme" , "1" = "'Milde' Mentale Erkrankung", "2" = " 'Moderate' Mentale Erkrankung", "3" = "Ernste Mentale Erkrankungen"))+
@@ -285,6 +292,7 @@ Drug.Dependency.MI <- data2019 %>%
 
 ggplot(Drug.Dependency.MI, aes( x = factor(MI_CAT_U), fill = factor(Drug)))+
   geom_bar(position = "fill")+
+  scale_y_continuous(labels = scales::percent)+
   scale_x_discrete(labels = c("0" = "Keine Mentalen \nGesundheitsprobleme" , "1" = "'Milde' Mentale \nErkrankung", "2" = " 'Moderate' Mentale \nErkrankung", "3" = "Ernste Mentale \nErkrankungen"),
                    guide = guide_axis(angle = 45))+
   labs(x = "Art der Erkrankung", y = "Anteil")
@@ -292,6 +300,7 @@ ggplot(Drug.Dependency.MI, aes( x = factor(MI_CAT_U), fill = factor(Drug)))+
 ##GLeicher Plot, nur achsen vertauscht
 ggplot(Drug.Dependency.MI, aes(x = factor(Drug), fill = factor(MI_CAT_U)))+
   geom_bar(position = "fill")+
+  scale_y_continuous(labels = scales::percent)+
   scale_x_discrete(labels = c("depndalc" = "Alkohol", "depndcoc" = "Cokain","depndher" = "Heroin"))+
   labs(title = "Substanzabhängigkeit und Mentale Gesundheit", x = " Substanz")+
   scale_fill_discrete(name = "",labels = c("0" = "Keine Mentalen Gesundheitsprobleme" , "1" = "'Milde' Mentale Erkrankung", "2" = " 'Moderate' Mentale Erkrankung", "3" = "Ernste Mentale Erkrankungen"))+
