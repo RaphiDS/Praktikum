@@ -28,8 +28,8 @@ ggplot(aes(x = factor(Answer,
   theme_light() +
   theme(
     axis.title.x = element_text(margin = margin(t = 20)),
-    axis.title = element_text(size = 25),  # Achsentitel
-    axis.text  = element_text(size = 25),  # Achsbeschriftungen
+    axis.title = element_text(size = 30),  # Achsentitel
+    axis.text  = element_text(size = 30),  # Achsbeschriftungen
     legend.position = "none"  # Legendentext
   )
 ggsave("Presentation_files/Pres_plots/Ethnie_Verteilung_plot.png",
@@ -273,10 +273,12 @@ histogram_fun <- function(datacol, drug_name, limit, colorcode, yearplot) {
       y = "Prozent"
     ) +
     theme(
-      axis.title = element_text(size = 20),
-      axis.text  = element_text(size = 20),
-      legend.title = element_text(size = 20),
-      legend.text = element_text(size = 20)
+      axis.title.x = element_text(margin = margin(t = 20)),
+      axis.title.y = element_text(margin = margin(r = 20)),
+      axis.title = element_text(size = 25),
+      axis.text  = element_text(size = 25),
+      legend.title = element_text(size = 25),
+      legend.text = element_text(size = 25)
     ) +
     scale_x_discrete(breaks = c("1", "5", "10", "15", "20", "25", "30"), drop = FALSE) +
     scale_y_continuous(limits = c(0, limit), labels = scales::percent_format())
@@ -493,7 +495,7 @@ Subs.Abhängig.Alter <- data2019 %>%
   mutate(Dependency = factor(Dependency, levels = c("Alkohol", "Kokain", "Heroin", "Mehrfachabhängigkeit"))) %>%
   group_by(CATAG2, Dependency) %>%
   ggplot(aes(x = factor(CATAG2), fill = Dependency))+
-  geom_bar(position = "fill")+
+  geom_bar(position = "dodge")+
   scale_fill_manual(name = "Drogen",
                     values = c("Alkohol" = "#0072B2",  # Blau
                                "Kokain" = "#E69F00",  # Gelb
@@ -510,6 +512,7 @@ Subs.Abhängig.Alter <- data2019 %>%
     legend.title = element_text(size = 20),
     legend.position = "bottom"
   )
+
 ggsave("Presentation_files/Pres_plots/SubsAbhängig_Alter.png", 
        plot = Subs.Abhängig.Alter, width = 18, height = 9, dpi = 300)
 Subs.Abhängig.Alter
@@ -585,7 +588,7 @@ ggplot(aes(x = factor(irsex), fill = Dependency))+
     legend.position = "bottom"
   )
 
-ggsave("Presentation_files/Pres_plots/SubsAbhängigkeit_Geschlecht.png", plot = SubsAbhängig.Geschlecht, width = 15, height = 10, dpi = 300)
+ggsave("Presentation_files/Pres_plots/SubsAbhängigkeit_Geschlecht.png", plot = SubsAbhängig.Geschlecht, width = 15, height = 8, dpi = 300)
 ########################################################################################################################################
 
 ## Mentale Gesundheit fertig
