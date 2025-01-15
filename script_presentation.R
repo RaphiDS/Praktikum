@@ -470,10 +470,11 @@ Subs.Abhängig.Alter <- data2019 %>%
     axis.title = element_text(size = 20),  # Achsentitel
     axis.text  = element_text(size = 25),  # Achsbeschriftungen
     legend.text = element_text(size = 20),
-    legend.title = element_text(size = 20)
+    legend.title = element_text(size = 20),
+    legend.position = "bottom"
   )
 ggsave("Presentation_files/Pres_plots/SubsAbhängig_Alter.png", 
-       plot = Subs.Abhängig.Alter, width = 18, height = 10, dpi = 300)
+       plot = Subs.Abhängig.Alter, width = 18, height = 9, dpi = 300)
 Subs.Abhängig.Alter
 #------------------------------------------------------------------------------
 ## Drug Dependency and Race
@@ -506,13 +507,14 @@ Subs.Abhängig.Ethnie <- data2019 %>%
   theme_light() +
   theme(
     axis.title = element_text(size = 20),  
-    axis.text  = element_text(size = 20),  
-    legend.text = element_text(size = 20),
-    legend.title = element_text(size = 20)
+    axis.text  = element_text(size = 22),  
+    legend.text = element_text(size = 18),
+    legend.title = element_text(size = 18),
+    legend.position = "bottom"
   )
 
 ggsave("Presentation_files/Pres_plots/SubsAbhängig_Ethnie.png", 
-       plot = Subs.Abhängig.Ethnie, width = 18, height = 8, dpi = 300)
+       plot = Subs.Abhängig.Ethnie, width = 16, height = 8, dpi = 300)
 
 ########################################################################################################################################
 
