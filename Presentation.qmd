@@ -34,10 +34,9 @@ transition: slide
 -   Stichproben so gewählt, dass...
     -   Geschlecht und Ethnie proportional zur Bevölkerung der USA sind
 
-
 ------------------------------------------------------------------------
 
-### Umfragen pro 100.000 nach Staat
+### Umfragen pro 100.000 Einwohner nach Staat (2019)
 
 ![](Presentation_files/Pres_plots/Karte_Verteilung.png)
 
@@ -52,18 +51,18 @@ transition: slide
 
 ## Definition
 
-- Drogenkonsum und Abhängigkeit:
-    -   Abhängigkeit ist definiert als drogensuchendes Verhalten, welches trotz bewusster und
-negativer Folgen schwer zu kontrollieren ist
-    -   hält dieses Verhalten länger als einen Monat an: Drogenmissbrauch
 -    Ausgewählten Substanzen: Tabak, Alkohol, Kokain, Heroin
+- Drogenkonsum und Abhängigkeit:
+    -   chronische, fortschreitende Krankheit im direkten Zusammenhang mit dauerhaften Konsum
+    -   gekennzeichnet durch erhebluche physiologische, psychologische oder soziale Funktionsstörung
+    -   hält dieses Verhalten länger an: Drogenmissbrauch
 
 
 
 ## Drogenkonsum von 2015-2019
 
 ::: panel-tabset
-### Verlauf
+### Jemals
 
 ![](Presentation_files/Pres_plots/Substanzen_Verlauf_plot.png)
 
@@ -78,7 +77,7 @@ negativer Folgen schwer zu kontrollieren ist
 ## Tabakkonsum von 2015-2019
 
 ::: panel-tabset
-### Verlauf
+### Jemals
 
 ![](Presentation_files/Pres_plots/Jemals_Tabbak_plot.png)
 
@@ -112,7 +111,7 @@ negativer Folgen schwer zu kontrollieren ist
 ![](Presentation_files/Pres_plots/Alk_19_plot.png)
 :::
 
-## Konsumverhalten - Tabak
+## Konsumverhalten - Zigaretten
 
 ::: panel-tabset
 ### 2015
@@ -185,17 +184,12 @@ negativer Folgen schwer zu kontrollieren ist
 :::
 
 
-### Umfragen pro 100.000 Einwohner nach Staat
-
-![](Presentation_files/Pres_plots/Karte_Verteilung.png)
-
 ## Demografie - Altersgruppen
 
 ![](Presentation_files/Pres_plots/Altersverteilung.png)
 
-------------------------------------------------------------------------
 
-## Demografie - Ethnie
+## Demografie - Race
 
 ![](Presentation_files/Pres_plots/Ethnie_Verteilung_plot.png)
 
@@ -220,15 +214,15 @@ negativer Folgen schwer zu kontrollieren ist
 
 ![](Presentation_files/Pres_plots/SubsAbhängig_Alter.png)
 
-### Ethnie
+### Race
 
 ![](Presentation_files/Pres_plots/SubsAbhängig_Ethnie.png)
 :::
 
 ## Mentale Gesundheit
 
--   Abstufung des psychischen Gesundheitszustands mithilfe von Indikatoren (WHODAS)
--   Serious Mental Illness: Schwellenwert (SMIPP_U) ab Schwellenwert von 0.236
+-   Abstufung des psychischen Gesundheitszustands mithilfe von Indikatoren (SMIPP = Serious Mental Illness Predicted Probability)
+-   Serious Mental Illness: Schwellenwert ab Schwellenwert von 0.236
 -   Serious to Moderate Mentall Illness: ab Schwellenwert von 0.066
 -   Any Mental Illness: ab 0.019
 -   Diese Bewertung kann nur für Erwachsene angewendet werden
@@ -239,7 +233,7 @@ negativer Folgen schwer zu kontrollieren ist
 
 ![](Presentation_files/Pres_plots/SubsAbhängig_Gesundheit.png)
 
-## Odds Ratio für MDE (letztes 12 Monate) nach Abhängigkeit
+## Odds Ratio für MDE (=Major Depressive Episode) nach Abhängigkeit
 
 ![](Presentation_files/Pres_plots/Odds_Abhängigkeit.png)
 
@@ -255,5 +249,5 @@ negativer Folgen schwer zu kontrollieren ist
 
 ## Quelle
 
-NSDUH
-usw.
+NSDUH Codebook 2019
+National Library of Medicine
