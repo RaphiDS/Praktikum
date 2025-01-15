@@ -38,3 +38,20 @@ ggsave("Presentation_files/Pres_plots/Substanzen_Verlauf_Abhängigkeit_plot.png"
 
 ####################################
 
+ex.year = c(2015, 2016, 2015, 2019, 2018)
+ex.cocever = c(1, 2, 1, 94, 2)
+ex.COCUS30A = c(2, 94, 30, 1, 97)
+ex.CATAG2 = c(1, 3, 1, 2, 2)
+ex.ndssdnsp = c(0, 1, 1, 0, 0)
+
+# Erstelle einen DataFrame
+ex.data.sample <- data.frame(
+  year = ex.year,
+  cocever = ex.cocever,
+  COCUS30A = ex.COCUS30A,
+  CATAG2 = ex.CATAG2,
+  ndssdnsp = ex.ndssdnsp
+)
+
+ kable(ex.data.sample)
+ 
