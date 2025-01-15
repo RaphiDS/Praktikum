@@ -427,7 +427,7 @@ Subs.Abhängig.Alter <- data2019 %>%
     legend.title = element_text(size = 17,5)
   )
 ggsave("Presentation_files/Pres_plots/SubsAbhängig_Alter.png", 
-       plot = Subs.Abhängig.Alter, width = 15, height = 8, dpi = 300)
+       plot = Subs.Abhängig.Alter, width = 12, height = 8, dpi = 300)
 #------------------------------------------------------------------------------
 ## Drug Dependency and Race
 Subs.Abhängig.Ethnie <- data2019 %>%
@@ -456,7 +456,7 @@ Subs.Abhängig.Ethnie <- data2019 %>%
   )
 
 ggsave("Presentation_files/Pres_plots/SubsAbhängig_Ethnie.png", 
-       plot = Subs.Abhängig.Ethnie, width = 15, height = 8, dpi = 300)
+       plot = Subs.Abhängig.Ethnie, width = 12, height = 6, dpi = 300)
 ########################################################################################################################################
 
 ## Mentale Gesundheit fertig

@@ -17,50 +17,21 @@ transition: slide
 
 ## Gliederung
 
--   Allgemeine Infos über den Datensatz
-    -   Befragung
-    -   Kodierung
--   Substanzen
--   Drogenkonsum 2015-2019
--   Nikotinkonsum 2015-2019
--   Konsumverhalten der einzelnen Substanzen
--   Demografischen Faktoren und Substanzkonsum
--   Mentale Gesundheit
--   Verbreitung und Behandlung
+-   Infos über den Datensatz
+-   Einführung in das Forschungsthema
+-   Verlauf des Drogenkonsum 2015-2019
+-   Demografischen Faktoren
+-   Substanzabhängigkeit und Mentale Gesundheit
 -   Fazit
 
-## Themenfragen
-
--   Wie haben sich die Konsummuster in dem Zeitraum 2015 bis 2019 entwickelt?
--   Wie hängt der Konsum im Jahr 2019 mit demografischen Merkmalen zusammen?
--   Wie steht der Konsum im Jahr 2019 mit dem psychischen Gesundheitszustand der Befragten in Verbindung?
 
 ## Infos über den Datensatz
 
--   "National Survey on Drug Use and Health", unterstützt von SAMHSA und organisiert von CBHSQ
--   Hauptquelle zum Konsum von Alkohol, Tabbak, verschriebenen Drogen in den USA
--   Es werden auch Fragen in Bezug auf Mentale Gesundheit gestellt
-
-## WER und WIE wird befragt
-
--   alle amerikanischen, nicht-institutionalisierten Bürger\*innen ab 12 (insgesamt 67.625 --\> Datensatz 2019: 56.136)
+-   "National Survey on Drug Use and Health", unterstützt von SAMHSA
+-   Hauptquelle zum Konsum von Alkohol, Tabbak, verschiedenen Drogen als auch mentale Gesundheit in den USA
+-   alle amerikanischen, nicht-institutionalisierten Bürger\*innen ab 12 
     -   ausgeschlossen: Obdachlose, Personen aktiv im Militär, Gefängnisse und Krankenhäuser
 -   Stichprobe basiert auf einer unabhängigen,mehrstufigen Gebietswahrscheinlichkeitsstichprobe
-
-------------------------------------------------------------------------
-
-### Verteilung der Befragung innerhalb der Staaten
-
-![](Presentation_files/Pres_plots/Karte_Verteilung.png)
-
-------------------------------------------------------------------------
-
-::: nonincremental
--   alle amerikanischen, nicht-institutionalisierten Bürger\*innen ab 12 (insgesamt 67.625 --\> Datensatz 2019: 56.136)
-    -   ausgeschlossen: Obdachlose, Personen aktiv im Militär, Gefängnisse und Krankenhäuser
--   Stichprobe basiert auf einer unabhängigen,mehrstufigen Gebietswahrscheinlichkeitsstichprobe
-:::
-
 -   Querschnittsdaten
 -   Stichproben so gewählt, dass...
     -   sie proportional zu den staatlichen Populationsgrößen sind
@@ -68,23 +39,29 @@ transition: slide
 
 ------------------------------------------------------------------------
 
-### Altersgruppen
+### Verteilung der Befragung innerhalb der Staaten
 
-![](Presentation_files/Pres_plots/Altersverteilung.png)
+![](Presentation_files/Pres_plots/Karte_Verteilung.png)
 
-------------------------------------------------------------------------
 
-### Ethnische Zugehörigkeit der Befragten
 
-![](Presentation_files/Pres_plots/Ethnie_Verteilung_plot.png)
+## Themenfragen
+
+-   Wie haben sich die Konsummuster in dem Zeitraum 2015 bis 2019 entwickelt?
+-   Wie hängt der Konsum im Jahr 2019 mit demografischen Merkmalen zusammen?
+-   Wie steht der Konsum im Jahr 2019 mit dem psychischen Gesundheitszustand der Befragten in Verbindung?
+
+
 
 ## Terminologie
 
-## Substanzen
-
 -   Ausgewählten Substanzen: Tabak, Alkohol, Cokain, Heroin
--   Differenzierung:
-    -   Tabak: Zigaretten als auch "rauchfreie" Tabbakprodukte wie z.b. Snus
+
+- Drogenkonsum und Abhängigkeit:
+    -   Abhängigkeit ist definiert als Drogen suchendes Verhalten ,welches SChwer zu kontrollieren ist, trotz bewusster
+negativer Folgen
+    -   hält dieses Verhalten länger als einen Monat: Drogenmissbrauch
+
 
 ## Drogenkonsum von 2015-2019
 
@@ -208,8 +185,20 @@ transition: slide
 ![](Presentation_files/Pres_plots/Her_19_plot.png)
 :::
 
-## Demografische Merkmale und Nikotin
+## Demografische Merkmale
 
+### Altersgruppen
+
+![](Presentation_files/Pres_plots/Altersverteilung.png)
+
+------------------------------------------------------------------------
+
+### Ethnische Zugehörigkeit der Befragten
+
+![](Presentation_files/Pres_plots/Ethnie_Verteilung_plot.png)
+
+
+## Nikotinabhängigkeit
 ::: panel-tabset
 ### Geschlecht
 
