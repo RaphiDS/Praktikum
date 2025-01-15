@@ -28,7 +28,7 @@ ggplot(aes(x = factor(Answer,
   theme(
     axis.title.x = element_text(margin = margin(t = 20)),
     axis.title = element_text(size = 20),  # Achsentitel
-    axis.text  = element_text(size = 20),  # Achsbeschriftungen
+    axis.text  = element_text(size = 22),  # Achsbeschriftungen
     legend.position = "none"  # Legendentext
   )
 ggsave("Presentation_files/Pres_plots/Ethnie_Verteilung_plot.png",
@@ -397,7 +397,7 @@ Nik.Abhängig.Alter <- data2019 %>%
   filter(ndssdnsp == 1) %>%
   summarise(count = n(), total = first(total))  %>%# count berechnen und total beibehalten
   mutate(count = count / total)%>%
-  ggplot(aes(x = factor(catage), y = count))+
+  ggplot(aes(x = factor(CATAG2), y = count))+
   geom_col(fill = "#009E73")+
   scale_x_discrete(name = "Gruppierung",labels = c("12-17", "18-25", "26+"))+
   labs( x = " ", y = "Anteil")+
