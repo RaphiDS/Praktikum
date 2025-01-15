@@ -24,12 +24,11 @@ transition: slide
 -   Substanzabhängigkeit und Mentale Gesundheit
 -   Fazit
 
-
 ## Infos über den Datensatz
 
 -   "National Survey on Drug Use and Health", unterstützt von SAMHSA
 -   Hauptquelle zum Konsum von Alkohol, Tabbak, verschiedenen Drogen als auch mentale Gesundheit in den USA
--   alle amerikanischen, nicht-institutionalisierten Bürger\*innen ab 12 
+-   alle amerikanischen, nicht-institutionalisierten Bürger\*innen ab 12
     -   ausgeschlossen: Obdachlose, Personen aktiv im Militär, Gefängnisse und Krankenhäuser
 -   Stichprobe basiert auf einer unabhängigen,mehrstufigen Gebietswahrscheinlichkeitsstichprobe
 -   Querschnittsdaten
@@ -43,25 +42,20 @@ transition: slide
 
 ![](Presentation_files/Pres_plots/Karte_Verteilung.png)
 
-
-
 ## Themenfragen
 
 -   Wie haben sich die Konsummuster in dem Zeitraum 2015 bis 2019 entwickelt?
 -   Wie hängt der Konsum im Jahr 2019 mit demografischen Merkmalen zusammen?
 -   Wie steht der Konsum im Jahr 2019 mit dem psychischen Gesundheitszustand der Befragten in Verbindung?
 
-
-
 ## Terminologie
 
 -   Ausgewählten Substanzen: Tabak, Alkohol, Cokain, Heroin
 
-- Drogenkonsum und Abhängigkeit:
-    -   Abhängigkeit ist definiert als Drogen suchendes Verhalten ,welches SChwer zu kontrollieren ist, trotz bewusster
-negativer Folgen
-    -   hält dieses Verhalten länger als einen Monat: Drogenmissbrauch
+-   Drogenkonsum und Abhängigkeit:
 
+    -   Abhängigkeit ist definiert als Drogen suchendes Verhalten ,welches SChwer zu kontrollieren ist, trotz bewusster negativer Folgen
+    -   hält dieses Verhalten länger als einen Monat: Drogenmissbrauch
 
 ## Drogenkonsum von 2015-2019
 
@@ -196,7 +190,6 @@ negativer Folgen
 ### Ethnische Zugehörigkeit der Befragten
 
 ![](Presentation_files/Pres_plots/Ethnie_Verteilung_plot.png)
-
 
 ## Nikotinabhängigkeit
 
