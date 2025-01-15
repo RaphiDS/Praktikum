@@ -4,9 +4,9 @@ subtitle: |
   Anfängerpraktikum im WS 24/25 bei Dr. Sabine Hoffman, Dr. Fabian Scheipl, Helena Veit
 format: 
   revealjs:
-    embed-resources: false
+    embed-resources: true
     title-slide: true
-    slide-number: true
+    slide-number: c
 editor: visual
 author: "Denis Oluri, Sarah Puthiaparampil, Raphael Schneider"
 incremental: true
@@ -17,7 +17,6 @@ transition: slide
 ## Gliederung
 
 -   Einführung Datensatz
--   Vorstellung Thema
 -   Verlauf Drogenkonsum von 2015 - 2019
 -   Demografische Faktoren
 -   Substanzabhängigkeit und mentale Gesundheit
@@ -29,10 +28,17 @@ transition: slide
 -   "National Survey on Drug Use and Health" durchgeführt von SAMHSA
 -   Hauptquelle zu dem Konsum von Alkohol, Tabak, verschiedener Drogen und zu mentaler Gesundheit in den USA
 -   GG: amerikanischen, nicht-institutionalisierten Bürger\*innen ab 12
--   Größe: ca. 56.000 UE
--   Querschnittsdaten: jedes Jahr neu erhobene Untersuchung
--   Stichproben so gewählt, dass...
-    -   Geschlecht und Ethnie proportional zur Bevölkerung der USA sind
+-   Größe: ca. 56.000 Beobachtungen zu 1693 Variablen
+
+------------------------------------------------------------------------
+
+| year| cocever| COCUS30A| CATAG2| ndssdnsp|
+|----:|-------:|--------:|------:|--------:|
+| 2015|       1|        2|      1|        0|
+| 2016|       2|       94|      3|        1|
+| 2015|       1|       30|      1|        1|
+| 2019|      94|        1|      2|        0|
+| 2018|       2|       97|      2|        0|
 
 ------------------------------------------------------------------------
 
@@ -41,20 +47,12 @@ transition: slide
 ![](Presentation_files/Pres_plots/Karte_Verteilung.png)
 
 
-## Themenfragen
-
--   "Wie haben sich die Konsummuster in dem Zeitraum 2015 bis 2019 entwickelt?"
--   "Wie hängt der Konsum im Jahr 2019 mit demografischen Merkmalen zusammen?"
--   "Wie steht der Konsum im Jahr 2019 mit dem psychischen Gesundheitszustand der Befragten in Verbindung?"
-
-
 
 ## Definition
 
--    Ausgewählten Substanzen: Tabak, Alkohol, Kokain, Heroin
 - Drogenkonsum und Abhängigkeit:
     -   chronische, fortschreitende Krankheit im direkten Zusammenhang mit dauerhaften Konsum
-    -   gekennzeichnet durch erhebluche physiologische, psychologische oder soziale Funktionsstörung
+    -   gekennzeichnet durch erhebliche physiologische, psychologische oder soziale Funktionsstörung
     -   hält dieses Verhalten länger an: Drogenmissbrauch
 
 
@@ -63,11 +61,9 @@ transition: slide
 
 ::: panel-tabset
 ### Jemals
-
 ![](Presentation_files/Pres_plots/Substanzen_Verlauf_plot.png)
 
-### Konsum im letzten 30 Tagen
-
+### letzten 30 Tage
 ![](Presentation_files/Pres_plots/Monatskonsum_Verlauf_plot.png)
 
 ### Abhängigkeit
@@ -78,11 +74,9 @@ transition: slide
 
 ::: panel-tabset
 ### Jemals
-
 ![](Presentation_files/Pres_plots/Jemals_Tabbak_plot.png)
 
-### Konsum in letzten 30 Tagen
-
+### letzten 30 Tage
 ![](Presentation_files/Pres_plots/Monatskonsum_Tabbak_plot.png)
 :::
 
@@ -91,23 +85,18 @@ transition: slide
 
 ::: panel-tabset
 ### 2015
-
 ![](Presentation_files/Pres_plots/Alk_15_plot.png)
 
 ### 2016
-
 ![](Presentation_files/Pres_plots/Alk_16_plot.png)
 
 ### 2017
-
 ![](Presentation_files/Pres_plots/Alk_17_plot.png)
 
 ### 2018
-
 ![](Presentation_files/Pres_plots/Alk_18_plot.png)
 
 ### 2019
-
 ![](Presentation_files/Pres_plots/Alk_19_plot.png)
 :::
 
@@ -115,23 +104,18 @@ transition: slide
 
 ::: panel-tabset
 ### 2015
-
 ![](Presentation_files/Pres_plots/Zig_15_plot.png)
 
 ### 2016
-
 ![](Presentation_files/Pres_plots/Zig_16_plot.png)
 
 ### 2017
-
 ![](Presentation_files/Pres_plots/Zig_17_plot.png)
 
 ### 2018
-
 ![](Presentation_files/Pres_plots/Zig_18_plot.png)
 
 ### 2019
-
 ![](Presentation_files/Pres_plots/Zig_19_plot.png)
 :::
 
@@ -197,26 +181,26 @@ transition: slide
 
 ::: panel-tabset
 ### Alter
-
 ![](Presentation_files/Pres_plots/NikAbhängig_Alter.png)
 
-### Ethnie
-
+### Race
 ![](Presentation_files/Pres_plots/NikAbhängig_Ethnie.png)
 
 ### Geschlecht
+![](Presentation_files/Pres_plots/NikAbhängig_Geschlecht.png)
 :::
 
 ## Demografie und Substanzkonsum
 ::: panel-tabset
 
 ### Alter
-
 ![](Presentation_files/Pres_plots/SubsAbhängig_Alter.png)
 
 ### Race
-
 ![](Presentation_files/Pres_plots/SubsAbhängig_Ethnie.png)
+
+### Geschlecht
+![](Presentation_files/Pres_plots/SubsAbhängigkeit_Geschlecht.png)
 :::
 
 ## Mentale Gesundheit
@@ -229,7 +213,7 @@ transition: slide
 
 ------------------------------------------------------------------------
 
-### Abhängigkeit und MI (= Mental Illness)
+### Abhängigkeit und Mentale Gesundheit
 
 ![](Presentation_files/Pres_plots/SubsAbhängig_Gesundheit.png)
 
@@ -240,12 +224,20 @@ transition: slide
 
 ## Fazit
 
-1.   Wie haben sich die Konsummuster in dem Zeitraum 2015 bis 2019 entwickelt?
+*1.   Wie haben sich die Konsummuster in dem Zeitraum 2015 bis 2019 entwickelt?*
     -    Es lassen sich keine eindeutigen Trends im Konsumverhalten erkennen, mit Ausnahme des Zigarettenkonsums, der eine bemerkenswerte Veränderung zeigt.
-2.   Wie hängt der Konsum im Jahr 2019 mit demografischen Merkmalen zusammen?
+*2.   Wie hängt der Konsum im Jahr 2019 mit demografischen Merkmalen zusammen?*
     -   Beim Geschlecht zeigen sich keine signifikanten Unterschiede im Konsumverhalten, während bei anderen demografischen Faktoren deutliche Unterschiede erkennbar sind.
-3.   Wie steht der Konsum im Jahr 2019 mit dem psychischen Gesundheitszustand der Befragten in Verbindung?
+    - Die Unterschiede beim Geschlecht sind im Vergleich zu anderen demografischen Faktoren sehr klein
+*3.   Wie steht der Konsum im Jahr 2019 mit dem psychischen Gesundheitszustand der Befragten in Verbindung?*
     -   Es besteht ein erkennbarer Zusammenhang zwischen Drogenabhängigkeit und psychischen Gesundheitsproblemen, wobei Betroffene häufiger unter mentalen Belastungen leiden.
+
+## Diskussion
+
+-   viele weitere Demografische Faktoren im Datensatz --> aus zeitlichen Gründen eingeschränkt
+-    psychische Gesundheitszustand: Abhängig von viele Faktoren, viele Formen an Erkrankungen
+
+## Anhang
 
 ## Quelle
 

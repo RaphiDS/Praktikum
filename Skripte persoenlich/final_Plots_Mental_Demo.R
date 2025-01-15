@@ -207,13 +207,23 @@ ggplot(Dependent.Users.Race , aes(x = factor(NEWRACE2), fill = factor(Drug)))+
 ## Drogen und Einkommen
 Drogen.Einkommen <- data2019 %>%
   select(depndalc, depndcoc,depndher, income) %>%
-  pivot_longer(cols = c(depndcoc,depndher, depndalc), names_to = "Drug", values_to = "Usage")%>%
-  filter(Usage == 1) %>%
-  ggplot(aes(x = factor(income), fill = factor(Drug)))+
+  mutate(Dependency = case_when(
+    depndalc == 1 & depndcoc == 0 & depndher == 0 ~ "Alkohol",
+    depndcoc == 1 & depndalc == 0 & depndher == 0 ~ "Kokain",
+    depndher == 1 & depndalc == 0 & depndcoc == 0 ~ "Heroin",
+    depndalc == 1 & depndcoc == 1 | depndalc == 1 & depndher == 1 | depndcoc == 1 & depndher == 1 ~ "Mehrfachabhängigkeit"
+  )) %>%
+  filter(!is.na(Dependency)) %>%
+  mutate(Dependency = factor(Dependency, levels = c("Alkohol", "Kokain", "Heroin", "Mehrfachabhängigkeit"))) %>%
+  group_by(income, Dependency) %>%
+  ggplot(aes(x = factor(income), fill = Dependency))+
   geom_bar(position = "fill")+
+  geom_vline(xintercept = 3, linetype = "dotted", color = "black", size = 1 )+
   scale_fill_manual(name = "Drogen",
-                    labels = c("depndalc" = "Alkohol","depndcoc" = "Kokain", "depndher" = "Heroin"),
-                    values = c("#0072B2","#E69F00", "#CC79A7"))+
+                    values = c("Alkohol" = "#0072B2",  # Blau
+                               "Kokain" = "#E69F00",  # Gelb
+                               "Heroin" = "#CC79A7",  # Rosa
+                               "Mehrfachabhängigkeit" = "grey30")) +  # Grau
   scale_x_discrete(labels = c("1" = "Weniger als 20.000", "2" = "20.000 - 49.999", "3" = "50.000 - 74.999", "4" = "75.000+"))+
   labs(x = "Familieneinkommen in $", y = "Anteil")+
   theme_light() +
@@ -221,7 +231,8 @@ Drogen.Einkommen <- data2019 %>%
     axis.title = element_text(size = 20),  # Achsentitel
     axis.text  = element_text(size = 20),  # Achsbeschriftungen
     legend.title = element_text(size = 17,5),
-    legend.text = element_text(size = 10)
+    legend.text = element_text(size = 17,5),
+    legend.position = "bottom",
   )
 Drogen.Einkommen
 ## Drogen und Armut
@@ -285,18 +296,18 @@ Drogen.Gehalt.Kreuztab <- data2019%>%
 #############
 
 ## MDE : Mayor Depressive Episode
-MDE.Age <- data2019 %>%
-  select(amdeyr,ymdeyr, catage) %>%
+MDE.Age <- data2019%>%
+  select(amdeyr,ymdeyr, CATAG2) %>%
   pivot_longer(cols =c(amdeyr,ymdeyr), names_to = "MDE", values_to = "Answer") %>%
-  group_by(catage) %>%
-  mutate (total = n()) %>% 
-  filter(Answer == 1) %>%
+  filter(Answer > 0)%>%
+  mutate (total = n())%>% 
+  group_by(CATAG2, Answer) %>%
   summarise(count = n(), total = first(total)) %>%
   mutate(count = count/total)
 
-ggplot(MDE.Age, aes(x = factor(catage), y = count))+
-  geom_col()+
-  scale_x_discrete(labels = c("1"= "12-17", "2" = "18-25", "3" = "26-34", "4" = "35+"))+
+ggplot(MDE.Age, aes(x = factor (CATAG2), y = count, fill = factor(Answer)))+
+  geom_col(position = "dodge")+
+  scale_x_discrete(labels = c("1"= "12-17", "2" = "18-25", "3" = "26+"))+
   labs( title = "MDE und Altersgruppen", x = "Altersgruppen", y = "Anteil")+
   theme_light() +
   theme(
@@ -304,6 +315,7 @@ ggplot(MDE.Age, aes(x = factor(catage), y = count))+
     axis.text  = element_text(size = 15),  # Achsbeschriftungen
     legend.position = "bottom"  # Legendentext
   )
+
 #-------------------------------------------------------------------------------
 ## Drug Dependency and 'Degree' of Mental illness
 Drug.Dependency.MI <- data2019 %>%
@@ -399,47 +411,17 @@ Youth.MDE.Drugs <- data2019 %>%
  
   
   #-------------------------------------------------------------------------
-  ## Youth with MDE and Substance Abuse
-  Youth.MDE.Substance <- data2019 %>%
-    select(YMDEAUDPY, ymdeimudpy, ymdeudpy) # Variable fehlt
-  
-  ## YOuth MDE an Dependency
-  
-## Spearman Rang versuch
+ 
   
   
   #########
   #Appendix
   #########
+
   
-## SEVERE MDE with role impairment and ALcohol or (illicit) Substance Abuse
-  # Normal MDE nicht in ALlfilterdata!
-  Youth.MDE.Substance <- data2019 %>%
-    select(ymdeimaud, ymdeimudpy) ## Daten fehlen!
+
   
-# Youth MDE
-  ## Youth MDE in the last year
-  Youth.MDE <- data2019 %>%
-    select(ymdeyr) %>%
-    filter(ymdeyr >= 0)%>%
-    pivot_longer(cols = everything(), names_to = "Var", values_to = "Response")%>%
-    group_by(Response)%>%
-    summarise(count = n())#%>%
-  mutate(count = count/56136)
-  
-  ggplot(Youth.MDE, aes(x = Response, y = count))+
-    geom_col()+
-    scale_x_discrete(labels = c("1" = "Yes", "2" = "No"))+
-    labs(title = "Youth mith MDE in last Year")
-  #No Treatment but Drugs
-  TreatmentNo.Drugs <- data2019 %>%
-    select
-  
-  ## Youth with MDE and Substance Abuse
-  Youth.MDE.Substance <- data2019 %>%
-    select(YMDEAUDPY, ymdeimudpy, ymdeudpy) # Variable fehlt
-  
-  ## Youth MDE an Dependency
+
   
   
   
