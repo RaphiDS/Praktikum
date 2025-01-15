@@ -23,12 +23,21 @@ transition: slide
 -   Substanzabhängigkeit und mentale Gesundheit
 -   Fazit
 
+<<<<<<< HEAD
 
 ## Datensatz: NSDUH
 
 -   "National Survey on Drug Use and Health" durchgeführt von SAMHSA
 -   Hauptquelle zu dem Konsum von Alkohol, Tabak, verschiedener Drogen und zu mentaler Gesundheit in den USA
 -   alle amerikanischen, nicht-verbeamtete Bürger\*innen ab 12
+=======
+## Infos über den Datensatz
+
+-   "National Survey on Drug Use and Health", unterstützt von SAMHSA
+-   Hauptquelle zum Konsum von Alkohol, Tabbak, verschiedenen Drogen als auch mentale Gesundheit in den USA
+-   alle amerikanischen, nicht-institutionalisierten Bürger\*innen ab 12
+    -   ausgeschlossen: Obdachlose, Personen aktiv im Militär, Gefängnisse und Krankenhäuser
+>>>>>>> 1f4a987025dd55f95a1016636b9a46754fb70c27
 -   Stichprobe basiert auf einer unabhängigen,mehrstufigen Gebietswahrscheinlichkeitsstichprobe
 -   Querschnittsdaten
 -   Stichproben so gewählt, dass...
@@ -41,25 +50,33 @@ transition: slide
 
 ![](Presentation_files/Pres_plots/Karte_Verteilung.png)
 
-
-
 ## Themenfragen
 
 -   "Wie haben sich die Konsummuster in dem Zeitraum 2015 bis 2019 entwickelt?"
 -   "Wie hängt der Konsum im Jahr 2019 mit demografischen Merkmalen zusammen?"
 -   "Wie steht der Konsum im Jahr 2019 mit dem psychischen Gesundheitszustand der Befragten in Verbindung?"
 
+<<<<<<< HEAD
 
 
 ## Definition
+=======
+## Terminologie
+>>>>>>> 1f4a987025dd55f95a1016636b9a46754fb70c27
 
 
+<<<<<<< HEAD
 - Drogenkonsum und Abhängigkeit:
     -   Abhängigkeit ist definiert als drogensuchendes Verhalten, welches trotz bewusster und
 negativer Folgen schwer zu kontrollieren ist
     -   hält dieses Verhalten länger als einen Monat an: Drogenmissbrauch
 -    Ausgewählten Substanzen: Tabak, Alkohol, Cokain, Heroin
+=======
+-   Drogenkonsum und Abhängigkeit:
+>>>>>>> 1f4a987025dd55f95a1016636b9a46754fb70c27
 
+    -   Abhängigkeit ist definiert als Drogen suchendes Verhalten ,welches SChwer zu kontrollieren ist, trotz bewusster negativer Folgen
+    -   hält dieses Verhalten länger als einen Monat: Drogenmissbrauch
 
 ## Drogenkonsum von 2015-2019
 
@@ -192,7 +209,6 @@ negativer Folgen schwer zu kontrollieren ist
 ## Demografie - Ethnie
 
 ![](Presentation_files/Pres_plots/Ethnie_Verteilung_plot.png)
-
 
 ## Nikotinabhängigkeit
 
