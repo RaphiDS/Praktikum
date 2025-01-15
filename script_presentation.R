@@ -23,7 +23,7 @@ ggplot(aes(x = factor(Answer,
                               "5" = "Asiaten",
                               "6" = "Gemischt",
                               "7" = "Hispanisch")) +
-  labs(y = "Anteil", x = "Ethnische Zugehörigkeit") +
+  labs(y = "Anteil", x = "Ethnische Zugehörigkeit", title = "") +
   theme_light() +
   theme(
     axis.title.x = element_text(margin = margin(t = 20)),
