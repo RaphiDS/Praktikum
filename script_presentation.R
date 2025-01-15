@@ -36,7 +36,7 @@ ggsave("Presentation_files/Pres_plots/Ethnie_Verteilung_plot.png",
 
 ## ALtersverteilung
 Altersverteilung <- data2019 %>%
-  select(catage) %>%
+  select(CATAG2) %>%
   pivot_longer(cols = everything(), names_to = "variable", values_to = "Group") %>%
   group_by(Group) %>%
   summarize(count =n()/56136)%>%
@@ -48,9 +48,9 @@ Altersverteilung <- data2019 %>%
     axis.title = element_text(size = 20),  # Achsentitel
     axis.text  = element_text(size = 20)  # Achsbeschriftungen
   ) +
-  scale_x_discrete(labels = c("12-17", "18-25", "26-34", "35+"))
+  scale_x_discrete(labels = c("12-17", "18-25", "26+"))
 
-ggsave ("Presentation_files/Pres_plots/Altersverteilung.png", plot = Altersverteilung, width = 15, height = 10, dpi = 300)
+ggsave ("Presentation_files/Pres_plots/Altersverteilung.png", plot = Altersverteilung, width = 20, height = 10, dpi = 300)
 ##### Drugs Denis Raphael
 
 # 1) Function: Generates a summarized table for a specified (drug) variable,
@@ -355,7 +355,7 @@ ggsave("Presentation_files/Pres_plots/Her_19_plot.png",
 #-------------------------------------------------------------------------------
 ## Nicotine Dependency Age
 Nik.Abhängig.Alter <- data2019 %>%
-  select(catage, ndssdnsp) %>%
+  select(CATAG2, ndssdnsp) %>%
   group_by(catage) %>%
   mutate(total = n()) %>%  # Gesamtanzahl pro catage berechnen
   filter(ndssdnsp == 1) %>%
@@ -363,7 +363,7 @@ Nik.Abhängig.Alter <- data2019 %>%
   mutate(count = count / total)%>%
   ggplot(aes(x = factor(catage), y = count))+
   geom_col(fill = "#009E73")+
-  scale_x_discrete(name = "Gruppierung",labels = c("12-17", "18-25", "26-34", "35+"))+
+  scale_x_discrete(name = "Gruppierung",labels = c("12-17", "18-25", "26+"))+
   labs( x = " ", y = "Anteil")+
   theme_light() +
   theme(
@@ -410,14 +410,24 @@ ggsave("Presentation_files/Pres_plots/NikAbhängig_Ethnie.png",
 #-------------------------------------------------------------------------------
 ## Drug Dependency by age group
 Subs.Abhängig.Alter <- data2019 %>%
-  select(catage,depndcoc,depndher, depndalc) %>%
-  pivot_longer(cols = c(depndcoc, depndher, depndalc), names_to = "Drug", values_to = "Usage") %>%
-  filter (Usage == 1)%>%
-  ggplot(aes(x = factor(catage), fill = factor(Drug)))+
-  geom_bar(position = "dodge")+
-  scale_fill_manual(name = "Drogen",labels = c("depndalc" = "Alkohol","depndcoc" = "Kokain", "depndher" = "Heroin"),
-                    values = c("#0072B2","#E69F00", "#CC79A7")) +
-  scale_x_discrete(labels = c("1" = "12-17", "2" = "18-25", "3" = "26-34", "4" = "35+"))+
+  select(CATAG2,depndcoc,depndher, depndalc) %>%
+  mutate(Dependency = case_when(
+    depndalc == 1 & depndcoc == 0 & depndher == 0 ~ "Alkohol",
+    depndcoc == 1 & depndalc == 0 & depndher == 0 ~ "Kokain",
+    depndher == 1 & depndalc == 0 & depndcoc == 0 ~ "Heroin",
+    depndalc == 1 & depndcoc == 1 | depndalc == 1 & depndher == 1 | depndcoc == 1 & depndher == 1 ~ "Mehrfachabhängigkeit"
+  )) %>%
+  filter(!is.na(Dependency)) %>%
+  mutate(Dependency = factor(Dependency, levels = c("Alkohol", "Kokain", "Heroin", "Mehrfachabhängigkeit"))) %>%
+  group_by(CATAG2, Dependency) %>%
+  ggplot(aes(x = factor(CATAG2), fill = Dependency))+
+  geom_bar(position = "fill")+
+  scale_fill_manual(name = "Drogen",
+                    values = c("Alkohol" = "#0072B2",  # Blau
+                               "Kokain" = "#E69F00",  # Gelb
+                               "Heroin" = "#CC79A7",  # Rosa
+                               "Mehrfachabhängigkeit" = "grey30")) +  # Grau
+  scale_x_discrete(labels = c("1" = "12-17", "2" = "18-25", "3" = "26+"))+
   labs(x = "Gruppierung", y = "Anteil")+
   theme_light() +
   theme(
@@ -427,15 +437,23 @@ Subs.Abhängig.Alter <- data2019 %>%
     legend.title = element_text(size = 17,5)
   )
 ggsave("Presentation_files/Pres_plots/SubsAbhängig_Alter.png", 
-       plot = Subs.Abhängig.Alter, width = 12, height = 8, dpi = 300)
+       plot = Subs.Abhängig.Alter, width = 15, height = 7, dpi = 300)
+Subs.Abhängig.Alter
 #------------------------------------------------------------------------------
 ## Drug Dependency and Race
 Subs.Abhängig.Ethnie <- data2019 %>%
   select(NEWRACE2, depndcoc, depndalc, depndher) %>%
-  pivot_longer(cols = c(depndcoc,depndher, depndalc), names_to = "Drug", values_to = "Usage") %>%
-  filter(Usage == 1)%>%
-  ggplot(aes(x = factor(NEWRACE2, levels = c(1, 7, 2, 5, 6, 3, 4)), fill = factor(Drug)))+
-  geom_bar(position = "fill")+
+  mutate(Dependency = case_when(
+    depndalc == 1 & depndcoc == 0 & depndher == 0 ~ "Alkohol",
+    depndcoc == 1 & depndalc == 0 & depndher == 0 ~ "Kokain",
+    depndher == 1 & depndalc == 0 & depndcoc == 0 ~ "Heroin",
+    depndalc == 1 & depndcoc == 1 | depndalc == 1 & depndher == 1 | depndcoc == 1 & depndher == 1 ~ "Mehrfachabhängigkeit"
+  )) %>%
+  filter(!is.na(Dependency)) %>%
+  mutate(Dependency = factor(Dependency, levels = c("Alkohol", "Kokain", "Heroin", "Mehrfachabhängigkeit"))) %>%
+  group_by(NEWRACE2, Dependency) %>%
+  ggplot(aes(x = factor(NEWRACE2, levels = c(1, 7, 2, 5, 6, 3, 4)), fill = Dependency)) +
+  geom_bar(position = "fill") +
   scale_x_discrete(labels = c("1" = "Weisse",
                               "2" = "Afro \nAmerikaner",
                               "3" = "Am/Ak \nIndigene",
@@ -444,19 +462,22 @@ Subs.Abhängig.Ethnie <- data2019 %>%
                               "6" = "Gemischt",
                               "7" = "Hispanisch")) +
   scale_fill_manual(name = "Drogen",
-                    labels = c("depndalc" = "Alkohol","depndcoc" = "Kokain", "depndher" = "Heroin"),
-                    values = c("#0072B2","#E69F00", "#CC79A7"))+
-  labs(x = "Gruppen", y = "Anteil")+
+                    values = c("Alkohol" = "#0072B2",  # Blau
+                               "Kokain" = "#E69F00",  # Gelb
+                               "Heroin" = "#CC79A7",  # Rosa
+                               "Mehrfachabhängigkeit" = "grey30")) +  # Grau
+  labs(x = "Gruppen", y = "Anteil") +
   theme_light() +
   theme(
-    axis.title = element_text(size = 20),  # Achsentitel
-    axis.text  = element_text(size = 20),  # Achsbeschriftungen
-    legend.text = element_text(size = 17,5),
-    legend.title = element_text(size = 17,5)
+    axis.title = element_text(size = 20),  
+    axis.text  = element_text(size = 20),  
+    legend.text = element_text(size = 17.5),
+    legend.title = element_text(size = 17.5)
   )
 
 ggsave("Presentation_files/Pres_plots/SubsAbhängig_Ethnie.png", 
-       plot = Subs.Abhängig.Ethnie, width = 12, height = 6, dpi = 300)
+       plot = Subs.Abhängig.Ethnie, width = 15, height = 7, dpi = 300)
+
 ########################################################################################################################################
 
 ## Mentale Gesundheit fertig
