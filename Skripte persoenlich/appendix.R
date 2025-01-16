@@ -143,17 +143,6 @@ Drug.Dependency.Abuse <- data2019 %>%
   ) 
 
 # Create stacked bar plot
-ggplot(Drug.Dependency.Abuse, aes(x = Substance, fill = factor(Condition, levels = c("Konsum im letzten Jahr", "Abhängigkeit", "Missbrauch")))+
-  geom_bar(position = "fill") +
-  scale_fill_manual(values = ("grey65", "grey45", "grey30"))+
-  labs(title = "Substanzkonsum, Abhängigkeit und Missbrauch im letzten Jahr",
-       x = "Substanz")+
-  scale_y_continuous(labels = scales::percent)+
-  theme_light() +
-  theme(
-    axis.title = element_text(size = 20),  # Achsentitel
-    axis.text  = element_text(size = 15),  # Achsbeschriftungen
-  )
 
 #nezer versuch
 GPT.Drug.Dependency.Abuse <- data2019 %>%
@@ -250,36 +239,67 @@ print(Drug.Dependency.Table)
 
 
 ### Demografisch
+
+
 Drogen.Einkommen <- data2019 %>%
-  select(depndalc, depndcoc,depndher, income) %>%
-  mutate(Dependency = case_when(
-    depndalc == 1 & depndcoc == 0 & depndher == 0 ~ "Alkohol",
-    depndcoc == 1 & depndalc == 0 & depndher == 0 ~ "Kokain",
-    depndher == 1 & depndalc == 0 & depndcoc == 0 ~ "Heroin",
-    depndalc == 1 & depndcoc == 1 | depndalc == 1 & depndher == 1 | depndcoc == 1 & depndher == 1 ~ "Mehrfachabhängigkeit"
-  )) %>%
+  select(depndalc, depndcoc, depndher, income) %>%
+  mutate(
+    Dependency = case_when(
+      depndalc == 1 & depndcoc == 0 & depndher == 0 ~ "Alkohol",
+      depndcoc == 1 & depndalc == 0 & depndher == 0 ~ "Kokain",
+      depndher == 1 & depndalc == 0 & depndcoc == 0 ~ "Heroin",
+      depndalc == 1 & depndcoc == 1 | 
+        depndalc == 1 & depndher == 1 | 
+        depndcoc == 1 & depndher == 1 ~ "Mehrfachabhängigkeit"
+    )
+  ) %>%
   filter(!is.na(Dependency)) %>%
-  mutate(Dependency = factor(Dependency, levels = c("Alkohol", "Kokain", "Heroin", "Mehrfachabhängigkeit"))) %>%
+  mutate(
+    Dependency = factor(Dependency, 
+                        levels = c("Alkohol", "Kokain", "Heroin", "Mehrfachabhängigkeit"))
+  ) %>%
   group_by(income, Dependency) %>%
-  ggplot(aes(x = factor(income), fill = factor(Dependency)))+
-  geom_bar(position = "fill")+
-  geom_vline(xintercept = 3, linetype = "dotted", color = "black", size = 1 )+
+  ggplot(aes(x = factor(income), fill = factor(Dependency))) +
+  geom_bar(position = "fill") +
+  geom_vline(
+    xintercept = 3, 
+    linetype = "dotted", 
+    color = "black", 
+    size = 1
+  ) +
   scale_fill_manual(
-    name = "Drogen",
+    name = "Art der Abhängigkeit",   # <- Titel der Legende
     values = c(
       "Alkohol" = "#0072B2",            # Blau
-      "Kokain" = "#E69F00",             # Gelb
-      "Heroin" = "#CC79A7",             # Rosa
+      "Kokain"  = "#E69F00",            # Orange/Gelb
+      "Heroin"  = "#CC79A7",            # Rosa
       "Mehrfachabhängigkeit" = "grey30" # Grau
-    ))+
-  scale_x_discrete(labels = c("1" = "Weniger als 20.000", "2" = "20.000 - 49.999", "3" = "50.000 - 74.999", "4" = "75.000+"))+
-  labs(x = "Familieneinkommen in $", y = "Anteil")+
+    )
+  ) +
+  scale_x_discrete(
+    labels = c(
+      "1" = "Weniger als 20.000", 
+      "2" = "20.000 - 49.999", 
+      "3" = "50.000 - 74.999", 
+      "4" = "75.000+"
+    )
+  ) +
+  labs(
+    x = "Familieneinkommen in $",
+    y = "Anteil"
+    # Optional: falls du lieber hier die Legende benennen willst, ginge z. B.:
+    # fill = "Abhängigkeit"
+  ) +
   theme_light() +
   theme(
-    axis.title = element_text(size = 20),  # Achsentitel
-    axis.text  = element_text(size = 20),  # Achsbeschriftungen
-    legend.title = element_text(size = 17,5),
-    legend.text = element_text(size = 17,5),
-    legend.position = "bottom",
+    axis.title      = element_text(size = 20),   
+    axis.text       = element_text(size = 20),   
+    legend.title    = element_text(size = 17.5), # auf Dezimalpunkt achten
+    legend.text     = element_text(size = 17.5),
+    legend.position = "bottom"
   )
 Drogen.Einkommen
+
+
+
+
