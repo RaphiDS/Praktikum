@@ -1,21 +1,19 @@
 ---
 title: ""
-subtitle: |
-  Anfängerpraktikum im WS 24/25 bei Dr. Sabine Hoffman, Dr. Fabian Scheipl, Helena Veit
+title-slide: false
 format: 
   revealjs:
     embed-resources: true
     title-slide: true
     slide-number: c
 editor: visual
-author: "Denis Oluri, Sarah Puthiaparampil, Raphael Schneider"
 incremental: true
 smaller: true
 transition: slide
 ---
 
-<!-- Custom Title Slide -->
-![](Presentation_files/Praktikum_titel.png){width="100%" height="100%"}
+## {data-background="Presentation_files/Titel_Folie_Praktikum.png"}
+
 
 ## Gliederung
 
@@ -26,9 +24,8 @@ transition: slide
 -   Fazit
 -   Limitationen
 
-------------------------------------------------------------------------
 
-![](Presentation_files/Pres_plots/NSDUH-Logo.png){fig-align="left" height="5cm"}
+## NSDUH
 
 -   "National Survey on Drug Use and Health" durchgeführt von SAMHSA
 -   Hauptquelle über den Konsum von Alkohol, Tabak, verschiedener Drogen und zu mentaler Gesundheit in den USA
@@ -244,12 +241,13 @@ transition: slide
 
 ## Fazit
 
-   *1. Wie haben sich die Konsummuster in dem Zeitraum 2015 bis 2019 entwickelt?* 
+-   *1. Wie haben sich die Konsummuster in dem Zeitraum 2015 bis 2019 entwickelt?* 
     -   Es lassen sich keine eindeutigen Trends im Konsumverhalten erkennen, mit Ausnahme des Zigarettenkonsums, der eine bemerkenswerte Veränderung zeigt.
-    *2. Wie hängt der Konsum im Jahr 2019 mit demografischen Merkmalen zusammen?* 
-    -   Beim Geschlecht zeigen sich keine signifikanten Unterschiede im Konsumverhalten, während bei anderen demografischen Faktoren deutliche Unterschiede erkennbar sind.
-    -   Die Unterschiede beim Geschlecht sind im Vergleich zu anderen demografischen Faktoren sehr klein 
-    *3. Wie steht der Konsum im Jahr 2019 mit dem psychischen Gesundheitszustand der Befragten in Verbindung?* 
+    
+-   *2. Wie hängt der Konsum im Jahr 2019 mit demografischen Merkmalen zusammen?*
+    -   Beim Geschlecht zeigen sich keine signifikanten Unterschiede im Konsumverhalten, während bei anderen demografischen Faktoren deutliche Unterschiede erkennbar sind. - Die Unterschiede beim Geschlecht sind im Vergleich zu anderen demografischen Faktoren sehr klein 
+    
+-   *3. Wie steht der Konsum im Jahr 2019 mit dem psychischen Gesundheitszustand der Befragten in Verbindung?*
     -   Es besteht ein erkennbarer Zusammenhang zwischen Drogenabhängigkeit und psychischen Gesundheitsproblemen, wobei Betroffene häufiger unter mentalen Belastungen leiden.
 
 ## Limitationen, Ausblick
@@ -257,11 +255,9 @@ transition: slide
 -   viele weitere Demografische Faktoren im Datensatz --\> nur auf die allgemeinen Beschränkt
 -   psychische Gesundheitszustand: Abhängig von viele Faktoren, viele Formen an Erkrankungen
 
-
 ## Anhang
-
 
 ## Quelle
 
--   NSDUH Codebook 2019 
+-   NSDUH Codebook 2019
 -   National Library of Medicine
