@@ -8,8 +8,8 @@ gender <- data2019 %>%
 ggplot(gender,aes(x = factor(gender, levels = 1:2, labels = c("Male", "Female")), y = count, fill = factor(gender)))+
   geom_col()+
   scale_y_continuous(labels = scales::percent)+
-  scale_fill_manual(values = c("1" = "blue", "2" = "red"), labels = c("1" = "Male", "2" = "Female"))+
-  labs(title = "Gender", y = "Percentage", fill = "Identity", x = "") +
+  scale_fill_manual(values = c("1" = "darkblue", "2" = "maroon"), labels = c("1" = "Male", "2" = "Female"))+
+  labs(title = "", y = "Percentage", fill = "Identity", x = "") +
   theme_light() +
   theme(
     axis.title = element_text(size = 20),  # Achsentitel
@@ -17,20 +17,6 @@ ggplot(gender,aes(x = factor(gender, levels = 1:2, labels = c("Male", "Female"))
     legend.position = "none"  # Legendentext
   )
 
-
-
-Racial.Background <- data2019 %>%
-  select (NEWRACE2, eduhighcat) %>% ## selected AI regions, racial background and education level
-  filter(eduhighcat <5)       ## wert 5 streichen? --> Leute unter 17 kein Abschluss, zählen nicht
-
-
-ggplot(Racial.Background, aes(x = NEWRACE2, fill = factor(eduhighcat)))+
-  geom_bar(position = "fill") +
-  scale_y_continuous(labels = scales::percent) +
-  scale_x_discrete(labels = c("1" = "White", "2" = "Afr.Am", "3" = "Am/AK Native", "4" ="Other Pac Isl", "5" = " Asian", "6" = "more than one Race", "7" = "Hispamic"))+
-  scale_fill_discrete(labels = c("1" = "some High School", "2"= "HIgh School Grad", "3" ="Some coll/Assoc Dg", "4"= "College graduate"))+
-  theme_light()+
-  labs(title = "Education achieved by each Race")
 
 
 ##########################
@@ -70,10 +56,10 @@ mosaicfun <- function(var1, var2, varname1, varname2) {
 }
 
 # Example calls for mosaic plots
-mosaicfun("herever", "cocever", "Heroin", "Kokain")
-mosaicfun("cigever", "cocever", "Zigaretten", "Kokain")
-mosaicfun("alcever", "cocever", "Alkohol", "Kokain")
-mosaicfun("alcever", "cigever", "Alkohol", "Zigaretten")
+#mosaicfun("herever", "cocever", "Heroin", "Kokain")
+#mosaicfun("cigever", "cocever", "Zigaretten", "Kokain")
+#mosaicfun("alcever", "cocever", "Alkohol", "Kokain")
+#mosaicfun("alcever", "cigever", "Alkohol", "Zigaretten")
 
 ##########################
 # Extension: Mosaic Plot for "Last 30 Days"
@@ -113,9 +99,9 @@ mosaicfun30 <- function(var1, var2, varname1, varname2) {
 }
 
 # Example call: Mosaic plot for the last 30 days
-mosaicfun30("CIG30USE", "COCUS30A", "Zigaretten", "Kokain")
+#mosaicfun30("CIG30USE", "COCUS30A", "Zigaretten", "Kokain")
 
-
+# ? noch mit drogen
 imputed.employment18 <- data2019 %>%
   select (IRWRKSTAT18) %>%
   filter (IRWRKSTAT18 < 99) %>%
@@ -137,51 +123,12 @@ ggplot(imputed.employment18, aes(x = factor(number), y = count, fill = factor(nu
   )
 
 
-Nic.Dependency.Gender <- data2019 %>%
-  select(ndssdnsp,irsex) %>%
-  filter(ndssdnsp == 1) %>%
-  group_by(irsex) %>%
-  summarise(count = n()) %>%
-  mutate (count = count/56136)
 
-ggplot(Nic.Dependency.Gender, aes(x = factor(irsex), y = count))+
-  geom_col()+
-  scale_y_continuous(labels = scales::percent)+
-  scale_x_discrete(labels = c("1" = "Männer", "2" = "Frauen"))+
-  labs(x = "Geschlecht", y = "Anteil")+
-  theme_light() +
-  theme(
-    axis.title = element_text(size = 20),  # Achsentitel
-    axis.text  = element_text(size = 20),  # Achsbeschriftungen
-    legend.position = "none"  # Legendentext
-  )
-
-
-Drug.Dependency.Gender <-data2019 %>%
-  select(irsex, depndcoc, depndalc, depndher) %>%
-  pivot_longer(cols = c(depndcoc,depndher, depndalc), names_to = "Drug", values_to = "Usage") %>%
-  filter(Usage == 1)
-
-ggplot(Drug.Dependency.Gender, aes(x = factor(Drug), fill = factor(irsex)))+
-  geom_bar(position = "fill")+
-  #geom_line(y = 0.5)+
-  labs(title = "Drug Dependency by Gender")+
-  scale_y_continuous(labels = scales::percent)+
-  scale_x_discrete(labels = c("depndalc" = "Alkohol", "depndcoc" = "Cokain", "depndher" = "Heroin"))+
-  scale_fill_manual(labels = c("1" = "Männer", "2" = "Frauen"), values =c("1" = "darkblue", "2" = "maroon"))+
-  labs(title = "Abhängigkeit von Männern und Frauen", x = "Substanz")+
-  theme_light() +
-  theme(
-    axis.title = element_text(size = 15),  # Achsentitel
-    axis.text  = element_text(size = 15),  # Achsbeschriftungen
-  )
 
 #-------------------------------------------------------------------------------
 ##Generel Drug Dependency / Abuse
 Drug.Dependency.Abuse <- data2019 %>%
   select(alcyr, cocyr, heryr, depndalc, depndcoc, depndher, abusealc, abusecoc,abuseher) %>%
-  mutate(ID = row_number()) %>%  # Add an ID column for pivoting
-  pivot_longer(cols = -ID, names_to = "Variable", values_to = "Value") %>%
   mutate(
     Substance = case_when(
       str_detect(Variable, "alc") ~ "Alkohol",
@@ -193,12 +140,12 @@ Drug.Dependency.Abuse <- data2019 %>%
       str_detect(Variable, "abuse") ~ "Missbrauch",
       str_detect(Variable, "yr") ~ "Konsum im letzten Jahr"
     )
-  ) %>%
-  filter(Value == 1)  # Keep only cases where the flag is 1 (indicating presence)
+  ) 
 
 # Create stacked bar plot
-ggplot(Drug.Dependency.Abuse, aes(x = Condition, fill = Substance)) +
+ggplot(Drug.Dependency.Abuse, aes(x = Substance, fill = factor(Condition, levels = c("Konsum im letzten Jahr", "Abhängigkeit", "Missbrauch")))+
   geom_bar(position = "fill") +
+  scale_fill_manual(values = ("grey65", "grey45", "grey30"))+
   labs(title = "Substanzkonsum, Abhängigkeit und Missbrauch im letzten Jahr",
        x = "Substanz")+
   scale_y_continuous(labels = scales::percent)+
@@ -208,72 +155,59 @@ ggplot(Drug.Dependency.Abuse, aes(x = Condition, fill = Substance)) +
     axis.text  = element_text(size = 15),  # Achsbeschriftungen
   )
 
+#nezer versuch
+GPT.Drug.Dependency.Abuse <- data2019 %>%
+  select(alcyr, cocyr, heryr, depndalc, depndcoc, depndher, abusealc, abusecoc, abuseher) %>%
+  mutate(ID = row_number()) %>%  # eine ID-Spalte anlegen
+  pivot_longer(
+    cols = -ID,                  # alle Spalten außer der ID
+    names_to = "Variable",       # Spaltennamen gehen in "Variable"
+    values_to = "Value"          # Werte gehen in "Value"
+  ) %>%
+  mutate(
+    Substance = case_when(
+      str_detect(Variable, "alc") ~ "Alkohol",
+      str_detect(Variable, "coc") ~ "Kokain",
+      str_detect(Variable, "her") ~ "Heroin"
+    ),
+    Condition = case_when(
+      str_detect(Variable, "depnd") ~ "Abhängigkeit",
+      str_detect(Variable, "abuse") ~ "Missbrauch",
+      str_detect(Variable, "yr")    ~ "Konsum im letzten Jahr"
+    )
+  ) %>%
+  filter(Value == 1)  # nur Zeilen behalten, in denen wirklich "1" steht
 
-# Youth MDE
-## Youth MDE in the last year
-Youth.MDE <- data2019 %>%
-  select(ymdeyr) %>%
-  filter(ymdeyr >= 0)%>%
-  pivot_longer(cols = everything(), names_to = "Var", values_to = "Response")%>%
-  group_by(Response)%>%
-  summarise(count = n())#%>%
-mutate(count = count/56136)
-
-ggplot(Youth.MDE, aes(x = Response, y = count))+
-  geom_col()+
-  scale_x_discrete(labels = c("1" = "Yes", "2" = "No"))+
-  labs(title = "Youth mith MDE in last Year")
-#No Treatment but Drugs
-TreatmentNo.Drugs <- data2019 %>%
-  select
-
-## Youth with MDE and Substance Abuse
-Youth.MDE.Substance <- data2019 %>%
-  select(YMDEAUDPY, ymdeimudpy, ymdeudpy) # Variable fehlt
-
-## YOuth MDE an Dependency
-
-## Spearman Rang versuch
-
-
-
-
-#-------------------------------------------------------------------------
-## Youth with MDE and Substance Abuse
-Youth.MDE.Substance <- data2019 %>%
-  select(YMDEAUDPY, ymdeimudpy, ymdeudpy) # Variable fehlt
-
-
-
-
-
-
-Drug.Dependency.MI <- data2019 %>%
-  select(depndalc,depndcoc,depndher,MI_CAT_U) %>%
-  filter (MI_CAT_U >= 0) %>%
-  pivot_longer(cols = c(depndalc, depndcoc,depndher), names_to = "Drug", values_to = "Response") %>%
-  filter( Response == 1) 
-
-ggplot(Drug.Dependency.MI, aes( x = factor(MI_CAT_U), fill = factor(Drug)))+
-  geom_bar(position = "fill")+
-  scale_y_continuous(labels = scales::percent)+
-  scale_x_discrete(labels = c("0" = "Keine Mentalen \nGesundheitsprobleme" , "1" = "'Milde' Mentale \nErkrankung", "2" = " 'Moderate' Mentale \nErkrankung", "3" = "Ernste Mentale \nErkrankungen"),
-                   guide = guide_axis(angle = 45))+
-  labs(x = "Art der Erkrankung", y = "Anteil")
-
-##GLeicher Plot, nur achsen vertauscht
-ggplot(Drug.Dependency.MI, aes(x = factor(Drug), fill = factor(MI_CAT_U)))+
-  geom_bar(position = "fill")+
-  scale_y_continuous(labels = scales::percent)+
-  scale_x_discrete(labels = c("depndalc" = "Alkohol", "depndcoc" = "Cokain","depndher" = "Heroin"))+
-  labs(title = "Substanzabhängigkeit und Mentale Gesundheit", x = " Substanz")+
-  scale_fill_discrete(name = "",labels = c("0" = "Keine Mentalen Gesundheitsprobleme" , "1" = "'Milde' Mentale Erkrankung", "2" = " 'Moderate' Mentale Erkrankung", "3" = "Ernste Mentale Erkrankungen"))+
+ggplot(
+  Drug.Dependency.Abuse, 
+  aes(
+    x = Substance, 
+    fill = factor(Condition, 
+                  levels = c("Konsum im letzten Jahr", "Abhängigkeit", "Missbrauch"))
+  )
+) +
+  geom_bar(position = "fill") +
+  # Achte hier auf c(...) bei den Werten
+  scale_fill_manual(name = "Art des Konsums",values = c("grey65", "grey45", "grey30")) +
+  labs(
+    title = "",
+    x = "Substanz",
+    y = "Prozent"
+  ) +
+  scale_y_continuous(labels = scales::percent) +
   theme_light() +
   theme(
-    axis.title = element_text(size = 15),  # Achsentitel
-    axis.text  = element_text(size = 20),  # Achsbeschriftungen
-    legend.position = "bottom"  # Legendentext
+    axis.title = element_text(size = 22),
+    axis.text  = element_text(size = 22),
+    legend.text = element_text(size = 20),
+    legend.title = element_text(size = 20)
   )
+
+  
+  
+  
+  
+
 
 #-------------------------------------------------------------------------------
 ## Adult Mental Heath / Substance Treatment
@@ -291,24 +225,6 @@ ggplot(Drug.Dependency.MI, aes( x = factor(MI_CAT_U), fill = factor(Drug)))+
   scale_x_discrete(labels = c("0" = "Keine Mentalen \nGesundheitsprobleme" , "1" = "'Milde' Mentale \nErkrankung", "2" = " 'Moderate' Mentale \nErkrankung", "3" = "Ernste Mentale \nErkrankungen"),
                    guide = guide_axis(angle = 45))+
   labs(x = "Art der Erkrankung", y = "Anteil")
-
-##GLeicher Plot, nur achsen vertauscht
-ggplot(Drug.Dependency.MI, aes(x = factor(Drug), fill = factor(MI_CAT_U)))+
-  geom_bar(position = "fill")+
-  scale_y_continuous(labels = scales::percent)+
-  scale_x_discrete(labels = c("depndalc" = "Alkohol", "depndcoc" = "Cokain","depndher" = "Heroin"))+
-  labs(title = "Substanzabhängigkeit und Mentale Gesundheit", x = " Substanz")+
-  scale_fill_discrete(name = "",labels = c("0" = "Keine Mentalen Gesundheitsprobleme" , "1" = "'Milde' Mentale Erkrankung", "2" = " 'Moderate' Mentale Erkrankung", "3" = "Ernste Mentale Erkrankungen"))+
-  theme_light() +
-  theme(
-    axis.title = element_text(size = 15),  # Achsentitel
-    axis.text  = element_text(size = 20),  # Achsbeschriftungen
-    legend.position = "bottom"  # Legendentext
-  )
-
-library(ggplot2)
-library(dplyr)
-library(tidyr)
 
 
 
@@ -334,7 +250,6 @@ print(Drug.Dependency.Table)
 
 
 ### Demografisch
-## Drogen und Einkommen
 Drogen.Einkommen <- data2019 %>%
   select(depndalc, depndcoc,depndher, income) %>%
   mutate(Dependency = case_when(
@@ -346,14 +261,17 @@ Drogen.Einkommen <- data2019 %>%
   filter(!is.na(Dependency)) %>%
   mutate(Dependency = factor(Dependency, levels = c("Alkohol", "Kokain", "Heroin", "Mehrfachabhängigkeit"))) %>%
   group_by(income, Dependency) %>%
-  ggplot(aes(x = factor(income), fill = Dependency))+
+  ggplot(aes(x = factor(income), fill = factor(Dependency)))+
   geom_bar(position = "fill")+
   geom_vline(xintercept = 3, linetype = "dotted", color = "black", size = 1 )+
-  scale_fill_manual(name = "Drogen",
-                    values = c("Alkohol" = "#0072B2",  # Blau
-                               "Kokain" = "#E69F00",  # Gelb
-                               "Heroin" = "#CC79A7",  # Rosa
-                               "Mehrfachabhängigkeit" = "grey30")) +  # Grau
+  scale_fill_manual(
+    name = "Drogen",
+    values = c(
+      "Alkohol" = "#0072B2",            # Blau
+      "Kokain" = "#E69F00",             # Gelb
+      "Heroin" = "#CC79A7",             # Rosa
+      "Mehrfachabhängigkeit" = "grey30" # Grau
+    ))+
   scale_x_discrete(labels = c("1" = "Weniger als 20.000", "2" = "20.000 - 49.999", "3" = "50.000 - 74.999", "4" = "75.000+"))+
   labs(x = "Familieneinkommen in $", y = "Anteil")+
   theme_light() +
@@ -365,44 +283,3 @@ Drogen.Einkommen <- data2019 %>%
     legend.position = "bottom",
   )
 Drogen.Einkommen
-## Drogen und Armut
-Drogen.Armut <- data2019 %>%
-  select(POVERTY3, depndalc, depndcoc, depndher) %>%
-  pivot_longer(cols = c(depndcoc,depndher, depndalc), names_to = "Drug", values_to = "Usage")%>%
-  filter(Usage == 1, POVERTY3 > 0) %>%
-  ggplot (aes(x = factor(POVERTY3), fill = factor(Drug)))+
-  geom_bar(position = "fill")+
-  scale_fill_manual(name = "Drogen",
-                    labels = c("depndalc" = "Alkohol","depndcoc" = "Kokain", "depndher" = "Heroin"),
-                    values = c("#0072B2","#E69F00", "#CC79A7"))+
-  scale_x_discrete(labels = c("1" = "Armutsbedroht", "2" = "Gehalt 2x Armutsquote", "3" = "Gehalt mehr als 2x"))+
-  labs(x = "Familieneinkommen in $", y = "Anteil")+
-  theme_light() +
-  theme(
-    axis.title = element_text(size = 25),  # Achsentitel
-    axis.text  = element_text(size = 15),  # Achsbeschriftungen
-    legend.title = element_text(size = 17,5),
-    legend.text = element_text(size = 10)
-  )
-
-Drogen.Armut
-## Bildungsgrad Drogen
-Substanz.Bildung <- data2019 %>%
-  select(eduhighcat, depndalc, depndcoc,depndher) %>%
-  pivot_longer(cols = c(depndcoc,depndher, depndalc), names_to = "Drug", values_to = "Usage")%>%
-  filter(Usage == 1, eduhighcat < 5) %>%
-  ggplot(aes(x = factor(eduhighcat), fill = factor(Drug)))+
-  geom_bar(position = "fill")+
-  scale_fill_manual(name = "Drogen",
-                    labels = c("depndalc" = "Alkohol","depndcoc" = "Kokain", "depndher" = "Heroin"),
-                    values = c("#0072B2","#E69F00", "#CC79A7"))+
-  scale_x_discrete(labels = c("1" = "Mittlere reife", "2" = "High School", "3" = "Uni Credits" ,"4" = "Bachelor"))+
-  labs(x = "Höchster Abschluss", y = "Anteil")+
-  theme_light() +
-  theme(
-    axis.title = element_text(size = 15),  # Achsentitel
-    axis.text  = element_text(size = 15),  # Achsbeschriftungen
-    legend.title = element_text(size = 17,5),
-    legend.text = element_text(size = 10)
-  )
-Substanz.Bildung
