@@ -16,13 +16,13 @@ ggplot(aes(x = factor(Answer,
                               levels = c(1, 7, 2, 5, 6, 3, 4)),
                               y = count))+
   geom_col()+
-  scale_x_discrete(labels = c("1" = "Weisse",
+  scale_x_discrete(labels = c("1" = "Weiße",
                               "2" = "Schwarze\nAfroamerikaner",
                               "3" = "Am/Ak\nIndigene",
                               "4" = "Indigene Hawaii\n/Paz. Inseln",
                               "5" = "Asiaten",
-                              "6" = "Gemischt",
-                              "7" = "Hispanisch")) +
+                              "6" = "Gemischte",
+                              "7" = "Hispanische")) +
   labs(y = "Prozent", x = "Race", title = "") +
   scale_y_continuous(labels = scales::percent_format()) +
   theme_light() +
@@ -414,8 +414,8 @@ Nik.Abhängig.Alter <- data2019 %>%
   labs( x = " ", y = "Prozent")+
   theme_light() +
   theme(
-    axis.title = element_text(size = 22),  # Achsentitel
-    axis.text  = element_text(size = 22),  # Achsbeschriftungen
+    axis.title = element_text(size = 24),  # Achsentitel
+    axis.text  = element_text(size = 24),  # Achsbeschriftungen
     legend.text = element_text(size = 17,5),
     legend.title = element_text(size = 17,5),
     legend.position = "none"  # Legendentext
@@ -443,11 +443,11 @@ Nik.Abhängig.Ethnie <- data2019 %>%
                               "6" = "Gemischt",
                               "7" = "Hispanisch"))+
   scale_y_continuous(labels = scales::percent_format())+
-  labs(x = "Ethnie", y = "Prozent")+
+  labs(x = "Race", y = "Prozent")+
   theme_light() +
   theme(
-    axis.title = element_text(size = 20),  # Achsentitel
-    axis.text  = element_text(size = 20),  # Achsbeschriftungen
+    axis.title = element_text(size = 22),  # Achsentitel
+    axis.text  = element_text(size = 22),  # Achsbeschriftungen
     legend.text = element_text(size = 17,5),
     legend.title = element_text(size = 17,5),
     legend.position = "none"  # Legendentext
@@ -529,37 +529,50 @@ Subs.Abhängig.Ethnie <- data2019 %>%
   )) %>%
   filter(!is.na(Dependency)) %>%
   mutate(Dependency = factor(Dependency, levels = c("Alkohol", "Kokain", "Heroin", "Mehrfachabhängigkeit"))) %>%
-  group_by(NEWRACE2, Dependency) %>%
   ggplot(aes(x = factor(NEWRACE2, levels = c(1, 7, 2, 5, 6, 3, 4)), fill = Dependency)) +
   geom_bar(position = "fill") +
-  scale_x_discrete(labels = c("1" = "Weisse",
-                              "2" = "Afro \nAmerikaner",
-                              "3" = "Am/Ak \nIndigene",
-                              "4" = "Indigene Hawaii \n/Paz. Inseln",
-                              "5" = "Asiaten",
-                              "6" = "Gemischt",
-                              "7" = "Hispanisch")) +
+  scale_x_discrete(
+    labels = function(x) {
+      labels <- c(
+        "1" = "Weisse",
+        "2" = "Afro \nAmerikaner",
+        "3" = "Am/Ak \nIndigene",
+        "4" = "Indigene Hawaii \n/Paz. Inseln",
+        "5" = "Asiaten",
+        "6" = "Gemischt",
+        "7" = "Hispanisch"
+      )
+      sample_sizes <- sapply(as.numeric(x), function(group) {
+        sum(data2019$NEWRACE2 == group &
+              (data2019$depndalc == 1 | data2019$depndcoc == 1 | data2019$depndher == 1),
+            na.rm = TRUE)
+      })
+      mapply(function(label, n) paste0(label, "\n(n = ", n, ")"), labels[x], sample_sizes)
+    }
+  ) +
   scale_fill_manual(name = "Drogen",
                     values = c("Alkohol" = "#0072B2",  # Blau
                                "Kokain" = "#E69F00",  # Gelb
                                "Heroin" = "#CC79A7",  # Rosa
                                "Mehrfachabhängigkeit" = "grey30")) +  # Grau
-  scale_y_continuous(labels = scales::percent_format())+
+  scale_y_continuous(labels = scales::percent_format()) +
   labs(x = "Gruppen", y = "Prozent") +
   theme_light() +
   theme(
     axis.title = element_text(size = 20),  
-    axis.text  = element_text(size = 22),  
+    axis.text = element_text(size = 22),  
     legend.text = element_text(size = 18),
     legend.title = element_text(size = 18),
     legend.position = "bottom"
   )
 
+
 ggsave("Presentation_files/Pres_plots/SubsAbhängig_Ethnie.png", 
        plot = Subs.Abhängig.Ethnie, width = 16, height = 8, dpi = 300)
 
 ## Drug Dependency based on gender
-SubsAbhängig.Geschlecht <-data2019 %>%
+
+SubsAbhängig.Geschlecht <- data2019 %>%
   select(irsex, depndcoc, depndalc, depndher) %>%
   mutate(Dependency = case_when(
     depndalc == 1 & depndcoc == 0 & depndher == 0 ~ "Alkohol",
@@ -569,25 +582,34 @@ SubsAbhängig.Geschlecht <-data2019 %>%
   )) %>%
   filter(!is.na(Dependency)) %>%
   mutate(Dependency = factor(Dependency, levels = c("Alkohol", "Kokain", "Heroin", "Mehrfachabhängigkeit"))) %>%
-  group_by(irsex, Dependency) %>%
-ggplot(aes(x = factor(irsex), fill = Dependency))+
-  geom_bar(position = "fill")+
-  scale_x_discrete(labels = c("1" = "Männer", "2" = "Frauen"))+
+  group_by(irsex) %>%
+  mutate(SampleSize = n()) %>%  # Berechnung der Stichprobengröße nach Geschlecht
+  ungroup() %>%
+  ggplot(aes(x = factor(irsex), fill = Dependency)) +
+  geom_bar(position = "fill") +
+  scale_x_discrete(
+    labels = function(x) {
+      ifelse(x == "1",
+             paste0("Männer\n(n = ", sum(data2019$irsex == 1, na.rm = TRUE), ")"),
+             paste0("Frauen\n(n = ", sum(data2019$irsex == 2, na.rm = TRUE), ")"))
+    }
+  ) +
   scale_fill_manual(name = "Drogen",
                     values = c("Alkohol" = "#0072B2",  # Blau
                                "Kokain" = "#E69F00",  # Gelb
                                "Heroin" = "#CC79A7",  # Rosa
                                "Mehrfachabhängigkeit" = "grey30")) +  # Grau
-  scale_y_continuous(labels = scales::percent_format())+
-  labs(x = "Geschlecht", y = "Prozent")+
+  scale_y_continuous(labels = scales::percent_format()) +
+  labs(x = "Geschlecht", y = "Prozent") +
   theme_light() +
   theme(
     axis.title = element_text(size = 20),  # Achsentitel
-    axis.text  = element_text(size = 20),  # Achsbeschriftungen
+    axis.text = element_text(size = 20),   # Achsbeschriftungen
     legend.text = element_text(size = 18),
     legend.title = element_text(size = 18),
     legend.position = "bottom"
   )
+
 
 ggsave("Presentation_files/Pres_plots/SubsAbhängigkeit_Geschlecht.png", plot = SubsAbhängig.Geschlecht, width = 15, height = 8, dpi = 300)
 ########################################################################################################################################
@@ -719,6 +741,7 @@ Karte.USA <- plot_usmap(
 
 ggsave("Presentation_files/Pres_plots/Karte_Verteilung.png", plot = Karte.USA, width = 18, height = 10, dpi = 300)
 
+## ODDS
 # Erstellen der Kreuztabelle mit absoluten Häufigkeiten
 Drug_Addprev_Crosstab <- data2019 %>%
   select(depndalc, depndcoc, depndher, addprev) %>%
@@ -786,22 +809,28 @@ drug_colors <- c("Keine Abhängigkeit" = "gray50",
                  "Mehrfache Abhängigkeit" = "black")
 
 # Plot der Odds Ratios mit Anpassungen
+# Plot der Odds Ratios mit logarithmischer Skala
 Odds.Abhängigkeit <- ggplot(Drug_Odds, aes(x = Dependency, y = OR, color = Dependency)) +
   geom_point(size = 5) +
   geom_hline(yintercept = 1, linetype = "dashed", color = "gray60") +  # Gesamtdurchschnittslinie in Grau
   geom_text(aes(x = "Heroin", y = 1.05, label = "Gesamtdurchschnitt"), color = "gray60", vjust = -0.5, size = 5) +  
   scale_color_manual(values = drug_colors) +
-  scale_y_continuous(limits = c(0.5, max(Drug_Odds$OR) * 1.2), breaks = seq(0.5, max(Drug_Odds$OR) * 1.2, by = 0.5)) +
-  labs(,
-       x = "Abhängigkeitstyp",
-       y = "Odds Ratio",
-       color = "Abhängigkeitstyp") +
+  scale_y_log10(limits = c(0.5, max(Drug_Odds$OR) * 1.2), 
+                breaks = c(0.1, 0.2, 0.5, 1, 2, 5, 10),  # Logarithmische Intervalle
+                labels = scales::number_format(accuracy = 0.1)) +
+  labs(
+    x = "Abhängigkeitstyp",
+    y = "Odds Ratio (log-Skala)",
+    color = "Abhängigkeitstyp"
+  ) +
   theme_light() +
   theme(
-    axis.title = element_text(size = 20),  # Achsentitel
-    axis.text  = element_text(size = 20),  # Achsbeschriftungen
+    axis.title = element_text(size = 22),  # Achsentitel
+    axis.text  = element_text(size = 22),  # Achsbeschriftungen
     legend.position = "none"  # Legendentext
   )
 
-ggsave("Presentation_files/Pres_plots/Odds_Abhängigkeit.png", plot = Odds.Abhängigkeit, width = 18, height = 10, dpi = 300)
+
+ggsave("Presentation_files/Pres_plots/Odds_Abhängigkeit.png", plot = Odds.Abhängigkeit, width = 15, height = 10, dpi = 300)
+
 
