@@ -11,6 +11,7 @@ editor: visual
 author: "Denis Oluri, Sarah Puthiaparampil, Raphael Schneider"
 date: "01-16-25"
 incremental: true
+smaller: true
 ---
 
 
@@ -261,6 +262,12 @@ incremental: true
 -   Viele weitere Demografische Faktoren im Datensatz --\> nur auf die allgemeinen beschränkt
 -   psychische Gesundheitszustand: Abhängig von viele Faktoren, viele Formen an Erkrankungen
 -   Keine genaueren Infos über geografische Daten
+
+
+------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------
 
 
 ## Anhang

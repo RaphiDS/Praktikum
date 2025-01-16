@@ -315,9 +315,9 @@ ggplot(aes( x = factor(Dependency,
   theme(
     axis.title = element_text(size = 20),  # Achsentitel
     axis.text  = element_text(size = 20),  # Achsbeschriftungen
-    legend.title = element_text(size = 17,5),
-    legend.text = element_text(size = 17,5),
+    legend.title = element_text(size = 20),
+    legend.text = element_text(size = 20),
     legend.position = "bottom"
   )
 
-ggsave("Presentation_files/Pres_plots/MI_Geschlecht.png", plot = Drug.Dependency.Gender, width = 19, height = 12, dpi = 300)
+ggsave("Presentation_files/Pres_plots/MI_Geschlecht.png", plot = Drug.Dependency.Gender, width = 18, height = 12, dpi = 300)
