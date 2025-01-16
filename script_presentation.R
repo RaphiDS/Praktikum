@@ -12,15 +12,15 @@ Race.Distribution <- data2019 %>%
   group_by(Answer) %>%
   summarize(count = n()) %>%
   mutate(count = count/56136) %>%
-ggplot(aes(x = factor(Answer,
-                              levels = c(1, 7, 2, 5, 6, 3, 4)),
-                              y = count))+
+  ggplot(aes(x = factor(Answer,
+                        levels = c(1, 7, 2, 5, 6, 3, 4)),
+             y = count))+
   geom_col()+
   scale_x_discrete(labels = c("1" = "Weiße",
-                              "2" = "Schwarze\nAfroamerikaner",
+                              "2" = "Schwarze\nAfro- \namerikanische",
                               "3" = "Am/Ak\nIndigene",
                               "4" = "Indigene Hawaii\n/Paz. Inseln",
-                              "5" = "Asiaten",
+                              "5" = "Asiatische",
                               "6" = "Gemischte",
                               "7" = "Hispanische")) +
   labs(y = "Prozent", x = "Race", title = "") +
@@ -123,7 +123,7 @@ tobacco30 <- as.data.frame(
     datafun30("CGR30USE", "Zigarre")
   )
 )
- #5) Dependency
+#5) Dependency
 
 fourdrugsdependency <- as.data.frame(
   rbind(
@@ -140,14 +140,14 @@ fourdrugsdependency <- as.data.frame(
 
 # 1) Plot: "Ever used" – 4 major drugs
 Substanzen.Verlauf <- ggplot(fourdrugsever, aes(x = Year, y = .data[["Anteil"]],
-                          color = factor(Drug, levels = c("Alkohol", "Zigarette", "Kokain", "Heroin")),
-                          shape = factor(Drug, levels = c("Alkohol", "Zigarette", "Kokain", "Heroin")))) +
+                                                color = factor(Drug, levels = c("Alkohol", "Zigarette", "Kokain", "Heroin")),
+                                                shape = factor(Drug, levels = c("Alkohol", "Zigarette", "Kokain", "Heroin")))) +
   geom_point(size = 3) +
   geom_line(linewidth = 1) +
   theme_light() +
   labs(
-    color = "Droge",
-    shape = "Droge",
+    color = "Drogen",
+    shape = "Drogen",
     x = "Jahr",
     y = "Prozent"
   ) +
@@ -166,14 +166,14 @@ ggsave("Presentation_files/Pres_plots/Substanzen_Verlauf_plot.png",
 
 # 2) Plot: "In the last 30 days" – 4 major drugs
 Monatskonsum.Verlauf <- ggplot(fourdrugs30, aes(x = Year, y = .data[["Anteil"]],
-                        color = factor(Drug, levels = c("Alkohol", "Zigarette", "Kokain", "Heroin")),
-                        shape = factor(Drug, levels = c("Alkohol", "Zigarette", "Kokain", "Heroin")))) +
+                                                color = factor(Drug, levels = c("Alkohol", "Zigarette", "Kokain", "Heroin")),
+                                                shape = factor(Drug, levels = c("Alkohol", "Zigarette", "Kokain", "Heroin")))) +
   geom_point(size = 3) +
   geom_line(size = 1) +
   theme_light() +
   labs(
-    color = "Droge",
-    shape = "Droge",
+    color = "Drogen",
+    shape = "Drogen",
     x = "Jahr",
     y = "Prozent"
   ) +
@@ -188,19 +188,19 @@ Monatskonsum.Verlauf <- ggplot(fourdrugs30, aes(x = Year, y = .data[["Anteil"]],
   scale_shape_manual(values = c(15:18))  # beliebige Form-Codes
 
 ggsave("Presentation_files/Pres_plots/Monatskonsum_Verlauf_plot.png",
-  plot = Monatskonsum.Verlauf, width = 15, height = 8, dpi = 300)
+       plot = Monatskonsum.Verlauf, width = 15, height = 8, dpi = 300)
 
 # 3) Plot: "Have ever used tobacco products"
 Jemals.Tabbak <- ggplot(tobaccoever, aes(x = Year, y = .data[["Anteil"]],
-                        color = factor(Drug, levels = c("Zigarette", "Zigarre", "Rauchfreier Tabak", "Pfeife")),
-                        shape = factor(Drug, levels = c("Zigarette", "Zigarre", "Rauchfreier Tabak", "Pfeife")))) +
+                                         color = factor(Drug, levels = c("Zigarette", "Zigarre", "Rauchfreier Tabak", "Pfeife")),
+                                         shape = factor(Drug, levels = c("Zigarette", "Zigarre", "Rauchfreier Tabak", "Pfeife")))) +
   geom_point(size = 3) +
   geom_line(size = 1) +
   theme_light() +
   labs(
-    fill = "Droge",
-    color = "Droge",
-    shape = "Droge",
+    fill = "Drogen",
+    color = "Drogen",
+    shape = "Drogen",
     x = "Jahr",
     y = "Prozent"
   ) +
@@ -217,18 +217,18 @@ Jemals.Tabbak <- ggplot(tobaccoever, aes(x = Year, y = .data[["Anteil"]],
   )
 
 ggsave("Presentation_files/Pres_plots/Jemals_Tabbak_plot.png",
-  plot = Jemals.Tabbak, width = 15, height = 8, dpi = 300)
+       plot = Jemals.Tabbak, width = 15, height = 8, dpi = 300)
 
 # 4) Plot: "In the last 30 days" – tobacco products
 Monatskonsum.Tabbak <- ggplot(tobacco30, aes(x = Year, y = .data[["Anteil"]],
-                      color = factor(Drug, levels = c("Zigarette", "Zigarre", "Rauchfreier Tabak", "Pfeife")),
-                      shape = factor(Drug, levels = c("Zigarette", "Zigarre", "Rauchfreier Tabak", "Pfeife")))) +
+                                             color = factor(Drug, levels = c("Zigarette", "Zigarre", "Rauchfreier Tabak", "Pfeife")),
+                                             shape = factor(Drug, levels = c("Zigarette", "Zigarre", "Rauchfreier Tabak", "Pfeife")))) +
   geom_point(size = 3) +
   geom_line(size = 1) +
   theme_light() +
   labs(
-    color = "Droge",
-    shape = "Droge",
+    color = "Drogen",
+    shape = "Drogen",
     x = "Jahr",
     y = "Prozent"
   ) +
@@ -245,7 +245,7 @@ Monatskonsum.Tabbak <- ggplot(tobacco30, aes(x = Year, y = .data[["Anteil"]],
   )
 
 ggsave ("Presentation_files/Pres_plots/Monatskonsum_Tabbak_plot.png",
-  plot = Monatskonsum.Tabbak, width = 15, height = 8, dpi = 300)
+        plot = Monatskonsum.Tabbak, width = 15, height = 8, dpi = 300)
 
 ## Histogram Function
 histogram_fun <- function(datacol, drug_name, limit, colorcode, yearplot) {
@@ -292,8 +292,8 @@ Substanzen.Verlauf.Abh <- ggplot(fourdrugsdependency, aes(x = Year, y = .data[["
   geom_line(linewidth = 1) +
   theme_light() +
   labs(
-    color = "Droge",
-    shape = "Droge",
+    color = "Drogen",
+    shape = "Drogen",
     x = "Jahr",
     y = "Prozent"
   ) +
@@ -318,7 +318,7 @@ ggsave("Presentation_files/Pres_plots/Alk_15_plot.png",
 
 Histo_Alk_16 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2016")
 ggsave("Presentation_files/Pres_plots/Alk_16_plot.png",
-        plot = Histo_Alk_16, width = 15, height = 7, dpi = 300)
+       plot = Histo_Alk_16, width = 15, height = 7, dpi = 300)
 
 Histo_Alk_17 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2017")
 ggsave("Presentation_files/Pres_plots/Alk_17_plot.png",
@@ -381,7 +381,7 @@ ggsave("Presentation_files/Pres_plots/Her_15_plot.png",
 
 Histo_Her_16 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2016")
 ggsave("Presentation_files/Pres_plots/Her_16_plot.png",
-  plot = Histo_Her_16, width = 15, height = 7, dpi = 300)
+       plot = Histo_Her_16, width = 15, height = 7, dpi = 300)
 
 Histo_Her_17 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2017")
 ggsave("Presentation_files/Pres_plots/Her_17_plot.png",
@@ -403,23 +403,33 @@ ggsave("Presentation_files/Pres_plots/Her_19_plot.png",
 Nik.Abhängig.Alter <- data2019 %>%
   select(CATAG2, ndssdnsp) %>%
   group_by(CATAG2) %>%
-  mutate(total = n()) %>%  # Gesamtanzahl pro catage berechnen
-  filter(ndssdnsp == 1) %>%
-  summarise(count = n(), total = first(total))  %>%# count berechnen und total beibehalten
-  mutate(count = count / total)%>%
-  ggplot(aes(x = factor(CATAG2), y = count))+
-  geom_col(fill = "#009E73")+
-  scale_x_discrete(name = "Altersgruppen",labels = c("12-17", "18-25", "26+"))+
-  scale_y_continuous(labels = scales::percent_format())+
-  labs( x = " ", y = "Prozent")+
+  mutate(total = n()) %>%  # Gesamtanzahl pro Altersgruppe berechnen
+  filter(ndssdnsp == 1) %>%  # Nur Nikotinsüchtige berücksichtigen
+  summarise(count = n(), total = first(total)) %>%  # Anzahl Nikotinsüchtiger und Gesamtanzahl
+  mutate(count = count / total) %>%  # Anteil der Nikotinsüchtigen berechnen
+  ggplot(aes(x = factor(CATAG2), y = count)) +
+  geom_col(fill = "#009E73") +
+  scale_x_discrete(
+    name = "Altersgruppen",
+    labels = c(
+      "1" = "12-17\n(n = 59)",  # Beispiel für die Stichprobengröße
+      "2" = "18-25\n(n = 745)",
+      "3" = "26+\n(n = 2463)"
+    )
+  ) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  labs(x = " ", y = "Prozent") +
   theme_light() +
   theme(
     axis.title = element_text(size = 24),  # Achsentitel
-    axis.text  = element_text(size = 24),  # Achsbeschriftungen
-    legend.text = element_text(size = 17,5),
-    legend.title = element_text(size = 17,5),
-    legend.position = "none"  # Legendentext
+    axis.text = element_text(size = 24),   # Achsbeschriftungen
+    axis.title.x = element_text(margin = margin(t = 20)),
+    axis.title.y = element_text(margin = margin(r = 20)),
+    legend.position = "none"  # Keine Legende anzeigen
   )
+
+
+
 ggsave("Presentation_files/Pres_plots/NikAbhängig_Alter.png", 
        plot = Nik.Abhängig.Alter, width = 18, height = 9, dpi = 300)
 #-------------------------------------------------------------------------------
@@ -427,34 +437,42 @@ ggsave("Presentation_files/Pres_plots/NikAbhängig_Alter.png",
 Nik.Abhängig.Ethnie <- data2019 %>%
   select(NEWRACE2, ndssdnsp) %>%
   group_by(NEWRACE2) %>%
-  mutate(total = n()) %>%
-  filter (ndssdnsp == 1)%>%
-  summarise(count = n(), total = first(total))  %>%# count berechnen und total beibehalten
-  mutate(count = count /total)%>%
-  ggplot(aes(x = factor(NEWRACE2,
-                                               levels = c(1, 7, 2, 5, 6, 3, 4)),
-                                    y = count))+
+  mutate(total = n()) %>%  # Gesamtanzahl pro Ethnienkategorie
+  filter(ndssdnsp == 1) %>%  # Nur Nikotinsüchtige
+  summarise(count = n(), total = first(total)) %>%  # Berechnung der Anzahl Nikotinsüchtiger und Gesamtanzahl
+  mutate(count = count / total) %>%  # Anteil der Nikotinsüchtigen pro Ethnienkategorie
+  ggplot(aes(x = factor(NEWRACE2, levels = c(1, 7, 2, 5, 6, 3, 4)), y = count)) +
   geom_col(fill = "#009E73") +
-  scale_x_discrete(labels = c("1" = "Weisse",
-                              "2" = "Afro- \nAmerikaner",
-                              "3" = "Am/Ak \nIndigene",
-                              "4" = "Indigene \nHawaii \n/Paz. Inseln",
-                              "5" = "Asiaten",
-                              "6" = "Gemischt",
-                              "7" = "Hispanisch"))+
-  scale_y_continuous(labels = scales::percent_format())+
-  labs(x = "Race", y = "Prozent")+
+  scale_x_discrete(
+    labels = function(x) {
+      labels <- c("1" = "Weiße",
+                                    "2" = "Schwarze\nAfro- \namerikanische",
+                                    "3" = "Am/Ak\nIndigene",
+                                    "4" = "Indigene Hawaii\n/Paz. Inseln",
+                                    "5" = "Asiatische",
+                                    "6" = "Gemischte",
+                                    "7" = "Hispanische")
+      sample_sizes <- sapply(as.numeric(x), function(group) {
+        sum(data2019$NEWRACE2 == group & data2019$ndssdnsp == 1, na.rm = TRUE)
+      })
+      mapply(function(label, n) paste0(label, "\n(n = ", n, ")"), labels[x], sample_sizes)
+    }
+  ) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  labs(x = "Race", y = "Prozent") +
   theme_light() +
   theme(
-    axis.title = element_text(size = 22),  # Achsentitel
-    axis.text  = element_text(size = 22),  # Achsbeschriftungen
-    legend.text = element_text(size = 17,5),
-    legend.title = element_text(size = 17,5),
-    legend.position = "none"  # Legendentext
+    axis.title = element_text(size = 20),  # Achsentitel
+    axis.text = element_text(size = 20),   # Achsbeschriftungen
+    axis.title.x = element_text(margin = margin(t = 10)),
+    axis.title.y = element_text(margin = margin(r = 10)),
+    legend.position = "none"  # Keine Legende anzeigen
   )
 
+
+
 ggsave("Presentation_files/Pres_plots/NikAbhängig_Ethnie.png", 
-       plot = Nik.Abhängig.Ethnie, width = 15, height = 8, dpi = 300)
+       plot = Nik.Abhängig.Ethnie, width = 16, height = 8, dpi = 300)
 
 ## Nikotine und Geschlecht
 
@@ -462,48 +480,120 @@ Nik.Abhängig.Geschlecht <- data2019 %>%
   select(irsex, ndssdnsp) %>%
   group_by(irsex) %>%
   mutate(total = n()) %>%
-  filter (ndssdnsp == 1)%>%
-  summarise(count = n(), total = first(total))  %>%# count berechnen und total beibehalten
-  mutate(count = count /total)%>%
-  ggplot(aes(x = factor(irsex), y = count))+
-  geom_col(fill = "#009E73")+
-  scale_x_discrete(labels = c("1"="Männer", "2" = "Frauen"))+
-  scale_y_continuous(labels = scales::percent_format())+
-  labs(x = "Geschlecht", y = "Prozent")+
+  filter(ndssdnsp == 1) %>%
+  summarise(count = n(), total = first(total)) %>%
+  mutate(count = count / total) %>%
+  ggplot(aes(x = factor(irsex), y = count)) +
+  geom_col(fill = "#009E73") +
+  scale_x_discrete(
+    labels = function(x) {
+      sample_sizes <- sapply(as.numeric(x), function(group) {
+        sum(data2019$irsex == group & data2019$ndssdnsp == 1, na.rm = TRUE)
+      })
+      labels <- c("1" = "Männer", "2" = "Frauen")
+      mapply(function(label, n) paste0(label, "\n(n = ", n, ")"), labels[x], sample_sizes)
+    }
+  ) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  labs(x = "Geschlecht", y = "Prozent") +
   theme_light() +
   theme(
     axis.title = element_text(size = 20),  # Achsentitel
-    axis.text  = element_text(size = 20),  # Achsbeschriftungen
-    legend.text = element_text(size = 17,5),
-    legend.title = element_text(size = 17,5),
-    legend.position = "none"  # Legendentext
+    axis.text = element_text(size = 20),   # Achsbeschriftungen
+    legend.text = element_text(size = 17.5),
+    legend.title = element_text(size = 17.5),
+    legend.position = "none"  # Keine Legende anzeigen
   )
 
+
 ggsave("Presentation_files/Pres_plots/NikAbhängig_Geschlecht.png",
-       plot = Nik.Abhängig.Geschlecht, width = 15, height = 8, dpi = 300)
+       plot = Nik.Abhängig.Geschlecht, width = 16, height = 8, dpi = 300)
 #-------------------------------------------------------------------------------
 ## Drug Dependency by age group
+
 Subs.Abhängig.Alter <- data2019 %>%
-  select(CATAG2,depndcoc,depndher, depndalc) %>%
+  select(CATAG2, depndcoc, depndher, depndalc) %>%
   mutate(Dependency = case_when(
     depndalc == 1 & depndcoc == 0 & depndher == 0 ~ "Alkohol",
     depndcoc == 1 & depndalc == 0 & depndher == 0 ~ "Kokain",
     depndher == 1 & depndalc == 0 & depndcoc == 0 ~ "Heroin",
-    depndalc == 1 & depndcoc == 1 | depndalc == 1 & depndher == 1 | depndcoc == 1 & depndher == 1 ~ "Mehrfachabhängigkeit"
+    depndalc == 1 & (depndcoc == 1 | depndher == 1) | depndcoc == 1 & depndher == 1 ~ "Mehrfachabhängigkeit",
+    TRUE ~ NA_character_  # Alle anderen Fälle als NA markieren
   )) %>%
-  filter(!is.na(Dependency)) %>%
+  filter(!is.na(Dependency)) %>%  # Entfernen von NA-Werten (inkl. "Keine Abhängigkeit")
   mutate(Dependency = factor(Dependency, levels = c("Alkohol", "Kokain", "Heroin", "Mehrfachabhängigkeit"))) %>%
-  group_by(CATAG2, Dependency) %>%
-  ggplot(aes(x = factor(CATAG2), fill = Dependency))+
-  geom_bar(position = "dodge")+
+  group_by(CATAG2) %>%
+  mutate(SampleSize = n()) %>%  # Berechnung der Stichprobengröße pro Altersgruppe (ohne "Keine Abhängigkeit")
+  ungroup() %>%
+  ggplot(aes(x = factor(CATAG2), fill = Dependency)) +
+  geom_bar(position = "fill") +
   scale_fill_manual(name = "Drogen",
                     values = c("Alkohol" = "#0072B2",  # Blau
                                "Kokain" = "#E69F00",  # Gelb
                                "Heroin" = "#CC79A7",  # Rosa
                                "Mehrfachabhängigkeit" = "grey30")) +  # Grau
-  scale_x_discrete(labels = c("1" = "12-17", "2" = "18-25", "3" = "26+"))+
-  scale_y_continuous(labels = scales::percent_format())+
-  labs(x = "Gruppierung", y = "Prozent")+
+  scale_x_discrete(
+    labels = function(x) {
+      labels <- c("1" = "12-17", "2" = "18-25", "3" = "26+")
+      sample_sizes <- sapply(as.numeric(x), function(group) {
+        sum(data2019$CATAG2 == group & (
+          data2019$depndalc == 1 |
+            data2019$depndcoc == 1 |
+            data2019$depndher == 1), na.rm = TRUE)
+      })
+      mapply(function(label, n) paste0(label, "\n(n = ", n, ")"), labels[x], sample_sizes)
+    }
+  ) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  labs(x = "Altersgruppen", y = "Prozent") +
+  theme_light() +
+  theme(
+    axis.title.x = element_text(margin = margin(t = 20)),
+    axis.title = element_text(size = 20),  # Achsentitel
+    axis.text = element_text(size = 25),   # Achsbeschriftungen
+    legend.text = element_text(size = 20),
+    legend.title = element_text(size = 20),
+    legend.position = "bottom"
+  )
+
+
+
+ggsave("Presentation_files/Pres_plots/SubsAbhängig_Alter.png", 
+       plot = Subs.Abhängig.Alter, width = 18, height = 9, dpi = 300)
+
+Subs.Abhängig.Alter.mit.KA <- data2019 %>%
+  select(CATAG2, depndcoc, depndher, depndalc) %>%
+  mutate(Dependency = case_when(
+    depndalc == 1 & depndcoc == 0 & depndher == 0 ~ "Alkohol",
+    depndcoc == 1 & depndalc == 0 & depndher == 0 ~ "Kokain",
+    depndher == 1 & depndalc == 0 & depndcoc == 0 ~ "Heroin",
+    depndalc == 1 & (depndcoc == 1 | depndher == 1) | depndcoc == 1 & depndher == 1 ~ "Mehrfachabhängigkeit",
+    TRUE ~ "Keine Abhängigkeit"  # Alle anderen Fälle
+  )) %>%
+  mutate(Dependency = factor(Dependency, levels = c(
+    "Keine Abhängigkeit", "Alkohol", "Kokain", "Heroin", "Mehrfachabhängigkeit"))) %>%
+  group_by(CATAG2) %>%
+  mutate(SampleSize = n()) %>%  # Berechnung der Stichprobengröße pro Gruppe
+  ungroup() %>%
+  ggplot(aes(x = factor(CATAG2), fill = Dependency)) +
+  geom_bar(position = "fill") +
+  scale_fill_manual(name = "Drogen",
+                    values = c("Keine Abhängigkeit" = "grey50",  # Grau
+                               "Alkohol" = "#0072B2",  # Blau
+                               "Kokain" = "#E69F00",  # Gelb
+                               "Heroin" = "#CC79A7",  # Rosa
+                               "Mehrfachabhängigkeit" = "grey30")) +  # Dunkelgrau
+  scale_x_discrete(
+    labels = function(x) {
+      labels <- c("1" = "12-17", "2" = "18-25", "3" = "26+")
+      sample_sizes <- sapply(as.numeric(x), function(group) {
+        sum(data2019$CATAG2 == group, na.rm = TRUE)
+      })
+      mapply(function(label, n) paste0(label, "\n(n = ", n, ")"), labels[x], sample_sizes)
+    }
+  ) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  labs(x = "Altersgruppen", y = "Prozent") +
   theme_light() +
   theme(
     axis.title.x = element_text(margin = margin(t = 20)),
@@ -514,9 +604,8 @@ Subs.Abhängig.Alter <- data2019 %>%
     legend.position = "bottom"
   )
 
-ggsave("Presentation_files/Pres_plots/SubsAbhängig_Alter.png", 
-       plot = Subs.Abhängig.Alter, width = 18, height = 9, dpi = 300)
-Subs.Abhängig.Alter
+ggsave("Presentation_files/Pres_plots/Subs_Alter_KA.png", plot = Subs.Abhängig.Alter.mit.KA, width = 18, height = 9, dpi = 300)
+
 #------------------------------------------------------------------------------
 ## Drug Dependency and Race
 Subs.Abhängig.Ethnie <- data2019 %>%
@@ -533,15 +622,13 @@ Subs.Abhängig.Ethnie <- data2019 %>%
   geom_bar(position = "fill") +
   scale_x_discrete(
     labels = function(x) {
-      labels <- c(
-        "1" = "Weisse",
-        "2" = "Afro \nAmerikaner",
-        "3" = "Am/Ak \nIndigene",
-        "4" = "Indigene Hawaii \n/Paz. Inseln",
-        "5" = "Asiaten",
-        "6" = "Gemischt",
-        "7" = "Hispanisch"
-      )
+      labels <- c("1" = "Weiße",
+                  "2" = "Schwarze\nAfro- \namerikanische",
+                  "3" = "Am/Ak\nIndigene",
+                  "4" = "Indigene Hawaii\n/Paz. Inseln",
+                  "5" = "Asiatische",
+                  "6" = "Gemischte",
+                  "7" = "Hispanische")
       sample_sizes <- sapply(as.numeric(x), function(group) {
         sum(data2019$NEWRACE2 == group &
               (data2019$depndalc == 1 | data2019$depndcoc == 1 | data2019$depndher == 1),
@@ -556,13 +643,13 @@ Subs.Abhängig.Ethnie <- data2019 %>%
                                "Heroin" = "#CC79A7",  # Rosa
                                "Mehrfachabhängigkeit" = "grey30")) +  # Grau
   scale_y_continuous(labels = scales::percent_format()) +
-  labs(x = "Gruppen", y = "Prozent") +
+  labs(x = "Race", y = "Prozent") +
   theme_light() +
   theme(
     axis.title = element_text(size = 20),  
-    axis.text = element_text(size = 22),  
-    legend.text = element_text(size = 18),
-    legend.title = element_text(size = 18),
+    axis.text = element_text(size = 20),  
+    legend.text = element_text(size = 20),
+    legend.title = element_text(size = 20),
     legend.position = "bottom"
   )
 
@@ -580,7 +667,7 @@ SubsAbhängig.Geschlecht <- data2019 %>%
     depndher == 1 & depndalc == 0 & depndcoc == 0 ~ "Heroin",
     depndalc == 1 & depndcoc == 1 | depndalc == 1 & depndher == 1 | depndcoc == 1 & depndher == 1 ~ "Mehrfachabhängigkeit"
   )) %>%
-  filter(!is.na(Dependency)) %>%
+  filter(!is.na(Dependency)) %>%  # Nur dargestellte Werte berücksichtigen
   mutate(Dependency = factor(Dependency, levels = c("Alkohol", "Kokain", "Heroin", "Mehrfachabhängigkeit"))) %>%
   group_by(irsex) %>%
   mutate(SampleSize = n()) %>%  # Berechnung der Stichprobengröße nach Geschlecht
@@ -589,9 +676,13 @@ SubsAbhängig.Geschlecht <- data2019 %>%
   geom_bar(position = "fill") +
   scale_x_discrete(
     labels = function(x) {
+      sample_sizes <- sapply(as.numeric(x), function(group) {
+        sum(data2019$irsex == group &
+              (data2019$depndalc == 1 | data2019$depndcoc == 1 | data2019$depndher == 1), na.rm = TRUE)
+      })
       ifelse(x == "1",
-             paste0("Männer\n(n = ", sum(data2019$irsex == 1, na.rm = TRUE), ")"),
-             paste0("Frauen\n(n = ", sum(data2019$irsex == 2, na.rm = TRUE), ")"))
+             paste0("Männer\n(n = ", sample_sizes[1], ")"),
+             paste0("Frauen\n(n = ", sample_sizes[2], ")"))
     }
   ) +
   scale_fill_manual(name = "Drogen",
@@ -611,7 +702,7 @@ SubsAbhängig.Geschlecht <- data2019 %>%
   )
 
 
-ggsave("Presentation_files/Pres_plots/SubsAbhängigkeit_Geschlecht.png", plot = SubsAbhängig.Geschlecht, width = 15, height = 8, dpi = 300)
+ggsave("Presentation_files/Pres_plots/SubsAbhängigkeit_Geschlecht.png", plot = SubsAbhängig.Geschlecht, width = 16, height = 8, dpi = 300)
 ########################################################################################################################################
 
 ## Mentale Gesundheit fertig
@@ -635,7 +726,7 @@ SubsAbhängig.Gesundheit <- ggplot(Drug.Dependency.Total, aes(x = Dependency, fi
                               "Kokain" = "Abhängigkeit \nvon Kokain", 
                               "Heroin" = "Abhängigkeit \nvon Heroin", 
                               "Mehrfachabhängigkeit" = "Abhängigkeit \nvon mehreren Drogen")) +
-  scale_fill_manual(name = "Mentale Erkrankungen:",
+  scale_fill_manual(name = "Mentale Erkrankungen",
                     labels = c("0" = "Keine", 
                                "1" = "Milde", 
                                "2" = "Moderate", 
@@ -645,25 +736,24 @@ SubsAbhängig.Gesundheit <- ggplot(Drug.Dependency.Total, aes(x = Dependency, fi
   labs(x = "Kategorien", y = "Prozent") +
   # Hinzufügen der Stichprobengröße
   annotate("text", x = 1:nlevels(Drug.Dependency.Total$Dependency), 
-           y = -0.05, label = sample_sizes_ddt$Label, size = 5, hjust = 0.5) +
+           y = -0.05, label = sample_sizes_ddt$Label, size = 8, hjust = 0.5) +
   theme_light() +
   theme(
-    axis.title = element_text(size = 20),
-    axis.text = element_text(size = 20),
+    axis.title = element_text(size = 22),
+    axis.text = element_text(size = 22),
     axis.text.x = element_text(margin = margin(t = 10)),  # Abstand zwischen Label und Achse
-    legend.title = element_text(size = 17.5),
-    legend.text = element_text(size = 17.5),
-    plot.margin = margin(t = 10, b = 20, l = 10, r = 10)  # Zusätzlicher Platz unten
+    legend.title = element_text(size = 20),
+    legend.text = element_text(size = 20),
+    plot.margin = margin(t = 10, b = 20, l = 10, r = 10),  # Zusätzlicher Platz unten
+    legend.position = "bottom"
   )
 
 
-ggsave("Presentation_files/Pres_plots/SubsAbhängig_Gesundheit.png", plot = SubsAbhängig.Gesundheit, width = 18, height = 10, dpi = 300)
+ggsave("Presentation_files/Pres_plots/SubsAbhängig_Gesundheit.png", plot = SubsAbhängig.Gesundheit, width = 19, height = 12, dpi = 300)
 
 
-
-## MAP
-install.packages("usmap")
-install.packages("usdata")
+#install.packages("usmap")
+#nstall.packages("usdata")
 library(usmap)
 library(usdata)
 
@@ -743,9 +833,8 @@ Karte.USA <- plot_usmap(
         
   )
 
-ggsave("fertige Präsentation/Presentation_files/Pres_plots/Karte_Verteilung.png", plot = Karte.USA, width = 18, height = 10, dpi = 300)
+ggsave("Presentation_files/Pres_plots/Karte_Verteilung.png", plot = Karte.USA, width = 18, height = 10, dpi = 300)
 
-## ODDS
 # Erstellen der Kreuztabelle mit absoluten Häufigkeiten
 Drug_Addprev_Crosstab <- data2019 %>%
   select(depndalc, depndcoc, depndher, addprev) %>%
@@ -825,7 +914,7 @@ Odds.Abhängigkeit <- ggplot(Drug_Odds, aes(x = Dependency, y = OR, color = Depe
   labs(
     x = "Abhängigkeitstyp",
     y = "Odds Ratio (log-Skala)",
-    color = "Abhängigkeitstyp"
+    color = "Abhängigkeit"
   ) +
   theme_light() +
   theme(
@@ -835,6 +924,5 @@ Odds.Abhängigkeit <- ggplot(Drug_Odds, aes(x = Dependency, y = OR, color = Depe
   )
 
 
-ggsave("fertige Präsentation/Presentation_files/Pres_plots/Odds_Abhängigkeit.png", plot = Odds.Abhängigkeit, width = 15, height = 10, dpi = 300)
-
+ggsave("Presentation_files/Pres_plots/Odds_Abhängigkeit.png", plot = Odds.Abhängigkeit, width = 18, height = 10, dpi = 300)
 

@@ -206,10 +206,13 @@ transition: slide
 ::: panel-tabset
 ### Alter
 
+![](Presentation_files/Pres_plots/Subs_Alter_KA.png)
+
+### Alter ohne KA
+
 ![](Presentation_files/Pres_plots/SubsAbhängig_Alter.png)
 
 ### Race
-
 ![](Presentation_files/Pres_plots/SubsAbhängig_Ethnie.png)
 
 ### Geschlecht
