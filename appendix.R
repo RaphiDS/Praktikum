@@ -277,9 +277,10 @@ Drogen.Einkommen <- data2019 %>%
     axis.text  = element_text(size = 20),  # Achsbeschriftungen
     legend.title = element_text(size = 17,5),
     legend.text = element_text(size = 17,5),
-    legend.position = "bottom",
+    legend.position = "bottom"
   )
 
+ggsave("Presentation_files/Pres_plots/SubsAbhängig_Einkommen.png", plot = Drogen.Einkommen, width = 15, height = 8, dpi = 300)
 
 
 ### Mental health gender
