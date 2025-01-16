@@ -1,18 +1,18 @@
 ---
-title: ""
-title-slide: false
+title: "Drogenkonsum in den USA von 2015-2019"
+subtitle: |
+  Anfängerpraktikum im WS 24/25 bei Dr. Sabine Hoffman, Dr. Fabian Scheipl, Helena Veit
 format: 
   revealjs:
     embed-resources: true
     title-slide: true
     slide-number: c
 editor: visual
+author: "Denis Oluri, Sarah Puthiaparampil, Raphael Schneider"
+date: "01-16-25"
 incremental: true
-smaller: true
-transition: slide
 ---
 
-##  {data-background="Presentation_files/Titel_Folie_Praktikum.png"}
 
 ## Gliederung
 
