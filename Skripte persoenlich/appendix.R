@@ -286,7 +286,7 @@ Drogen.Einkommen <- data2019 %>%
   ) +
   labs(
     x = "Familieneinkommen in $",
-    y = "Anteil"
+    y = "Prozent"
     # Optional: falls du lieber hier die Legende benennen willst, ginge z. B.:
     # fill = "Abhängigkeit"
   ) +
