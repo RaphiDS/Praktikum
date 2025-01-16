@@ -1,5 +1,5 @@
 ---
-title: "Drogenkonsum in den USA von 2015-2019"
+title: ""
 subtitle: |
   Anfängerpraktikum im WS 24/25 bei Dr. Sabine Hoffman, Dr. Fabian Scheipl, Helena Veit
 format: 
@@ -14,7 +14,8 @@ smaller: true
 transition: slide
 ---
 
-![](Presentation_files/Praktikum_titel.png)
+<!-- Custom Title Slide -->
+![](Presentation_files/Praktikum_titel.png){width="100%" height="100%"}
 
 ## Gliederung
 
@@ -23,14 +24,16 @@ transition: slide
 -   Demografische Faktoren
 -   Substanzabhängigkeit und mentale Gesundheit
 -   Fazit
+-   Limitationen
 
 ------------------------------------------------------------------------
 
 ![](Presentation_files/Pres_plots/NSDUH-Logo.png){fig-align="left" height="5cm"}
+
 -   "National Survey on Drug Use and Health" durchgeführt von SAMHSA
--   Hauptquelle zu dem Konsum von Alkohol, Tabak, verschiedener Drogen und zu mentaler Gesundheit in den USA
--   GG: amerikanischen, nicht-institutionalisierten Bürger\*innen ab 12
--   Größe: ca. 56.000 Beobachtungen zu 1693 Variablen
+-   Hauptquelle über den Konsum von Alkohol, Tabak, verschiedener Drogen und zu mentaler Gesundheit in den USA
+-   Grundgesamtheit: amerikanische, nicht-institutionalisierte Bürger\*innen ab 12
+-   Stichprobengröße: ca. 56.000 Beobachtungen zu 1693 Variablen
 
 ------------------------------------------------------------------------
 
@@ -52,7 +55,7 @@ transition: slide
 
 -   Drogenkonsum und Abhängigkeit:
     -   chronische, fortschreitende Krankheit im direkten Zusammenhang mit dauerhaften Konsum
-    -   gekennzeichnet durch erhebliche physiologische, psychologische oder soziale Funktionsstörung
+    -   gekennzeichnet durch erhebliche physiologische, psychologische oder soziale Funktionsstörungen
     -   hält dieses Verhalten länger an: Drogenmissbrauch
 
 ## Drogenkonsum von 2015-2019
@@ -233,21 +236,32 @@ transition: slide
 
 ![](Presentation_files/Pres_plots/SubsAbhängig_Gesundheit.png)
 
-## Odds Ratio für MDE (=Major Depressive Episode) nach Abhängigkeit
+------------------------------------------------------------------------
+
+### Odds Ratio für "Major Depressive Episode" nach Abhängigkeit
 
 ![](Presentation_files/Pres_plots/Odds_Abhängigkeit.png)
 
 ## Fazit
 
-*1. Wie haben sich die Konsummuster in dem Zeitraum 2015 bis 2019 entwickelt?* - Es lassen sich keine eindeutigen Trends im Konsumverhalten erkennen, mit Ausnahme des Zigarettenkonsums, der eine bemerkenswerte Veränderung zeigt. *2. Wie hängt der Konsum im Jahr 2019 mit demografischen Merkmalen zusammen?* - Beim Geschlecht zeigen sich keine signifikanten Unterschiede im Konsumverhalten, während bei anderen demografischen Faktoren deutliche Unterschiede erkennbar sind. - Die Unterschiede beim Geschlecht sind im Vergleich zu anderen demografischen Faktoren sehr klein *3. Wie steht der Konsum im Jahr 2019 mit dem psychischen Gesundheitszustand der Befragten in Verbindung?* - Es besteht ein erkennbarer Zusammenhang zwischen Drogenabhängigkeit und psychischen Gesundheitsproblemen, wobei Betroffene häufiger unter mentalen Belastungen leiden.
+   *1. Wie haben sich die Konsummuster in dem Zeitraum 2015 bis 2019 entwickelt?* 
+    -   Es lassen sich keine eindeutigen Trends im Konsumverhalten erkennen, mit Ausnahme des Zigarettenkonsums, der eine bemerkenswerte Veränderung zeigt.
+    *2. Wie hängt der Konsum im Jahr 2019 mit demografischen Merkmalen zusammen?* 
+    -   Beim Geschlecht zeigen sich keine signifikanten Unterschiede im Konsumverhalten, während bei anderen demografischen Faktoren deutliche Unterschiede erkennbar sind.
+    -   Die Unterschiede beim Geschlecht sind im Vergleich zu anderen demografischen Faktoren sehr klein 
+    *3. Wie steht der Konsum im Jahr 2019 mit dem psychischen Gesundheitszustand der Befragten in Verbindung?* 
+    -   Es besteht ein erkennbarer Zusammenhang zwischen Drogenabhängigkeit und psychischen Gesundheitsproblemen, wobei Betroffene häufiger unter mentalen Belastungen leiden.
 
-## Diskussion
+## Limitationen, Ausblick
 
--   viele weitere Demografische Faktoren im Datensatz --\> aus zeitlichen Gründen eingeschränkt
+-   viele weitere Demografische Faktoren im Datensatz --\> nur auf die allgemeinen Beschränkt
 -   psychische Gesundheitszustand: Abhängig von viele Faktoren, viele Formen an Erkrankungen
+
 
 ## Anhang
 
+
 ## Quelle
 
-NSDUH Codebook 2019 National Library of Medicine
+-   NSDUH Codebook 2019 
+-   National Library of Medicine

@@ -506,6 +506,7 @@ Subs.Abhängig.Alter <- data2019 %>%
   labs(x = "Gruppierung", y = "Prozent")+
   theme_light() +
   theme(
+    axis.title.x = element_text(margin = margin(t = 20)),
     axis.title = element_text(size = 20),  # Achsentitel
     axis.text  = element_text(size = 25),  # Achsbeschriftungen
     legend.text = element_text(size = 20),
@@ -804,21 +805,3 @@ Odds.Abhängigkeit <- ggplot(Drug_Odds, aes(x = Dependency, y = OR, color = Depe
 
 ggsave("Presentation_files/Pres_plots/Odds_Abhängigkeit.png", plot = Odds.Abhängigkeit, width = 18, height = 10, dpi = 300)
 
-### Mental health gender
-Drug.Dependency.Gender <- data2019 %>%
-  select(depndalc, depndcoc, depndher, MI_CAT_U, irsex) %>%
-  mutate(
-    Dependency = case_when(
-      depndalc == 1 & depndcoc == 0 & depndher == 0 ~ "Alkohol",
-      depndcoc == 1 & depndalc == 0 & depndher == 0 ~ "Kokain",
-      depndher == 1 & depndalc == 0 & depndcoc == 0 ~ "Heroin",
-      depndalc == 1 & depndcoc == 1 | depndalc == 1 & depndher == 1 | depndcoc == 1 & depndher == 1 ~ "Mehrfachabhängigkeit",
-      TRUE ~ "Keine Abhängigkeit"
-    )
-  ) %>%
-  filter(MI_CAT_U >= 0) %>%  # Mehrfachabhängigkeit wird jetzt nicht mehr ausgeschlossen
-  group_by(Dependency, MI_CAT_U, irsex) %>%
-  summarise(count = n(), .groups = "drop") 
-
-ggplot(Drug.Dependency.Gender, aes( x = Dependency))+
-  geom_col
