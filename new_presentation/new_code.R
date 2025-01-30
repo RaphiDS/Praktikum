@@ -1,4 +1,7 @@
+
 library(tidyverse)
+library(usmap)
+library(usdata)
 
 load("Daten bearbeitet/combi_redu_data.Rdata")
 drugdata <- allfilterdata
@@ -32,10 +35,7 @@ Race.Distribution <- data2019 %>%
     axis.text  = element_text(size = 30),  # Achsbeschriftungen
     legend.position = "none"  # Legendentext
   )
-ggsave("Presentation_files/Pres_plots/Ethnie_Verteilung_plot.png",
-       plot = Race.Distribution, width = 18, height = 11, dpi = 300)
 
-## ALtersverteilung
 Altersverteilung <- data2019 %>%
   select(CATAG2) %>%
   pivot_longer(cols = everything(), names_to = "variable", values_to = "Group") %>%
@@ -54,7 +54,6 @@ Altersverteilung <- data2019 %>%
   ) +
   scale_x_discrete(labels = c("12-17", "18-25", "26+"))
 
-ggsave ("Presentation_files/Pres_plots/Altersverteilung.png", plot = Altersverteilung, width = 18, height = 10, dpi = 300)
 ##### Drugs Denis Raphael
 
 # 1) Function: Generates a summarized table for a specified (drug) variable,
@@ -161,8 +160,6 @@ Substanzen.Verlauf <- ggplot(fourdrugsever, aes(x = Year, y = .data[["Anteil"]],
   scale_shape_manual(values = c(15:18))# beliebige Form-Codes
 
 
-ggsave("Presentation_files/Pres_plots/Substanzen_Verlauf_plot.png",
-       plot = Substanzen.Verlauf, width = 15, height = 8, dpi = 300)
 
 # 2) Plot: "In the last 30 days" – 4 major drugs
 Monatskonsum.Verlauf <- ggplot(fourdrugs30, aes(x = Year, y = .data[["Anteil"]],
@@ -187,8 +184,6 @@ Monatskonsum.Verlauf <- ggplot(fourdrugs30, aes(x = Year, y = .data[["Anteil"]],
   scale_color_manual(values = c("#0072B2", "#009E73", "#E69F00", "#CC79A7")) +
   scale_shape_manual(values = c(15:18))  # beliebige Form-Codes
 
-ggsave("Presentation_files/Pres_plots/Monatskonsum_Verlauf_plot.png",
-       plot = Monatskonsum.Verlauf, width = 15, height = 8, dpi = 300)
 
 # 3) Plot: "Have ever used tobacco products"
 Jemals.Tabbak <- ggplot(tobaccoever, aes(x = Year, y = .data[["Anteil"]],
@@ -216,8 +211,6 @@ Jemals.Tabbak <- ggplot(tobaccoever, aes(x = Year, y = .data[["Anteil"]],
     values = c(16, 15, 17, 18)
   )
 
-ggsave("Presentation_files/Pres_plots/Jemals_Tabbak_plot.png",
-       plot = Jemals.Tabbak, width = 15, height = 8, dpi = 300)
 
 # 4) Plot: "In the last 30 days" – tobacco products
 Monatskonsum.Tabbak <- ggplot(tobacco30, aes(x = Year, y = .data[["Anteil"]],
@@ -244,8 +237,6 @@ Monatskonsum.Tabbak <- ggplot(tobacco30, aes(x = Year, y = .data[["Anteil"]],
     values = c(16, 15, 17, 18)
   )
 
-ggsave ("Presentation_files/Pres_plots/Monatskonsum_Tabbak_plot.png",
-        plot = Monatskonsum.Tabbak, width = 15, height = 8, dpi = 300)
 
 ## Histogram Function
 histogram_fun <- function(datacol, drug_name, limit, colorcode, yearplot) {
@@ -307,93 +298,70 @@ Substanzen.Verlauf.Abh <- ggplot(fourdrugsdependency, aes(x = Year, y = .data[["
   scale_shape_manual(values = c(15:18))# beliebige Form-Codes
 
 
-ggsave("Presentation_files/Pres_plots/Substanzen_Verlauf_Abhängigkeit_plot.png",
-       plot = Substanzen.Verlauf.Abh, width = 15, height = 8, dpi = 300)
 
 
 # Example calls
 Histo_Alk_15 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2015")
-ggsave("Presentation_files/Pres_plots/Alk_15_plot.png",
-       plot = Histo_Alk_15, width = 15, height = 7, dpi = 300)
+
 
 Histo_Alk_16 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2016")
-ggsave("Presentation_files/Pres_plots/Alk_16_plot.png",
-       plot = Histo_Alk_16, width = 15, height = 7, dpi = 300)
+
 
 Histo_Alk_17 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2017")
-ggsave("Presentation_files/Pres_plots/Alk_17_plot.png",
-       plot = Histo_Alk_17, width = 15, height = 7, dpi = 300)
+
 
 Histo_Alk_18 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2018")
-ggsave("Presentation_files/Pres_plots/Alk_18_plot.png",
-       plot = Histo_Alk_18, width = 15, height = 7, dpi = 300)
+
 
 Histo_Alk_19 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2019")
-ggsave("Presentation_files/Pres_plots/Alk_19_plot.png",
-       plot = Histo_Alk_19, width = 15, height = 7, dpi = 300)
+
 
 # Zigaretten
 Histo_Zig_15 <- histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2015")
-ggsave("Presentation_files/Pres_plots/Zig_15_plot.png",
-       plot = Histo_Zig_15, width = 15, height = 7, dpi = 300)
+
 
 Histo_Zig_16 <- histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2016")
-ggsave ("Presentation_files/Pres_plots/Zig_16_plot.png",
-        plot = Histo_Zig_16, width = 15, height = 7, dpi = 300)
+
 
 Histo_Zig_17 <- histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2017")
-ggsave("Presentation_files/Pres_plots/Zig_17_plot.png",
-       plot = Histo_Zig_17, width = 15, height = 7, dpi = 300)
+
 
 Histo_Zig_18 <- histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2018")
-ggsave("Presentation_files/Pres_plots/Zig_18_plot.png",
-       plot = Histo_Zig_18, width = 15, height = 7, dpi = 300)
+
 
 Histo_Zig_19 <- histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2019")
-ggsave("Presentation_files/Pres_plots/Zig_19_plot.png",
-       plot = Histo_Zig_19, width = 15, height = 7, dpi = 300)
 
 # Kokain
 Histo_Koks_15 <- histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2015")
-ggsave("Presentation_files/Pres_plots/Koks_15_plot.png",
-       plot = Histo_Koks_15, width = 15, height = 7, dpi = 300)
+
 
 Histo_Koks_16 <- histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2016")
-ggsave("Presentation_files/Pres_plots/Koks_16_plot.png",
-       plot = Histo_Koks_16, width = 15, height = 7, dpi = 300)
+
 
 Histo_Koks_17 <- histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2017")
-ggsave("Presentation_files/Pres_plots/Koks_17_plot.png",
-       plot = Histo_Koks_17, width = 15, height = 7, dpi = 300)
+
 
 Histo_Koks_18 <- histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2018")
-ggsave("Presentation_files/Pres_plots/Koks_18_plot.png",
-       plot = Histo_Koks_18, width = 15, height = 7, dpi = 300)
+
 
 Histo_Koks_19 <- histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2019")
-ggsave("Presentation_files/Pres_plots/Koks_19_plot.png",
-       plot = Histo_Koks_19, width = 15, height = 7, dpi = 300)
+
 
 ##Heroin
 Histo_Her_15 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2015")
-ggsave("Presentation_files/Pres_plots/Her_15_plot.png",
-       plot = Histo_Her_15, width = 15, height = 7, dpi = 300)
+
 
 Histo_Her_16 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2016")
-ggsave("Presentation_files/Pres_plots/Her_16_plot.png",
-       plot = Histo_Her_16, width = 15, height = 7, dpi = 300)
+
 
 Histo_Her_17 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2017")
-ggsave("Presentation_files/Pres_plots/Her_17_plot.png",
-       plot = Histo_Her_17, width = 15, height = 7, dpi = 300)
+
 
 Histo_Her_18 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2018")
-ggsave("Presentation_files/Pres_plots/Her_18_plot.png",
-       plot = Histo_Her_18, width = 15, height = 7, dpi = 300)
+
 
 Histo_Her_19 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2019")
-ggsave("Presentation_files/Pres_plots/Her_19_plot.png",
-       plot = Histo_Her_19, width = 15, height = 7, dpi = 300)
+
 ###################################
 #Demographics and Drugs / Nicotine
 ###################################
@@ -420,8 +388,7 @@ Nik.Abhängig.Alter <- data2019 %>%
     legend.title = element_text(size = 17,5),
     legend.position = "none"  # Legendentext
   )
-ggsave("Presentation_files/Pres_plots/NikAbhängig_Alter.png", 
-       plot = Nik.Abhängig.Alter, width = 18, height = 9, dpi = 300)
+
 #-------------------------------------------------------------------------------
 ## Nikotin Dependency (last month) and Race
 Nik.Abhängig.Ethnie <- data2019 %>%
@@ -453,8 +420,6 @@ Nik.Abhängig.Ethnie <- data2019 %>%
     legend.position = "none"  # Legendentext
   )
 
-ggsave("Presentation_files/Pres_plots/NikAbhängig_Ethnie.png", 
-       plot = Nik.Abhängig.Ethnie, width = 15, height = 8, dpi = 300)
 
 ## Nikotine und Geschlecht
 
@@ -479,8 +444,6 @@ Nik.Abhängig.Geschlecht <- data2019 %>%
     legend.position = "none"  # Legendentext
   )
 
-ggsave("Presentation_files/Pres_plots/NikAbhängig_Geschlecht.png",
-       plot = Nik.Abhängig.Geschlecht, width = 15, height = 8, dpi = 300)
 #-------------------------------------------------------------------------------
 ## Drug Dependency by age group
 Subs.Abhängig.Alter <- data2019 %>%
@@ -514,8 +477,6 @@ Subs.Abhängig.Alter <- data2019 %>%
     legend.position = "bottom"
   )
 
-ggsave("Presentation_files/Pres_plots/SubsAbhängig_Alter.png", 
-       plot = Subs.Abhängig.Alter, width = 18, height = 9, dpi = 300)
 Subs.Abhängig.Alter
 #------------------------------------------------------------------------------
 ## Drug Dependency and Race
@@ -567,9 +528,6 @@ Subs.Abhängig.Ethnie <- data2019 %>%
   )
 
 
-ggsave("Presentation_files/Pres_plots/SubsAbhängig_Ethnie.png", 
-       plot = Subs.Abhängig.Ethnie, width = 16, height = 8, dpi = 300)
-
 ## Drug Dependency based on gender
 
 SubsAbhängig.Geschlecht <- data2019 %>%
@@ -611,7 +569,6 @@ SubsAbhängig.Geschlecht <- data2019 %>%
   )
 
 
-ggsave("Presentation_files/Pres_plots/SubsAbhängigkeit_Geschlecht.png", plot = SubsAbhängig.Geschlecht, width = 15, height = 8, dpi = 300)
 ########################################################################################################################################
 
 ## Mentale Gesundheit fertig
@@ -655,13 +612,8 @@ SubsAbhängig.Gesundheit <-ggplot(Drug.Dependency.Total, aes(x = factor(Dependen
     legend.title = element_text(size = 17,5),
     legend.text = element_text(size = 17,5)
   )
-ggsave("Presentation_files/Pres_plots/SubsAbhängig_Gesundheit.png", plot = SubsAbhängig.Gesundheit, width = 18, height = 10, dpi = 300)
 
 
-install.packages("usmap")
-install.packages("usdata")
-library(usmap)
-library(usdata)
 
 
 ############################
@@ -739,7 +691,6 @@ Karte.USA <- plot_usmap(
         
   )
 
-ggsave("Presentation_files/Pres_plots/Karte_Verteilung.png", plot = Karte.USA, width = 18, height = 10, dpi = 300)
 
 ## ODDS
 # Erstellen der Kreuztabelle mit absoluten Häufigkeiten
@@ -829,6 +780,3 @@ Odds.Abhängigkeit <- ggplot(Drug_Odds, aes(x = Dependency, y = OR, color = Depe
     axis.text  = element_text(size = 22),  # Achsbeschriftungen
     legend.position = "none"  # Legendentext
   )
-
-
-ggsave("Presentation_files/Pres_plots/Odds_Abhängigkeit.png", plot = Odds.Abhängigkeit, width = 15, height = 10, dpi = 300)
