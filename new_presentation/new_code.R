@@ -3,90 +3,115 @@ library(tidyverse)
 library(usmap)
 library(usdata)
 
-load("Daten bearbeitet/combi_redu_data.Rdata")
-drugdata <- allfilterdata
+########################################################################################################################
 
+load("data_edit/filtered_data.Rdata")
+drugdata <- allfilterdata
 data2019 <- allfilterdata %>%
   filter(year == 2019)
 
-Race.Distribution <- data2019 %>%
-  select(NEWRACE2) %>%
-  pivot_longer(cols = everything(), names_to = "Var", values_to = "Answer") %>%
-  group_by(Answer) %>%
-  summarize(count = n()) %>%
-  mutate(count = count/56136) %>%
-  ggplot(aes(x = factor(Answer,
-                        levels = c(1, 7, 2, 5, 6, 3, 4)),
-             y = count))+
-  geom_col()+
-  scale_x_discrete(labels = c("1" = "Weiße",
-                              "2" = "Schwarze\nAfroamerikaner",
-                              "3" = "Am/Ak\nIndigene",
-                              "4" = "Indigene Hawaii\n/Paz. Inseln",
-                              "5" = "Asiaten",
-                              "6" = "Gemischte",
-                              "7" = "Hispanische")) +
-  labs(y = "Prozent", x = "Race", title = "") +
-  scale_y_continuous(labels = scales::percent_format()) +
-  theme_light() +
-  theme(
-    axis.title.x = element_text(margin = margin(t = 20)),
-    axis.title = element_text(size = 30),  # Achsentitel
-    axis.text  = element_text(size = 30),  # Achsbeschriftungen
-    legend.position = "none"  # Legendentext
-  )
+########################################################################################################################
 
-Altersverteilung <- data2019 %>%
-  select(CATAG2) %>%
-  pivot_longer(cols = everything(), names_to = "variable", values_to = "Group") %>%
-  group_by(Group) %>%
-  summarize(count =n()/56136)%>%
-  ggplot(aes(x= factor(Group),y = count)) +
-  geom_col() +
-  labs(x = "Altersgruppen", y = "Prozent") +
-  scale_y_continuous(labels = scales::percent_format()) +
+theme_custom <-
   theme_light() +
   theme(
-    axis.title = element_text(size = 30),  # Achsentitel
-    axis.text  = element_text(size = 30),  # Achsbeschriftungen
+    axis.title = element_text(size = 30),
+    axis.text  = element_text(size = 30),
     axis.title.x = element_text(margin = margin(t = 20)),
     axis.title.y = element_text(margin = margin(r = 20))
-  ) +
-  scale_x_discrete(labels = c("12-17", "18-25", "26+"))
+    )
 
-##### Drugs Denis Raphael
+theme_set(theme_custom)
 
-# 1) Function: Generates a summarized table for a specified (drug) variable,
-#    focusing only on "Yes" answers (value == 1), referring to "ever used".
+my_plot <- function(...) {
+    ... +
+    scale_y_continuous(labels = scales::percent_format()) +
+    labs(y = "Prozent", title = "")
+}
+
+newrace2_vector <-
+  c(
+    "1" = "Weiße",
+    "2" = "Schwarze\nAfroamerikaner",
+    "3" = "Am/Ak\nIndigene",
+    "4" = "Indigene Hawaii\n/Paz. Inseln",
+    "5" = "Asiaten",
+    "6" = "Gemischte",
+    "7" = "Hispanische"
+    )
+
+catag2_vector <-
+  c(
+    "1" = "12-17",
+    "2" = "18-25",
+    "3" = "26+"
+    )
+
+irsex_vector <-
+  c(
+    "1" = "Männer",
+    "2"= "Frauen"
+    )
+
+########################################################################################################################
+
+demo_distr_fun <- function(demovar, label_vec, xlab) {
+  my_plot(data2019 %>%
+  select(all_of(demovar)) %>%
+  group_by(.data[[demovar]]) %>%
+  summarize(count = n()) %>%
+  mutate(count = count / sum(count)) %>%  
+  ggplot(aes(
+    x = factor(.data[[demovar]]),
+    y = count)
+    ) +
+  geom_col() +
+  scale_x_discrete(labels = label_vec) +
+  labs(x = xlab))
+}
+
+Race.Distribution <-
+  demo_distr_fun("NEWRACE2", newrace2_vector, "Race")
+
+Age.Distribution <-
+  demo_distr_fun("CATAG2", catag2_vector, "Altersgruppen")
+
+Gender.Distribution <-
+  demo_distr_fun("irsex", irsex_vector, "Geschlecht")
+
+########################################################################################################################
+
 everdatafun <- function(datacol, drug) {
   drugdata %>%
-    group_by(year) %>%
-    count(.data[[datacol]]) %>%                # Counts how often each value appears in 'datacol' per year
-    mutate("Anteil" = n / sum(n)) %>%       # Relative share per year
-    filter(.data[[datacol]] == 1) %>%           # Keep only "Yes" answers
-    ungroup() %>%
-    mutate(
-      Drug = drug,                              # Name of the drug in a new column
-      Year = year
+  group_by(year, .data[[datacol]]) %>%
+  summarize(count = n()) %>%
+  mutate(
+    count = count / sum(count),
+    drug = drug
     ) %>%
-    select(Year, "Anteil", Drug)            # Select columns in a consistent order
-}
-# 2) Function: Generates a summarized table for a specified (drug) variable,
-#    focusing on consumption "in the last 30 days".
-#    Values 1–30 are treated as "Yes," everything else as "No."
-datafun30 <- function(datacol, drug) {
-  drugdata %>%
-    group_by(year) %>%
-    summarise(
-      TotalPeople = n(),                                         # Total number of observations
-      Users = sum(.data[[datacol]] >= 1 & .data[[datacol]] <= 30, na.rm = TRUE),
-      "Anteil" = Users / TotalPeople
-    ) %>%
-    mutate(Drug = drug) %>%                                      # Drug name in a new column
-    select(Year = year, "Anteil", Drug)                      # Rename and reorder columns
+  filter(.data[[datacol]] == 1)
 }
 
-# 1) "Ever used" data for 4 major drugs
+datafun30 <- function(datacol, drug) {
+  drugdata %>%
+  group_by(year, .data[[datacol]]) %>%
+  summarise(count = n()) %>%
+  mutate(
+    count = count / sum(count),
+    drug = drug
+    ) %>%
+  filter(
+      .data[[datacol]] > 0 &
+      .data[[datacol]] < 31
+    ) %>%
+  ungroup() %>%
+  group_by(year) %>%
+  mutate(count = sum(count)) %>%
+  filter(.data[[datacol]] == 1)
+}
+
+########################################################################################################################
+
 fourdrugsever <- as.data.frame(
   rbind(
     everdatafun("alcever", "Alkohol"),
@@ -95,7 +120,7 @@ fourdrugsever <- as.data.frame(
     everdatafun("herever", "Heroin")
   )
 )
-# 2) "Ever used" for various tobacco products
+
 tobaccoever <- as.data.frame(
   rbind(
     everdatafun("cigever", "Zigarette"),
@@ -104,7 +129,7 @@ tobaccoever <- as.data.frame(
     everdatafun("cigarevr", "Zigarre")
   )
 )
-# 3) "In the last 30 days" for 4 major drugs
+
 fourdrugs30 <- as.data.frame(
   rbind(
     datafun30("alcdays", "Alkohol"),
@@ -113,7 +138,7 @@ fourdrugs30 <- as.data.frame(
     datafun30("HER30USE", "Heroin")
   )
 )
-# 4) "In the last 30 days" for various tobacco products
+
 tobacco30 <- as.data.frame(
   rbind(
     datafun30("CIG30USE", "Zigarette"),
@@ -122,7 +147,6 @@ tobacco30 <- as.data.frame(
     datafun30("CGR30USE", "Zigarre")
   )
 )
-#5) Dependency
 
 fourdrugsdependency <- as.data.frame(
   rbind(
@@ -133,241 +157,134 @@ fourdrugsdependency <- as.data.frame(
   )
 )
 
-##########################
-# Plot Creation using ggplot2
-##########################
+########################################################################################################################
 
-# 1) Plot: "Ever used" – 4 major drugs
-Substanzen.Verlauf <- ggplot(fourdrugsever, aes(x = Year, y = .data[["Anteil"]],
-                                                color = factor(Drug, levels = c("Alkohol", "Zigarette", "Kokain", "Heroin")),
-                                                shape = factor(Drug, levels = c("Alkohol", "Zigarette", "Kokain", "Heroin")))) +
-  geom_point(size = 3) +
-  geom_line(linewidth = 1) +
-  theme_light() +
-  labs(
-    color = "Droge",
-    shape = "Droge",
-    x = "Jahr",
-    y = "Prozent"
-  ) +
-  theme(
-    axis.title = element_text(size = 20),  # Achsentitel
-    axis.text  = element_text(size = 20),  # Achsbeschriftungen
-    legend.title = element_text(size = 20),  # Legendentitel
-    legend.text =  element_text(size = 20),  # Legendentext
-  ) + scale_y_continuous(limits = c(0, 0.85), labels = scales::percent_format()) +
-  scale_color_manual(values = c("#0072B2", "#009E73", "#E69F00", "#CC79A7")) +
-  scale_shape_manual(values = c(15:18))# beliebige Form-Codes
+colors_drugs <- c("#0072B2", "#009E73", "#E69F00", "#CC79A7")
+labels_drugs <- c("Alkohol", "Zigarette", "Kokain", "Heroin")
+shapes_drugs <- c(15:18)
 
+colors_tobacco <- c("#009E73", "darkorchid4","lightblue", "darkgrey")
+labels_tobacco <- c("Zigarette", "Zigarre", "Rauchfreier Tabak", "Pfeife")
+shapes_tobacco <- c(c(16, 15, 17, 18))
 
-
-# 2) Plot: "In the last 30 days" – 4 major drugs
-Monatskonsum.Verlauf <- ggplot(fourdrugs30, aes(x = Year, y = .data[["Anteil"]],
-                                                color = factor(Drug, levels = c("Alkohol", "Zigarette", "Kokain", "Heroin")),
-                                                shape = factor(Drug, levels = c("Alkohol", "Zigarette", "Kokain", "Heroin")))) +
-  geom_point(size = 3) +
-  geom_line(size = 1) +
-  theme_light() +
-  labs(
-    color = "Droge",
-    shape = "Droge",
-    x = "Jahr",
-    y = "Prozent"
-  ) +
-  theme(
-    axis.title = element_text(size = 20),  # Achsentitel
-    axis.text  = element_text(size = 20),  # Achsbeschriftungen
-    legend.title = element_text(size = 20),  # Legendentitel
-    legend.text =  element_text(size = 20),  # Legendentext
+timeline_fun <- function(table, label_vec, colors, limit, shapes) {
+  my_plot(
+    table %>%
+    ggplot(aes(
+      x = year,
+      y = count,
+      color = factor(drug, levels = label_vec),
+      shape = factor(drug, levels = label_vec)
+    )) +
+    geom_point(size = 3) +
+    geom_line(linewidth = 1) +
+    labs(
+      color = "Droge",
+      shape = "Droge",
+      x = "Jahr",
+      y = "Prozent"
+    ) +
+    theme(
+      legend.title = element_text(size = 20),
+      legend.text =  element_text(size = 20)
+    ) +
+    scale_color_manual(values = colors) +
+    scale_shape_manual(values = shapes)
   )  +
-  scale_y_continuous(limits = c(0, 0.85), labels = scales::percent_format()) +
-  scale_color_manual(values = c("#0072B2", "#009E73", "#E69F00", "#CC79A7")) +
-  scale_shape_manual(values = c(15:18))  # beliebige Form-Codes
+    scale_y_continuous(limits = c(0, limit), labels = scales::percent_format())
+}
 
+########################################################################################################################
 
-# 3) Plot: "Have ever used tobacco products"
-Jemals.Tabbak <- ggplot(tobaccoever, aes(x = Year, y = .data[["Anteil"]],
-                                         color = factor(Drug, levels = c("Zigarette", "Zigarre", "Rauchfreier Tabak", "Pfeife")),
-                                         shape = factor(Drug, levels = c("Zigarette", "Zigarre", "Rauchfreier Tabak", "Pfeife")))) +
-  geom_point(size = 3) +
-  geom_line(size = 1) +
-  theme_light() +
-  labs(
-    fill = "Droge",
-    color = "Droge",
-    shape = "Droge",
-    x = "Jahr",
-    y = "Prozent"
-  ) +
-  theme(
-    axis.title = element_text(size = 20),
-    axis.text  = element_text(size = 20),
-    legend.title = element_text(size = 20),
-    legend.text = element_text(size = 20)
-  ) +
-  scale_y_continuous(limits = c(0, 0.6), labels = scales::percent_format()) +
-  scale_color_manual(values = c("#009E73", "red","lightblue", "darkgrey")) +
-  scale_shape_manual(
-    values = c(16, 15, 17, 18)
-  )
+timeline_fun(fourdrugsever, labels_drugs, colors_drugs, 0.85, shapes_drugs)
+timeline_fun(fourdrugs30, labels_drugs, colors_drugs, 0.85, shapes_drugs)
+timeline_fun(fourdrugsdependency, labels_drugs, colors_drugs, 0.08, shapes_drugs)
 
+timeline_fun(tobaccoever, labels_tobacco, colors_tobacco, 0.6, shapes_tobacco)
+timeline_fun(tobacco30, labels_tobacco, colors_tobacco, 0.6, shapes_tobacco)
 
-# 4) Plot: "In the last 30 days" – tobacco products
-Monatskonsum.Tabbak <- ggplot(tobacco30, aes(x = Year, y = .data[["Anteil"]],
-                                             color = factor(Drug, levels = c("Zigarette", "Zigarre", "Rauchfreier Tabak", "Pfeife")),
-                                             shape = factor(Drug, levels = c("Zigarette", "Zigarre", "Rauchfreier Tabak", "Pfeife")))) +
-  geom_point(size = 3) +
-  geom_line(size = 1) +
-  theme_light() +
-  labs(
-    color = "Droge",
-    shape = "Droge",
-    x = "Jahr",
-    y = "Prozent"
-  ) +
-  theme(
-    axis.title = element_text(size = 20),
-    axis.text  = element_text(size = 20),
-    legend.title = element_text(size = 20),
-    legend.text = element_text(size = 20)
-  ) +
-  scale_y_continuous(limits = c(0, 0.6), labels = scales::percent_format()) +
-  scale_color_manual(values = c("#009E73", "red","lightblue", "darkgrey")) +
-  scale_shape_manual(
-    values = c(16, 15, 17, 18)
-  )
+########################################################################################################################
 
-
-## Histogram Function
 histogram_fun <- function(datacol, drug_name, limit, colorcode, yearplot) {
-  data <- drugdata %>%
+  
+  data <-
+    drugdata %>%
     group_by(year) %>%
     count(day = .data[[datacol]]) %>%
     mutate(`Relative share` = n / sum(n)) %>%
-    filter(day >= 1 & day <= 30) %>%
+    filter(
+      day >= 1 &
+        day <= 30
+    ) %>%
     filter(year == yearplot) %>%
     ungroup() %>%
     mutate(
       Drug = drug_name,
-      # Hier explizit alle Levels 1:30 setzen:
       day  = factor(day, levels = as.character(1:30))
     )
-  
-  # Berechnung der Stichprobengröße
-  sample_size <- sum(data$n)
-  
-  ggplot(data, aes(x = day, y = `Relative share`)) +
+
+  my_plot(
+    ggplot(data, aes(x = day, y = `Relative share`)) +
     geom_col(fill = colorcode, color = "black") +
-    theme_light() +
     labs(
-      x = paste0("Anzahl der Konsumtage in den letzten 30 Tagen (n = ", sample_size, ")"),  # Stichprobengröße hinzufügen
+      x =
+        paste0(
+        "Anzahl der Konsumtage in den letzten 30 Tagen (n = ",
+        sum(data$n),
+        ")"
+      ),
       y = "Prozent"
     ) +
-    theme(
-      axis.title.x = element_text(margin = margin(t = 20)),
-      axis.title.y = element_text(margin = margin(r = 20)),
-      axis.title = element_text(size = 25),
-      axis.text  = element_text(size = 25),
-      legend.title = element_text(size = 25),
-      legend.text = element_text(size = 25)
-    ) +
-    scale_x_discrete(breaks = c("1", "5", "10", "15", "20", "25", "30"), drop = FALSE) +
-    scale_y_continuous(limits = c(0, limit), labels = scales::percent_format())
+    scale_x_discrete(breaks = c("1", "5", "10", "15", "20", "25", "30"), drop = FALSE)
+  ) +
+  scale_y_continuous(limits = c(0, limit), labels = scales::percent_format())
 }
 
-# 5) Abhängigkeit
-Substanzen.Verlauf.Abh <- ggplot(fourdrugsdependency, aes(x = Year, y = .data[["Anteil"]],
-                                                          color = factor(Drug, levels = c("Alkohol", "Zigarette", "Kokain", "Heroin")),
-                                                          shape = factor(Drug, levels = c("Alkohol", "Zigarette", "Kokain", "Heroin")))) +
-  geom_point(size = 3) +
-  geom_line(linewidth = 1) +
-  theme_light() +
-  labs(
-    color = "Droge",
-    shape = "Droge",
-    x = "Jahr",
-    y = "Prozent"
-  ) +
-  theme(
-    axis.title = element_text(size = 20),  # Achsentitel
-    axis.text  = element_text(size = 20),  # Achsbeschriftungen
-    legend.title = element_text(size = 20),  # Legendentitel
-    legend.text =  element_text(size = 20),  # Legendentext
-  ) + scale_y_continuous(limits = c(0, 0.08), labels = scales::percent_format()) +
-  scale_color_manual(values = c("#0072B2", "#009E73", "#E69F00", "#CC79A7")) +
-  scale_shape_manual(values = c(15:18))# beliebige Form-Codes
+########################################################################################################################
 
-
-
-
-# Example calls
 Histo_Alk_15 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2015")
-
 
 Histo_Alk_16 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2016")
 
-
 Histo_Alk_17 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2017")
-
 
 Histo_Alk_18 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2018")
 
-
 Histo_Alk_19 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2019")
 
-
-# Zigaretten
 Histo_Zig_15 <- histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2015")
-
 
 Histo_Zig_16 <- histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2016")
 
-
 Histo_Zig_17 <- histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2017")
-
 
 Histo_Zig_18 <- histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2018")
 
-
 Histo_Zig_19 <- histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2019")
 
-# Kokain
 Histo_Koks_15 <- histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2015")
-
 
 Histo_Koks_16 <- histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2016")
 
-
 Histo_Koks_17 <- histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2017")
-
 
 Histo_Koks_18 <- histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2018")
 
-
 Histo_Koks_19 <- histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2019")
 
-
-##Heroin
 Histo_Her_15 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2015")
-
 
 Histo_Her_16 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2016")
 
-
 Histo_Her_17 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2017")
-
 
 Histo_Her_18 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2018")
 
-
 Histo_Her_19 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2019")
 
-###################################
-#Demographics and Drugs / Nicotine
-###################################
+########################################################################################################################
 
-#-------------------------------------------------------------------------------
-## Nicotine Dependency Age
+
 Nik.Abhängig.Alter <- data2019 %>%
   select(CATAG2, ndssdnsp) %>%
   group_by(CATAG2) %>%
