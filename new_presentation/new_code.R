@@ -6,8 +6,14 @@ library(usdata)
 ########################################################################################################################
 
 load("data_edit/filtered_data.Rdata")
-drugdata <- allfilterdata
-data2019 <- allfilterdata %>%
+
+drugdata <- allfilterdata %>%
+  mutate(NEWRACE2 =
+           factor(NEWRACE2,
+                  levels = c(1, 7, 2, 5, 6, 3, 4)
+           ))
+
+data2019 <- drugdata %>%
   filter(year == 2019)
 
 ########################################################################################################################
@@ -15,10 +21,12 @@ data2019 <- allfilterdata %>%
 theme_custom <-
   theme_light() +
   theme(
-    axis.title = element_text(size = 30),
-    axis.text  = element_text(size = 30),
+    axis.title = element_text(size = 20),
+    axis.text  = element_text(size = 20),
     axis.title.x = element_text(margin = margin(t = 20)),
-    axis.title.y = element_text(margin = margin(r = 20))
+    axis.title.y = element_text(margin = margin(r = 20)),
+    legend.title = element_text(size = 15),
+    legend.text = element_text(size = 15)
     )
 
 theme_set(theme_custom)
@@ -52,6 +60,14 @@ irsex_vector <-
     "1" = "Männer",
     "2"= "Frauen"
     )
+
+colors_drugs <- c("#0072B2", "#009E73", "#E69F00", "#CC79A7")
+labels_drugs <- c("Alkohol", "Zigarette", "Kokain", "Heroin")
+shapes_drugs <- c(15:18)
+
+colors_tobacco <- c("#009E73", "darkorchid4","lightblue", "darkgrey")
+labels_tobacco <- c("Zigarette", "Zigarre", "Rauchfreier Tabak", "Pfeife")
+shapes_tobacco <- c(c(16, 15, 17, 18))
 
 ########################################################################################################################
 
@@ -158,14 +174,6 @@ fourdrugsdependency <- as.data.frame(
 )
 
 ########################################################################################################################
-
-colors_drugs <- c("#0072B2", "#009E73", "#E69F00", "#CC79A7")
-labels_drugs <- c("Alkohol", "Zigarette", "Kokain", "Heroin")
-shapes_drugs <- c(15:18)
-
-colors_tobacco <- c("#009E73", "darkorchid4","lightblue", "darkgrey")
-labels_tobacco <- c("Zigarette", "Zigarre", "Rauchfreier Tabak", "Pfeife")
-shapes_tobacco <- c(c(16, 15, 17, 18))
 
 timeline_fun <- function(table, label_vec, colors, limit, shapes) {
   my_plot(
@@ -284,212 +292,90 @@ Histo_Her_19 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2019")
 
 ########################################################################################################################
 
-
-Nik.Abhängig.Alter <- data2019 %>%
-  select(CATAG2, ndssdnsp) %>%
-  group_by(CATAG2) %>%
-  mutate(total = n()) %>%  # Gesamtanzahl pro catage berechnen
-  filter(ndssdnsp == 1) %>%
-  summarise(count = n(), total = first(total))  %>%# count berechnen und total beibehalten
-  mutate(count = count / total)%>%
-  ggplot(aes(x = factor(CATAG2), y = count))+
-  geom_col(fill = "#009E73")+
-  scale_x_discrete(name = "Altersgruppen",labels = c("12-17", "18-25", "26+"))+
-  scale_y_continuous(labels = scales::percent_format())+
-  labs( x = " ", y = "Prozent")+
-  theme_light() +
-  theme(
-    axis.title = element_text(size = 24),  # Achsentitel
-    axis.text  = element_text(size = 24),  # Achsbeschriftungen
-    legend.text = element_text(size = 17,5),
-    legend.title = element_text(size = 17,5),
-    legend.position = "none"  # Legendentext
-  )
-
-#-------------------------------------------------------------------------------
-## Nikotin Dependency (last month) and Race
-Nik.Abhängig.Ethnie <- data2019 %>%
-  select(NEWRACE2, ndssdnsp) %>%
-  group_by(NEWRACE2) %>%
-  mutate(total = n()) %>%
-  filter (ndssdnsp == 1)%>%
-  summarise(count = n(), total = first(total))  %>%# count berechnen und total beibehalten
-  mutate(count = count /total)%>%
-  ggplot(aes(x = factor(NEWRACE2,
-                        levels = c(1, 7, 2, 5, 6, 3, 4)),
-             y = count))+
-  geom_col(fill = "#009E73") +
-  scale_x_discrete(labels = c("1" = "Weisse",
-                              "2" = "Afro- \nAmerikaner",
-                              "3" = "Am/Ak \nIndigene",
-                              "4" = "Indigene \nHawaii \n/Paz. Inseln",
-                              "5" = "Asiaten",
-                              "6" = "Gemischt",
-                              "7" = "Hispanisch"))+
-  scale_y_continuous(labels = scales::percent_format())+
-  labs(x = "Race", y = "Prozent")+
-  theme_light() +
-  theme(
-    axis.title = element_text(size = 22),  # Achsentitel
-    axis.text  = element_text(size = 22),  # Achsbeschriftungen
-    legend.text = element_text(size = 17,5),
-    legend.title = element_text(size = 17,5),
-    legend.position = "none"  # Legendentext
-  )
-
-
-## Nikotine und Geschlecht
-
-Nik.Abhängig.Geschlecht <- data2019 %>%
-  select(irsex, ndssdnsp) %>%
-  group_by(irsex) %>%
-  mutate(total = n()) %>%
-  filter (ndssdnsp == 1)%>%
-  summarise(count = n(), total = first(total))  %>%# count berechnen und total beibehalten
-  mutate(count = count /total)%>%
-  ggplot(aes(x = factor(irsex), y = count))+
-  geom_col(fill = "#009E73")+
-  scale_x_discrete(labels = c("1"="Männer", "2" = "Frauen"))+
-  scale_y_continuous(labels = scales::percent_format())+
-  labs(x = "Geschlecht", y = "Prozent")+
-  theme_light() +
-  theme(
-    axis.title = element_text(size = 20),  # Achsentitel
-    axis.text  = element_text(size = 20),  # Achsbeschriftungen
-    legend.text = element_text(size = 17,5),
-    legend.title = element_text(size = 17,5),
-    legend.position = "none"  # Legendentext
-  )
-
-#-------------------------------------------------------------------------------
-## Drug Dependency by age group
-Subs.Abhängig.Alter <- data2019 %>%
-  select(CATAG2,depndcoc,depndher, depndalc) %>%
-  mutate(Dependency = case_when(
-    depndalc == 1 & depndcoc == 0 & depndher == 0 ~ "Alkohol",
-    depndcoc == 1 & depndalc == 0 & depndher == 0 ~ "Kokain",
-    depndher == 1 & depndalc == 0 & depndcoc == 0 ~ "Heroin",
-    depndalc == 1 & depndcoc == 1 | depndalc == 1 & depndher == 1 | depndcoc == 1 & depndher == 1 ~ "Mehrfachabhängigkeit"
-  )) %>%
-  filter(!is.na(Dependency)) %>%
-  mutate(Dependency = factor(Dependency, levels = c("Alkohol", "Kokain", "Heroin", "Mehrfachabhängigkeit"))) %>%
-  group_by(CATAG2, Dependency) %>%
-  ggplot(aes(x = factor(CATAG2), fill = Dependency))+
-  geom_bar(position = "dodge")+
-  scale_fill_manual(name = "Drogen",
-                    values = c("Alkohol" = "#0072B2",  # Blau
-                               "Kokain" = "#E69F00",  # Gelb
-                               "Heroin" = "#CC79A7",  # Rosa
-                               "Mehrfachabhängigkeit" = "grey30")) +  # Grau
-  scale_x_discrete(labels = c("1" = "12-17", "2" = "18-25", "3" = "26+"))+
-  scale_y_continuous(labels = scales::percent_format())+
-  labs(x = "Gruppierung", y = "Prozent")+
-  theme_light() +
-  theme(
-    axis.title.x = element_text(margin = margin(t = 20)),
-    axis.title = element_text(size = 20),  # Achsentitel
-    axis.text  = element_text(size = 25),  # Achsbeschriftungen
-    legend.text = element_text(size = 20),
-    legend.title = element_text(size = 20),
-    legend.position = "bottom"
-  )
-
-Subs.Abhängig.Alter
-#------------------------------------------------------------------------------
-## Drug Dependency and Race
-Subs.Abhängig.Ethnie <- data2019 %>%
-  select(NEWRACE2, depndcoc, depndalc, depndher) %>%
-  mutate(Dependency = case_when(
-    depndalc == 1 & depndcoc == 0 & depndher == 0 ~ "Alkohol",
-    depndcoc == 1 & depndalc == 0 & depndher == 0 ~ "Kokain",
-    depndher == 1 & depndalc == 0 & depndcoc == 0 ~ "Heroin",
-    depndalc == 1 & depndcoc == 1 | depndalc == 1 & depndher == 1 | depndcoc == 1 & depndher == 1 ~ "Mehrfachabhängigkeit"
-  )) %>%
-  filter(!is.na(Dependency)) %>%
-  mutate(Dependency = factor(Dependency, levels = c("Alkohol", "Kokain", "Heroin", "Mehrfachabhängigkeit"))) %>%
-  ggplot(aes(x = factor(NEWRACE2, levels = c(1, 7, 2, 5, 6, 3, 4)), fill = Dependency)) +
-  geom_bar(position = "fill") +
-  scale_x_discrete(
-    labels = function(x) {
-      labels <- c(
-        "1" = "Weisse",
-        "2" = "Afro \nAmerikaner",
-        "3" = "Am/Ak \nIndigene",
-        "4" = "Indigene Hawaii \n/Paz. Inseln",
-        "5" = "Asiaten",
-        "6" = "Gemischt",
-        "7" = "Hispanisch"
+nic_dependency_demo <- function(demog, label, labelvec) {
+  data_sum <- data2019 %>%
+    group_by(.data[[demog]]) %>%
+    mutate(total = n()) %>%
+    filter(ndssdnsp == 1) %>%
+    summarise(count = n(), total = first(total))
+  lvls <- levels(factor(data_sum[[demog]]))
+  new_labels <- sapply(seq_along(lvls), function(i) {
+    paste0(labelvec[i], " \n(n = ", data_sum$count[data_sum[[demog]] == lvls[i]], ")")
+  })
+  data_sum <- data_sum %>% mutate(count = count / total)
+  my_plot(
+    data_sum %>%
+      ggplot(aes(
+        x = factor(.data[[demog]]),
+        y = count
+      )) +
+      geom_col(fill = "#009E73") +
+      scale_x_discrete(
+        name = label,
+        labels = new_labels
       )
-      sample_sizes <- sapply(as.numeric(x), function(group) {
-        sum(data2019$NEWRACE2 == group &
-              (data2019$depndalc == 1 | data2019$depndcoc == 1 | data2019$depndher == 1),
-            na.rm = TRUE)
-      })
-      mapply(function(label, n) paste0(label, "\n(n = ", n, ")"), labels[x], sample_sizes)
-    }
-  ) +
-  scale_fill_manual(name = "Drogen",
-                    values = c("Alkohol" = "#0072B2",  # Blau
-                               "Kokain" = "#E69F00",  # Gelb
-                               "Heroin" = "#CC79A7",  # Rosa
-                               "Mehrfachabhängigkeit" = "grey30")) +  # Grau
-  scale_y_continuous(labels = scales::percent_format()) +
-  labs(x = "Gruppen", y = "Prozent") +
-  theme_light() +
-  theme(
-    axis.title = element_text(size = 20),  
-    axis.text = element_text(size = 22),  
-    legend.text = element_text(size = 18),
-    legend.title = element_text(size = 18),
-    legend.position = "bottom"
+  )
+}
+
+########################################################################################################################
+
+nic_dependency_demo("CATAG2", "Altersgruppen", catag2_vector)
+
+nic_dependency_demo("NEWRACE2", "Race", newrace2_vector)
+
+nic_dependency_demo("irsex", "Geschlecht", irsex_vector)
+
+########################################################################################################################
+
+drug_dep_color <- c(
+  "Alkohol" = "#0072B2",
+  "Kokain" = "#E69F00",
+  "Heroin" = "#CC79A7",
+  "Mehrfachabhängigkeit" = "grey20"
   )
 
+########################################################################################################################
 
-## Drug Dependency based on gender
-
-SubsAbhängig.Geschlecht <- data2019 %>%
-  select(irsex, depndcoc, depndalc, depndher) %>%
-  mutate(Dependency = case_when(
-    depndalc == 1 & depndcoc == 0 & depndher == 0 ~ "Alkohol",
-    depndcoc == 1 & depndalc == 0 & depndher == 0 ~ "Kokain",
-    depndher == 1 & depndalc == 0 & depndcoc == 0 ~ "Heroin",
-    depndalc == 1 & depndcoc == 1 | depndalc == 1 & depndher == 1 | depndcoc == 1 & depndher == 1 ~ "Mehrfachabhängigkeit"
-  )) %>%
-  filter(!is.na(Dependency)) %>%
-  mutate(Dependency = factor(Dependency, levels = c("Alkohol", "Kokain", "Heroin", "Mehrfachabhängigkeit"))) %>%
-  group_by(irsex) %>%
-  mutate(SampleSize = n()) %>%  # Berechnung der Stichprobengröße nach Geschlecht
-  ungroup() %>%
-  ggplot(aes(x = factor(irsex), fill = Dependency)) +
-  geom_bar(position = "fill") +
-  scale_x_discrete(
-    labels = function(x) {
-      ifelse(x == "1",
-             paste0("Männer\n(n = ", sum(data2019$irsex == 1, na.rm = TRUE), ")"),
-             paste0("Frauen\n(n = ", sum(data2019$irsex == 2, na.rm = TRUE), ")"))
-    }
-  ) +
-  scale_fill_manual(name = "Drogen",
-                    values = c("Alkohol" = "#0072B2",  # Blau
-                               "Kokain" = "#E69F00",  # Gelb
-                               "Heroin" = "#CC79A7",  # Rosa
-                               "Mehrfachabhängigkeit" = "grey30")) +  # Grau
-  scale_y_continuous(labels = scales::percent_format()) +
-  labs(x = "Geschlecht", y = "Prozent") +
-  theme_light() +
-  theme(
-    axis.title = element_text(size = 20),  # Achsentitel
-    axis.text = element_text(size = 20),   # Achsbeschriftungen
-    legend.text = element_text(size = 18),
-    legend.title = element_text(size = 18),
-    legend.position = "bottom"
+drug_dependency_demo <- function(demog, labelvec, xlabel) {
+  data_filtered <- data2019 %>%
+    mutate(Dependency = case_when(
+      depndalc == 1 & depndcoc == 0 & depndher == 0 ~ "Alkohol",
+      depndcoc == 1 & depndalc == 0 & depndher == 0 ~ "Kokain",
+      depndher == 1 & depndalc == 0 & depndcoc == 0 ~ "Heroin",
+      depndalc == 1 & depndcoc == 1 | depndalc == 1 & depndher == 1 | depndcoc == 1 & depndher == 1 ~ "Mehrfachabhängigkeit"
+    )) %>%
+    filter(!is.na(Dependency)) %>%
+    mutate(Dependency = factor(Dependency, levels = c("Alkohol","Kokain","Heroin","Mehrfachabhängigkeit")))
+  counts <- data_filtered %>% count(.data[[demog]])
+  lvls <- levels(factor(data_filtered[[demog]]))
+  new_labels <- sapply(seq_along(lvls), function(i) {
+    paste0(labelvec[i]," \n(n = ", counts$n[counts[[demog]] == lvls[i]], ")")
+  })
+  my_plot(
+    data_filtered %>%
+      group_by(.data[[demog]], Dependency) %>%
+      ggplot(aes(x = factor(.data[[demog]]), fill = Dependency)) +
+      geom_bar(position = "fill") +
+      scale_fill_manual(name = "Drogen", values = drug_dep_color) +
+      scale_x_discrete(labels = new_labels) +
+      labs(x = xlabel)
   )
+}
+
+########################################################################################################################
+
+drug_dependency_demo("CATAG2", catag2_vector, "Altergruppen")
+
+drug_dependency_demo("irsex", irsex_vector, "Geschlecht")
+
+drug_dependency_demo("NEWRACE2", newrace2_vector, "Race")
+
+########################################################################################################################
+
 
 
 ########################################################################################################################################
 
-## Mentale Gesundheit fertig
-# Datenaufbereitung für "Keine Abhängigkeit" vs. spezifische Substanzabhängigkeit & Mehrfachabhängigkeit
 Drug.Dependency.Total <- data2019 %>%
   select(depndalc, depndcoc, depndher, MI_CAT_U) %>%
   mutate(
