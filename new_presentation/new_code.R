@@ -38,16 +38,15 @@ my_plot <- function(...) {
     labs(y = "Prozent", title = "")
 }
 
-newrace2_vector <-
-  c(
-    "1" = "Weiße",
-    "2" = "Schwarze\nAfroamerikaner",
-    "3" = "Am/Ak\nIndigene",
-    "4" = "Indigene Hawaii\n/Paz. Inseln",
-    "5" = "Asiaten",
-    "6" = "Gemischte",
-    "7" = "Hispanische"
-    )
+newrace2_vector <- c(
+  "1" = "Weiße",
+  "7" = "Hispanische",
+  "2" = "Schwarze\nAfroamerikaner",
+  "5" = "Asiaten",
+  "6" = "Gemischte",
+  "3" = "Am/Ak\nIndigene",
+  "4" = "Indigene Hawaii\n/Paz. Inseln"
+)
 
 catag2_vector <-
   c(
@@ -339,6 +338,65 @@ Nic.Dependency.Gender <-
 
 ########################################################################################################################
 
+nic_dependency_demo_with_none <- function(demog, label, labelvec) {
+  data_sum <- data2019 %>%
+    group_by(.data[[demog]], ndssdnsp) %>%
+    summarise(count = n(), .groups = "drop") %>%
+    group_by(.data[[demog]]) %>%
+    mutate(total = sum(count)) %>%
+    ungroup() %>%
+    mutate(
+      prop = count / total,
+      NicotineStatus = ifelse(ndssdnsp == 1, "Abhängigkeit", "Keine Abhängigkeit"),
+      # Damit GRÜN (Abhängigkeit) unten ist und GRAU (Keine Abhängigkeit) oben:
+      NicotineStatus = factor(NicotineStatus, levels = c("Keine Abhängigkeit", "Abhängigkeit"))
+    )
+  
+  lvls <- levels(factor(data_sum[[demog]]))
+  new_labels <- sapply(seq_along(lvls), function(i) {
+    paste0(
+      labelvec[i],
+      " \n(n = ",
+      sum(data_sum$count[data_sum[[demog]] == lvls[i]]),
+      ")"
+    )
+  })
+  
+  my_plot(
+    data_sum %>%
+      ggplot(aes(
+        x = factor(.data[[demog]]),
+        y = prop,
+        fill = NicotineStatus
+      )) +
+      geom_col() +
+      scale_fill_manual(
+        name = "Nikotinabhängigkeit",
+        values = c(
+          "Abhängigkeit" = "#009E73",
+          "Keine Abhängigkeit" = "gray60"
+        )
+      ) +
+      scale_x_discrete(
+        name = label,
+        labels = new_labels
+      )
+  )
+}
+
+########################################################################################################################
+
+Nic.Dependency.Age.WN <-
+  nic_dependency_demo_with_none("CATAG2", "Altersgruppen", catag2_vector)
+
+Nic.Dependency.Race.WN <-
+  nic_dependency_demo_with_none("NEWRACE2", "Race", newrace2_vector)
+
+Nic.Dependency.Gender.WN <-
+  nic_dependency_demo_with_none("irsex", "Geschlecht", irsex_vector)
+
+########################################################################################################################
+
 drug_dep_color <- c(
   "Alkohol" = "#0072B2",
   "Kokain" = "#E69F00",
@@ -390,6 +448,61 @@ Drug.Dependency.Gender <-
 
 Drug.Dependency.Race <-
   drug_dependency_demo("NEWRACE2", newrace2_vector, "Race")
+
+########################################################################################################################
+
+drug_dependency_demo_with_none <- function(demog, labelvec, xlabel) {
+  data_filtered <- data2019 %>%
+    mutate(
+      Dependency = case_when(
+        depndalc == 1 & depndcoc == 0 & depndher == 0 ~ "Alkohol",
+        depndcoc == 1 & depndalc == 0 & depndher == 0 ~ "Kokain",
+        depndher == 1 & depndalc == 0 & depndcoc == 0 ~ "Heroin",
+        depndalc == 1 & depndcoc == 1 | depndalc == 1 & depndher == 1 | depndcoc == 1 & depndher == 1 ~ "Mehrfachabhängigkeit",
+        TRUE ~ "Keine Abhängigkeit"
+      )
+    ) %>%
+    mutate(
+      Dependency = factor(
+        Dependency,
+        levels = c("Keine Abhängigkeit", "Alkohol", "Kokain", "Heroin", "Mehrfachabhängigkeit")
+      )
+    )
+  counts <- data_filtered %>% count(.data[[demog]])
+  lvls <- levels(factor(data_filtered[[demog]]))
+  new_labels <- sapply(seq_along(lvls), function(i) {
+    paste0(labelvec[i], " \n(n = ", counts$n[counts[[demog]] == lvls[i]], ")")
+  })
+  my_plot(
+    data_filtered %>%
+      group_by(.data[[demog]], Dependency) %>%
+      ggplot(aes(x = factor(.data[[demog]]), fill = Dependency)) +
+      geom_bar(position = "fill") +
+      scale_fill_manual(
+        name = "Drogen",
+        values = c(
+          "Keine Abhängigkeit" = "gray80",
+          "Alkohol" = drug_dep_color[["Alkohol"]],
+          "Kokain" = drug_dep_color[["Kokain"]],
+          "Heroin" = drug_dep_color[["Heroin"]],
+          "Mehrfachabhängigkeit" = drug_dep_color[["Mehrfachabhängigkeit"]]
+        )
+      ) +
+      scale_x_discrete(labels = new_labels) +
+      labs(x = xlabel)
+  )
+}
+
+########################################################################################################################
+
+Drug.Dependency.Age.WN <-
+  drug_dependency_demo_with_none("CATAG2", catag2_vector, "Altersgruppen")
+
+Drug.Dependency.Gender.WN <-
+  drug_dependency_demo_with_none("irsex", irsex_vector, "Geschlecht")
+
+Drug.Dependency.Race.WN <-
+  drug_dependency_demo_with_none("NEWRACE2", newrace2_vector, "Race")
 
 ########################################################################################################################
 
@@ -469,47 +582,6 @@ my_plot(
       x = "Abhängigkeiten",
     )
 )
-
-########################################################################################################################
-
-SubsAbhängig.Gesundheit <-
-  my_plot(
-  data2019 %>%
-  mutate(
-    Dependency = case_when(
-      depndalc == 1 & depndcoc == 0 & depndher == 0 ~ "Alkohol",
-      depndcoc == 1 & depndalc == 0 & depndher == 0 ~ "Kokain",
-      depndher == 1 & depndalc == 0 & depndcoc == 0 ~ "Heroin",
-      depndalc == 1 & depndcoc == 1 | depndalc == 1 & depndher == 1 | depndcoc == 1 & depndher == 1 ~ "Mehrfachabhängigkeit",
-      TRUE ~ "Keine"
-    )) %>%
-  filter(MI_CAT_U >= 0) %>%
-  group_by(Dependency, MI_CAT_U) %>%
-  summarise(count = n(), .groups = "drop") %>%
-  ggplot(aes(
-    x = factor(Dependency,
-               levels = c(
-                 "Keine",
-                 "Alkohol",
-                 "Kokain",
-                 "Heroin",
-                 "Mehrfachabhängigkeit"
-                 )), 
-      fill = factor(MI_CAT_U))) +
-      geom_bar(
-        stat = "identity",
-        position = "fill",
-        aes(y = count)
-      ) +
-      scale_fill_manual(name = "Mentale Erkrankungen:",
-                        labels = c("0" = "Keine", 
-                                   "1" = "Milde", 
-                                   "2" = "Moderate", 
-                                   "3" = "Schwere"),
-                        values = c("grey80", "grey65", "grey45", "grey30")) + # Farben für Mental Health Kategorien
-      scale_y_continuous(labels = scales::percent_format())+
-      labs(x = "Abhängigkeiten", y = "Prozent")
-      )
 
 ########################################################################################################################
 
