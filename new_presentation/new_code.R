@@ -26,7 +26,8 @@ theme_custom <-
     axis.title.x = element_text(margin = margin(t = 20)),
     axis.title.y = element_text(margin = margin(r = 20)),
     legend.title = element_text(size = 15),
-    legend.text = element_text(size = 15)
+    legend.text = element_text(size = 15),
+    legend.position = "bottom"
     )
 
 theme_set(theme_custom)
@@ -61,7 +62,7 @@ irsex_vector <-
     "2"= "Frauen"
     )
 
-colors_drugs <- c("#0072B2", "#009E73", "#E69F00", "#CC79A7")
+colors_drugs <- c("#0072B2", "#009E73", "#E69F00", "#be548e")
 labels_drugs <- c("Alkohol", "Zigarette", "Kokain", "Heroin")
 shapes_drugs <- c(15:18)
 
@@ -187,8 +188,8 @@ timeline_fun <- function(table, label_vec, colors, limit, shapes) {
     geom_point(size = 3) +
     geom_line(linewidth = 1) +
     labs(
-      color = "Droge",
-      shape = "Droge",
+      color = "Droge:",
+      shape = "Droge:",
       x = "Jahr",
       y = "Prozent"
     ) +
@@ -203,13 +204,21 @@ timeline_fun <- function(table, label_vec, colors, limit, shapes) {
 }
 
 ########################################################################################################################
+Drugs.Timeline.Ever <-
+  timeline_fun(fourdrugsever, labels_drugs, colors_drugs, 0.85, shapes_drugs)
 
-timeline_fun(fourdrugsever, labels_drugs, colors_drugs, 0.85, shapes_drugs)
-timeline_fun(fourdrugs30, labels_drugs, colors_drugs, 0.85, shapes_drugs)
-timeline_fun(fourdrugsdependency, labels_drugs, colors_drugs, 0.08, shapes_drugs)
+Drugs.Timeline.30 <-
+  timeline_fun(fourdrugs30, labels_drugs, colors_drugs, 0.85, shapes_drugs)
 
-timeline_fun(tobaccoever, labels_tobacco, colors_tobacco, 0.6, shapes_tobacco)
-timeline_fun(tobacco30, labels_tobacco, colors_tobacco, 0.6, shapes_tobacco)
+Drugs.Timeline.Dependency <-
+  timeline_fun(fourdrugsdependency, labels_drugs, colors_drugs, 0.08, shapes_drugs)
+
+
+Tobacco.Timeline.Ever <-
+  timeline_fun(tobaccoever, labels_tobacco, colors_tobacco, 0.6, shapes_tobacco)
+
+Tobacco.Timeline.30 <-
+  timeline_fun(tobacco30, labels_tobacco, colors_tobacco, 0.6, shapes_tobacco)
 
 ########################################################################################################################
 
@@ -250,45 +259,45 @@ histogram_fun <- function(datacol, drug_name, limit, colorcode, yearplot) {
 
 ########################################################################################################################
 
-Histo_Alk_15 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2015")
+Histogram.Alc.15 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2015")
 
-Histo_Alk_16 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2016")
+Histogram.Alc.16 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2016")
 
-Histo_Alk_17 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2017")
+Histogram.Alc.17 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2017")
 
-Histo_Alk_18 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2018")
+Histogram.Alc.18 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2018")
 
-Histo_Alk_19 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2019")
+Histogram.Alc.19 <- histogram_fun("alcdays", "Alcohol", 0.085, "#0072B2", "2019")
 
-Histo_Zig_15 <- histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2015")
+Histogram.Cig.15 <- histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2015")
 
-Histo_Zig_16 <- histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2016")
+Histogram.Cig.16 <- histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2016")
 
-Histo_Zig_17 <- histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2017")
+Histogram.Cig.17 <- histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2017")
 
-Histo_Zig_18 <- histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2018")
+Histogram.Cig.18 <- histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2018")
 
-Histo_Zig_19 <- histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2019")
+Histogram.Cig.19 <- histogram_fun("CIG30USE", "Cigarettes", 0.12, "#009E73", "2019")
 
-Histo_Koks_15 <- histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2015")
+Histogram.Coc.15 <- histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2015")
 
-Histo_Koks_16 <- histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2016")
+Histogram.Coc.16 <- histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2016")
 
-Histo_Koks_17 <- histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2017")
+Histogram.Coc.17 <- histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2017")
 
-Histo_Koks_18 <- histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2018")
+Histogram.Coc.18 <- histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2018")
 
-Histo_Koks_19 <- histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2019")
+Histogram.Coc.19 <- histogram_fun("COCUS30A", "Cocaine", 0.004, "#E69F00","2019")
 
-Histo_Her_15 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2015")
+Histogram.Her.15 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2015")
 
-Histo_Her_16 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2016")
+Histogram.Her.16 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2016")
 
-Histo_Her_17 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2017")
+Histogram.Her.17 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2017")
 
-Histo_Her_18 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2018")
+Histogram.Her.18 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2018")
 
-Histo_Her_19 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2019")
+Histogram.Her.19 <- histogram_fun("HER30USE", "Heroin", 0.0006, "#CC79A7", "2019")
 
 ########################################################################################################################
 
@@ -319,11 +328,14 @@ nic_dependency_demo <- function(demog, label, labelvec) {
 
 ########################################################################################################################
 
-nic_dependency_demo("CATAG2", "Altersgruppen", catag2_vector)
+Nic.Dependency.Age <-
+  nic_dependency_demo("CATAG2", "Altersgruppen", catag2_vector)
 
-nic_dependency_demo("NEWRACE2", "Race", newrace2_vector)
+Nic.Dependency.Race <-
+  nic_dependency_demo("NEWRACE2", "Race", newrace2_vector)
 
-nic_dependency_demo("irsex", "Geschlecht", irsex_vector)
+Nic.Dependency.Gender <-
+  nic_dependency_demo("irsex", "Geschlecht", irsex_vector)
 
 ########################################################################################################################
 
@@ -364,64 +376,137 @@ drug_dependency_demo <- function(demog, labelvec, xlabel) {
 
 ########################################################################################################################
 
-drug_dependency_demo("CATAG2", catag2_vector, "Altergruppen")
+Drug.Dependency.Age <-
+  drug_dependency_demo("CATAG2", catag2_vector, "Altersgruppen")
 
-drug_dependency_demo("irsex", irsex_vector, "Geschlecht")
+Drug.Dependency.Gender <-
+  drug_dependency_demo("irsex", irsex_vector, "Geschlecht")
 
-drug_dependency_demo("NEWRACE2", newrace2_vector, "Race")
+Drug.Dependency.Race <-
+  drug_dependency_demo("NEWRACE2", newrace2_vector, "Race")
 
 ########################################################################################################################
 
+Dependency.Mental <- data2019 %>%
+  mutate(Dependency = case_when(
+    depndalc == 1 & depndcoc == 0 & depndher == 0 ~ "Alkohol",
+    depndcoc == 1 & depndalc == 0 & depndher == 0 ~ "Kokain",
+    depndher == 1 & depndalc == 0 & depndcoc == 0 ~ "Heroin",
+    (depndalc == 1 & depndcoc == 1) | (depndalc == 1 & depndher == 1) | (depndcoc == 1 & depndher == 1) ~ "Mehrfachabhängigkeit",
+    TRUE ~ "Keine Abhängigkeit"
+    )
+  ) %>%
+  filter(MI_CAT_U >= 0) %>%
+  mutate(FillGroup = paste(Dependency, MI_CAT_U, sep = "_")) %>%
+  group_by(Dependency, MI_CAT_U, FillGroup) %>%
+  summarise(count = n(), .groups = "drop")
 
+color_palette <- c(
+  "Keine Abhängigkeit_0" = "#e6e6e6", "Keine Abhängigkeit_1" = "#b3b3b3",
+  "Keine Abhängigkeit_2" = "#808080", "Keine Abhängigkeit_3" = "#4d4d4d",
+  "Alkohol_0" = "#7fd0ff", "Alkohol_1" = "#19abff",
+  "Alkohol_2" = "#0072B2", "Alkohol_3" = "#00304c",
+  "Kokain_0" = "#ffe7b3", "Kokain_1" = "#ffc74d",
+  "Kokain_2" = "#E69F00", "Kokain_3" = "#805700",
+  "Heroin_0" = "#f6e8f0", "Heroin_1" = "#da9ebf",
+  "Heroin_2" = "#be548e", "Heroin_3" = "#7d2f5a",
+  "Mehrfachabhängigkeit_0" = "#e6e6e6", "Mehrfachabhängigkeit_1" = "#b3b3b3",
+  "Mehrfachabhängigkeit_2" = "#808080", "Mehrfachabhängigkeit_3" = "#4d4d4d"
+)
+my_plot(
+  ggplot(
+    data = Drug.Dependency.Total,
+    aes(
+      x = factor(
+        Dependency,
+        levels = c(
+          "Keine Abhängigkeit",
+          "Alkohol",
+          "Kokain",
+          "Heroin",
+          "Mehrfachabhängigkeit"
+        )
+      ),
+      y = count,
+      fill = FillGroup
+    )
+  ) +
+    geom_bar(
+      stat = "identity",
+      position = "fill"
+    ) +
+    scale_x_discrete(
+      labels = c(
+        "Keine Abhängigkeit"     = "Keine",
+        "Alkohol"                = "Alkohol",
+        "Kokain"                 = "Kokain",
+        "Heroin"                 = "Heroin",
+        "Mehrfachabhängigkeit"   = "Mehrere"
+      )
+    ) +
+    scale_fill_manual(
+      name = "Mentale Erkrankungen:",
+      values = color_palette,
+      breaks = c(
+        "Keine Abhängigkeit_0",
+        "Keine Abhängigkeit_1",
+        "Keine Abhängigkeit_2",
+        "Keine Abhängigkeit_3"
+      ),
+      labels = c(
+        "Keine",
+        "Leichte",
+        "Mittlere",
+        "Schwere"
+      )) +
+    labs(
+      x = "Abhängigkeiten",
+    )
+)
 
-########################################################################################################################################
+########################################################################################################################
 
-Drug.Dependency.Total <- data2019 %>%
-  select(depndalc, depndcoc, depndher, MI_CAT_U) %>%
+SubsAbhängig.Gesundheit <-
+  my_plot(
+  data2019 %>%
   mutate(
     Dependency = case_when(
       depndalc == 1 & depndcoc == 0 & depndher == 0 ~ "Alkohol",
       depndcoc == 1 & depndalc == 0 & depndher == 0 ~ "Kokain",
       depndher == 1 & depndalc == 0 & depndcoc == 0 ~ "Heroin",
       depndalc == 1 & depndcoc == 1 | depndalc == 1 & depndher == 1 | depndcoc == 1 & depndher == 1 ~ "Mehrfachabhängigkeit",
-      TRUE ~ "Keine Abhängigkeit"
-    )
-  ) %>%
-  filter(MI_CAT_U >= 0) %>%  # Mehrfachabhängigkeit wird jetzt nicht mehr ausgeschlossen
+      TRUE ~ "Keine"
+    )) %>%
+  filter(MI_CAT_U >= 0) %>%
   group_by(Dependency, MI_CAT_U) %>%
-  summarise(count = n(), .groups = "drop") 
+  summarise(count = n(), .groups = "drop") %>%
+  ggplot(aes(
+    x = factor(Dependency,
+               levels = c(
+                 "Keine",
+                 "Alkohol",
+                 "Kokain",
+                 "Heroin",
+                 "Mehrfachabhängigkeit"
+                 )), 
+      fill = factor(MI_CAT_U))) +
+      geom_bar(
+        stat = "identity",
+        position = "fill",
+        aes(y = count)
+      ) +
+      scale_fill_manual(name = "Mentale Erkrankungen:",
+                        labels = c("0" = "Keine", 
+                                   "1" = "Milde", 
+                                   "2" = "Moderate", 
+                                   "3" = "Schwere"),
+                        values = c("grey80", "grey65", "grey45", "grey30")) + # Farben für Mental Health Kategorien
+      scale_y_continuous(labels = scales::percent_format())+
+      labs(x = "Abhängigkeiten", y = "Prozent")
+      )
 
-# Plot
-SubsAbhängig.Gesundheit <-ggplot(Drug.Dependency.Total, aes(x = factor(Dependency, levels = c("Keine Abhängigkeit", "Alkohol", "Kokain", "Heroin", "Mehrfachabhängigkeit")), 
-                                                            fill = factor(MI_CAT_U))) +
-  geom_bar(stat = "identity", position = "fill", aes(y = count)) +
-  scale_x_discrete(labels = c("Keine Abhängigkeit" = "Keine \nAbhängigkeit", 
-                              "Alkohol" = "Abhängigkeit \nvon Alkohol", 
-                              "Kokain" = "Abhängigkeit \nvon Kokain", 
-                              "Heroin" = "Abhängigkeit \nvon Heroin", 
-                              "Mehrfachabhängigkeit" = "Abhängigkeit \nvon mehreren Drogen")) +
-  scale_fill_manual(name = "Mentale Erkrankungen:",
-                    labels = c("0" = "Keine", 
-                               "1" = "Milde", 
-                               "2" = "Moderate", 
-                               "3" = "Schwere"),
-                    values = c("grey80", "grey65", "grey45", "grey30")) + # Farben für Mental Health Kategorien
-  scale_y_continuous(labels = scales::percent_format())+
-  labs(x = "Kategorien", y = "Prozent") +
-  theme_light() +
-  theme(
-    axis.title = element_text(size = 20),
-    axis.text = element_text(size = 20),
-    legend.title = element_text(size = 17,5),
-    legend.text = element_text(size = 17,5)
-  )
+########################################################################################################################
 
-
-
-
-############################
-# 1) Daten definieren
-############################
 state_data <- data.frame(
   state = c(
     "California", "Texas", "Florida", "New York", "Pennsylvania",
@@ -458,42 +543,27 @@ state_data <- data.frame(
   )
 )
 
-############################
-# 2) Abkürzungen erzeugen
-############################
-# *Über* das Paket 'usdata':
-# state2abbr("California") => "CA", etc.
 state_data <- state_data %>%
   mutate(
-    state_abbr = state2abbr(state),
-    # Beispielmetrik: Interviews pro 100.000 Einwohner
     interviews_per_100k = (interviews / population) * 100000
   )
 
-############################
-# 3) Choroplethen-Karte zeichnen
-############################
-Karte.USA <- plot_usmap(
+Karte.USA <-
+  plot_usmap(
   data    = state_data,
   regions = "states",
-  values  = "interviews_per_100k",
-  include = state_data$state_abbr  # optional: nur die definierten Staaten
+  values  = "interviews_per_100k"
 ) +
   scale_fill_continuous(
-    low   = "lightgrey",
-    high  = "black",
-    name  = "Umfragen\n(pro 100k)",
-    label = scales::comma
+    low   = "grey90",
+    high  = "grey0",
+    name  = "Umfragen\n(pro 100k)"
   ) +
-  theme(panel.background = element_blank(),
-        
-        legend.position = "right",
-        legend.title = element_text(size = 20),   # Schriftgröße des Legendentitels
-        legend.text  = element_text(size = 20),   # Schriftgröße der Legendenbeschriftungen
-        legend.key.size = unit(1.0, "cm")         # Größe der Farbfelder
-        
-  )
+  theme(legend.position = "right",
+        legend.title = element_text(size = 13),
+        legend.text = element_text(size = 12))
 
+########################################################################################################################
 
 ## ODDS
 # Erstellen der Kreuztabelle mit absoluten Häufigkeiten
