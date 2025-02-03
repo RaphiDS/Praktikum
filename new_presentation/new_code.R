@@ -346,6 +346,12 @@ drug_dep_color <- c(
   "Mehrfachabhängigkeit" = "grey20"
   )
 
+drug_dep_colors_5 <- c("Keine Abhängigkeit" = "gray60",
+                 "Alkohol" = "#0072B2",
+                 "Kokain" = "#E69F00",
+                 "Heroin" = "#CC79A7",
+                 "Mehrfache Abhängigkeit" = "grey20")
+
 ########################################################################################################################
 
 drug_dependency_demo <- function(demog, labelvec, xlabel) {
@@ -565,33 +571,7 @@ Karte.USA <-
 
 ########################################################################################################################
 
-## ODDS
-# Erstellen der Kreuztabelle mit absoluten Häufigkeiten
-Drug_Addprev_Crosstab <- data2019 %>%
-  select(depndalc, depndcoc, depndher, addprev) %>%
-  filter(addprev %in% c(1, 2)) %>%  # Nur gültige Werte behalten (Ja, Nein)
-  mutate(
-    Dependency = case_when(
-      depndalc == 0 & depndcoc == 0 & depndher == 0 ~ "Keine Abhängigkeit",
-      depndalc == 1 & depndcoc == 0 & depndher == 0 ~ "Alkohol",
-      depndalc == 0 & depndcoc == 1 & depndher == 0 ~ "Kokain",
-      depndalc == 0 & depndcoc == 0 & depndher == 1 ~ "Heroin",
-      TRUE ~ "Mehrfache Abhängigkeit"  # Falls jemand mehrere Drogen konsumiert
-    )
-  ) %>%
-  group_by(addprev, Dependency) %>%
-  summarise(Frequency = n(), .groups = "drop") %>%
-  pivot_wider(names_from = Dependency, values_from = Frequency, values_fill = 0) %>%
-  mutate(addprev = recode(addprev, `1` = "Ja", `2` = "Nein")) %>%
-  column_to_rownames(var = "addprev") %>%
-  select("Keine Abhängigkeit", "Alkohol", "Kokain", "Heroin", "Mehrfache Abhängigkeit") 
-
-# Kreuztabelle anzeigen
-print(Drug_Addprev_Crosstab)
-
-# Erstellen der Kreuztabelle mit absoluten Häufigkeiten
-Drug_amdeyr_Crosstab <- data2019 %>%
-  select(depndalc, depndcoc, depndher, amdeyr) %>%
+df <- data2019 %>%
   filter(amdeyr %in% c(1, 2)) %>%
   mutate(
     Dependency = case_when(
@@ -604,52 +584,60 @@ Drug_amdeyr_Crosstab <- data2019 %>%
   ) %>%
   group_by(amdeyr, Dependency) %>%
   summarise(Frequency = n(), .groups = "drop") %>%
-  pivot_wider(names_from = Dependency, values_from = Frequency, values_fill = 0) %>%
-  mutate(amdeyr = recode(amdeyr, `1` = "Depression Ja", `2` = "Depression Nein")) %>%
-  column_to_rownames(var = "amdeyr")
-
-# Berechnung der Odds und Gruppengröße
-Drug_Odds <- Drug_amdeyr_Crosstab %>%
+  pivot_wider(
+    names_from = Dependency,
+    values_from = Frequency,
+    values_fill = 0
+  ) %>%
+  mutate(
+    amdeyr = recode(amdeyr, `1` = "Depression Ja", `2` = "Depression Nein")
+  ) %>%
+  tibble::column_to_rownames("amdeyr") %>%
   t() %>%
   as.data.frame() %>%
-  mutate(Total = `Depression Ja` + `Depression Nein`,
-         Odds_Yes = ifelse(`Depression Nein` > 0, `Depression Ja` / `Depression Nein`, NA)) %>%
-  filter(!is.na(Odds_Yes))  # Entfernt Zeilen mit NA-Werten
+  rownames_to_column("Dependency") %>%
+  mutate(
+    Dependency = factor(
+      Dependency,
+      levels = c(
+        "Keine Abhängigkeit",
+        "Alkohol",
+        "Kokain",
+        "Heroin",
+        "Mehrfache Abhängigkeit"
+      )
+    ),
+    Total = `Depression Ja` + `Depression Nein`,
+    Odds_Yes = ifelse(`Depression Nein` > 0, `Depression Ja` / `Depression Nein`, NA),
+    total_dep_ja = sum(`Depression Ja`),
+    total_dep_nein = sum(`Depression Nein`),
+    overall_odds = total_dep_ja / total_dep_nein,
+    Odds_Ratio = Odds_Yes / overall_odds
+  )
 
-# Gewichteter Durchschnitt der Odds berechnen
-weighted_avg_odds <- sum(Drug_Odds$Odds_Yes * Drug_Odds$Total) / sum(Drug_Odds$Total)
-
-# Berechnung der Odds Ratios relativ zum gewichteten Durchschnitt
-Drug_Odds <- Drug_Odds %>%
-  mutate(OR = Odds_Yes / weighted_avg_odds) %>%
-  rownames_to_column(var = "Dependency") %>%
-  mutate(Dependency = factor(Dependency, levels = c("Keine Abhängigkeit", "Alkohol", "Kokain", "Heroin", "Mehrfache Abhängigkeit")))  # Reihenfolge setzen
-
-# Farben für die Kategorien definieren
-drug_colors <- c("Keine Abhängigkeit" = "gray50",
-                 "Alkohol" = "#0072B2",
-                 "Kokain" = "#E69F00",
-                 "Heroin" = "#CC79A7",
-                 "Mehrfache Abhängigkeit" = "black")
-
-# Plot der Odds Ratios mit Anpassungen
-# Plot der Odds Ratios mit logarithmischer Skala
-Odds.Abhängigkeit <- ggplot(Drug_Odds, aes(x = Dependency, y = OR, color = Dependency)) +
+ggplot(df, aes(x = Dependency, y = Odds_Ratio, color = Dependency)) +
   geom_point(size = 5) +
-  geom_hline(yintercept = 1, linetype = "dashed", color = "gray60") +  # Gesamtdurchschnittslinie in Grau
-  geom_text(aes(x = "Heroin", y = 1.05, label = "Gesamtdurchschnitt"), color = "gray60", vjust = -0.5, size = 5) +  
+  geom_hline(yintercept = 1, linetype = "dashed", color = "gray60") +
+  annotate(
+    "text",
+    x = 4,
+    y = 1.05,
+    label = "Gesamtdurchschnitt",
+    color = "gray60",
+    vjust = -0.5,
+    size = 5
+  ) +
   scale_color_manual(values = drug_colors) +
-  scale_y_log10(limits = c(0.5, max(Drug_Odds$OR) * 1.2), 
-                breaks = c(0.1, 0.2, 0.5, 1, 2, 5, 10),  # Logarithmische Intervalle
-                labels = scales::number_format(accuracy = 0.1)) +
+  scale_y_log10(
+    limits = c(0.5, max(df$Odds_Ratio, na.rm = TRUE) * 1.2),
+    breaks = c(0.1, 0.2, 0.5, 1, 2, 5, 10),
+    labels = scales::number_format(accuracy = 0.1)
+  ) +
   labs(
-    x = "Abhängigkeitstyp",
+    x = "Abhängigkeiten",
     y = "Odds Ratio (log-Skala)",
     color = "Abhängigkeitstyp"
   ) +
-  theme_light() +
   theme(
-    axis.title = element_text(size = 22),  # Achsentitel
-    axis.text  = element_text(size = 22),  # Achsbeschriftungen
-    legend.position = "none"  # Legendentext
+    legend.position = "none"
   )
