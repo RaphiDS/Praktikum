@@ -506,20 +506,6 @@ Drug.Dependency.Race.WN <-
 
 ########################################################################################################################
 
-Dependency.Mental <- data2019 %>%
-  mutate(Dependency = case_when(
-    depndalc == 1 & depndcoc == 0 & depndher == 0 ~ "Alkohol",
-    depndcoc == 1 & depndalc == 0 & depndher == 0 ~ "Kokain",
-    depndher == 1 & depndalc == 0 & depndcoc == 0 ~ "Heroin",
-    (depndalc == 1 & depndcoc == 1) | (depndalc == 1 & depndher == 1) | (depndcoc == 1 & depndher == 1) ~ "Mehrfachabhängigkeit",
-    TRUE ~ "Keine Abhängigkeit"
-    )
-  ) %>%
-  filter(MI_CAT_U >= 0) %>%
-  mutate(FillGroup = paste(Dependency, MI_CAT_U, sep = "_")) %>%
-  group_by(Dependency, MI_CAT_U, FillGroup) %>%
-  summarise(count = n(), .groups = "drop")
-
 color_palette <- c(
   "Keine Abhängigkeit_0" = "#e6e6e6", "Keine Abhängigkeit_1" = "#b3b3b3",
   "Keine Abhängigkeit_2" = "#808080", "Keine Abhängigkeit_3" = "#4d4d4d",
@@ -532,9 +518,24 @@ color_palette <- c(
   "Mehrfachabhängigkeit_0" = "#e6e6e6", "Mehrfachabhängigkeit_1" = "#b3b3b3",
   "Mehrfachabhängigkeit_2" = "#808080", "Mehrfachabhängigkeit_3" = "#4d4d4d"
 )
-my_plot(
+
+Dependency.Mental <-
+  my_plot(
+  data2019 %>%
+  mutate(Dependency = case_when(
+    depndalc == 1 & depndcoc == 0 & depndher == 0 ~ "Alkohol",
+    depndcoc == 1 & depndalc == 0 & depndher == 0 ~ "Kokain",
+    depndher == 1 & depndalc == 0 & depndcoc == 0 ~ "Heroin",
+    (depndalc == 1 & depndcoc == 1) | (depndalc == 1 & depndher == 1) | (depndcoc == 1 & depndher == 1) ~ "Mehrfachabhängigkeit",
+    TRUE ~ "Keine Abhängigkeit"
+    )
+  ) %>%
+  filter(MI_CAT_U >= 0) %>%
+  mutate(FillGroup = paste(Dependency, MI_CAT_U, sep = "_")) %>%
+  group_by(Dependency, MI_CAT_U, FillGroup) %>%
+  summarise(count = n(), .groups = "drop") %>%
+
   ggplot(
-    data = Drug.Dependency.Total,
     aes(
       x = factor(
         Dependency,
@@ -699,7 +700,7 @@ ggplot(df, aes(x = Dependency, y = Odds_Ratio, color = Dependency)) +
     vjust = -0.5,
     size = 5
   ) +
-  scale_color_manual(values = drug_colors) +
+  scale_color_manual(values = drug_dep_colors_5) +
   scale_y_log10(
     limits = c(0.5, max(df$Odds_Ratio, na.rm = TRUE) * 1.2),
     breaks = c(0.1, 0.2, 0.5, 1, 2, 5, 10),

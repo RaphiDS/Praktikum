@@ -1,23 +1,4 @@
 
-gender <- data2019 %>%
-  select(irsex) %>%
-  pivot_longer(cols = everything(), names_to = "variable", values_to = "gender") %>%
-  group_by(gender) %>%
-  summarize(count = n()/56136) %>%
-ggplot(aes(x = factor(gender, labels = c("1" = "Männer", "2"= "Frauen")), y = count))+
-  geom_col()+
-  scale_y_continuous(labels = scales::percent)+
-  labs(y = "Prozent", fill = "Geschlecht", x = "") +
-  theme_light() +
-  theme(
-    axis.title = element_text(size = 20),  # Achsentitel
-    axis.text  = element_text(size = 20),  # Achsbeschriftungen
-    legend.position = "none"  # Legendentex
-  )
-
-#ggsave("Presentation_files/Pres_plots/Verteilung_Geschlecht.png", plot = gender, width = 18, height = 10, dpi = 300)
-
-
 Drogen.Einkommen <- data2019 %>%
   select(depndalc, depndcoc,depndher, income) %>%
   mutate(Dependency = case_when(
