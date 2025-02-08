@@ -63,15 +63,15 @@ smaller: true
 ::: panel-tabset
 ### Jemals
 
-![](Presentation_files/Pres_plots/Substanzen_Verlauf_plot.png)
+![](presentation_files/plots/drugs_timeline_ever.png)
 
 ### letzten 30 Tage
 
-![](Presentation_files/Pres_plots/Monatskonsum_Verlauf_plot.png)
+![](presentation_files/plots/drugs_timeline_30.png)
 
 ### Abhängigkeit
 
-![](Presentation_files/Pres_plots/Substanzen_Verlauf_Abhängigkeit_plot.png)
+![](presentation_files/plots/drugs_timeline_dependency.png)
 :::
 
 ## Tabakkonsum von 2015-2019
@@ -79,11 +79,11 @@ smaller: true
 ::: panel-tabset
 ### Jemals
 
-![](Presentation_files/Pres_plots/Jemals_Tabbak_plot.png)
+![](presentation_files/plots/tobacco_timeline_ever.png)
 
 ### letzten 30 Tage
 
-![](Presentation_files/Pres_plots/Monatskonsum_Tabbak_plot.png)
+![](presentation_files/plots/tobacco_timeline_30.png)
 :::
 
 ## Konsumverhalten - Alkohol
@@ -91,23 +91,23 @@ smaller: true
 ::: panel-tabset
 ### 2015
 
-![](Presentation_files/Pres_plots/Alk_15_plot.png)
+![](presentation_files/plots/hist_alc_15.png)
 
 ### 2016
 
-![](Presentation_files/Pres_plots/Alk_16_plot.png)
+![](presentation_files/plots/hist_alc_16.png)
 
 ### 2017
 
-![](Presentation_files/Pres_plots/Alk_17_plot.png)
+![](presentation_files/plots/hist_alc_17.png)
 
 ### 2018
 
-![](Presentation_files/Pres_plots/Alk_18_plot.png)
+![](presentation_files/plots/hist_alc_18.png)
 
 ### 2019
 
-![](Presentation_files/Pres_plots/Alk_19_plot.png)
+![](presentation_files/plots/hist_alc_19.png)
 :::
 
 ## Konsumverhalten - Zigaretten
@@ -115,23 +115,23 @@ smaller: true
 ::: panel-tabset
 ### 2015
 
-![](Presentation_files/Pres_plots/Zig_15_plot.png)
+![](presentation_files/plots/hist_cig_15.png)
 
 ### 2016
 
-![](Presentation_files/Pres_plots/Zig_16_plot.png)
+![](presentation_files/plots/hist_cig_16.png)
 
 ### 2017
 
-![](Presentation_files/Pres_plots/Zig_17_plot.png)
+![](presentation_files/plots/hist_cig_17.png)
 
 ### 2018
 
-![](Presentation_files/Pres_plots/Zig_18_plot.png)
+![](presentation_files/plots/hist_cig_18.png)
 
 ### 2019
 
-![](Presentation_files/Pres_plots/Zig_19_plot.png)
+![](presentation_files/plots/hist_cig_19.png)
 :::
 
 ## Konsumverhalten - Kokain
@@ -139,23 +139,23 @@ smaller: true
 ::: panel-tabset
 ### 2015
 
-![](Presentation_files/Pres_plots/Koks_15_plot.png)
+![](presentation_files/plots/hist_coc_15.png)
 
 ### 2016
 
-![](Presentation_files/Pres_plots/Koks_16_plot.png)
+![](presentation_files/plots/hist_coc_16.png)
 
 ### 2017
 
-![](Presentation_files/Pres_plots/Koks_17_plot.png)
+![](presentation_files/plots/hist_coc_17.png)
 
 ### 2018
 
-![](Presentation_files/Pres_plots/Koks_18_plot.png)
+![](presentation_files/plots/hist_coc_18.png)
 
 ### 2019
 
-![](Presentation_files/Pres_plots/Koks_19_plot.png)
+![](presentation_files/plots/hist_coc_19.png)
 :::
 
 ## Konsumverhalten - Heroin
@@ -163,28 +163,28 @@ smaller: true
 ::: panel-tabset
 ### 2015
 
-![](Presentation_files/Pres_plots/Her_15_plot.png)
+![](presentation_files/plots/hist_her_15.png)
 
 ### 2016
 
-![](Presentation_files/Pres_plots/Her_16_plot.png)
+![](presentation_files/plots/hist_her_16.png)
 
 ### 2017
 
-![](Presentation_files/Pres_plots/Her_17_plot.png)
+![](presentation_files/plots/hist_her_17.png)
 
 ### 2018
 
-![](Presentation_files/Pres_plots/Her_18_plot.png)
+![](presentation_files/plots/hist_her_18.png)
 
 ### 2019
 
-![](Presentation_files/Pres_plots/Her_19_plot.png)
+![](presentation_files/plots/hist_her_19.png)
 :::
 
 ## Demografie - Altersgruppen
 
-![](Presentation_files/Pres_plots/Altersverteilung.png)
+![](presentation_files/plots/age)
 
 ## Demografie - Race
 
