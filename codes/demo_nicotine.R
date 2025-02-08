@@ -26,8 +26,14 @@ nicotine_dependency_demo <- function(demo_var, x_label, label_vec) {
 
 # Generate nicotine dependency plots for age, race, and gender
 nicotine_dependency_age <- nicotine_dependency_demo("CATAG2", "Altersgruppen", age_group_vector)
+ggsave("presentation_files/plots/nicotine_dependency_age.png",
+       plot = nicotine_dependency_age, width = 18, height = 9, dpi = 300)
 nicotine_dependency_race <- nicotine_dependency_demo("NEWRACE2", "Race", new_race2_vector)
+ggsave("presentation_files/plots/nicotine_dependency_race.png",
+       plot = nicotine_dependency_race, width = 18, height = 9, dpi = 300)
 nicotine_dependency_gender <- nicotine_dependency_demo("irsex", "Geschlecht", ir_sex_vector)
+ggsave("presentation_files/plots/nicotine_dependency_gender.png",
+       plot = nicotine_dependency_gender, width = 18, height = 9, dpi = 300)
 
 # Function to generate nicotine dependency plots including a non-dependent category
 nicotine_dependency_demo_with_none <- function(demo_var, x_label, label_vec) {
@@ -62,7 +68,12 @@ nicotine_dependency_demo_with_none <- function(demo_var, x_label, label_vec) {
 
 # Generate nicotine dependency plots (with none) for age, race, and gender
 nicotine_dependency_age_wn <- nicotine_dependency_demo_with_none("CATAG2", "Altersgruppen", age_group_vector)
+ggsave("presentation_files/plots/nicotine_dependency_age_wn.png",
+       plot = nicotine_dependency_age_wn, width = 18, height = 9, dpi = 300)
 nicotine_dependency_race_wn <- nicotine_dependency_demo_with_none("NEWRACE2", "Race", new_race2_vector)
+ggsave("presentation_files/plots/nicotine_dependency_race_wn.png",
+       plot = nicotine_dependency_race_wn, width = 18, height = 9, dpi = 300)
 nicotine_dependency_gender_wn <- nicotine_dependency_demo_with_none("irsex", "Geschlecht", ir_sex_vector)
-
+ggsave("presentation_files/plots/nicotine_dependency_gender_wn.png",
+       plot = nicotine_dependency_gender_wn, width = 18, height = 9, dpi = 300)
 ########################################################################################################################
