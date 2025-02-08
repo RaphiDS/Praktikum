@@ -1,4 +1,43 @@
-# Praktikum
-Statistisches Anfängerpraktikum
+---
+editor_options: 
+  markdown: 
+    wrap: 72
+---
 
-Fehlende Variable: 2019 - IRMARIT
+# Drogenkonsum in den USA von 2015-2019
+
+**Author:** Denis Oluri, Sarah Puthiaparampil, Raphael Schneider
+
+## Version & 
+
+We use R Version 4.4.2. The Packages we use are: tidyverse usmap usdata
+
+## Data
+
+First you have to get the data:
+
+to create the dataset on your own:
+
+-   Go to: <https://www.samhsa.gov/data/data-we-collect/nsduh/datafiles>
+    and download the data of the years 2015, 2016, 2017, 2018, 2019
+-   Load them inside of RStudio
+-   Run data_edit/data_generating_code.R
+
+OR
+
+-   load data_edit/filtered_data.Rdata
+
+## Presentation
+
+To get the Presentation.html
+
+To create it manually:
+
+-   The first Code you should run is the setup.R inside the codes folder
+-   After that you have to run every other script inside the same folder
+    to save all plots
+-   The last step is to render the presentation.qmd
+
+OR
+
+-   open presentation.html
