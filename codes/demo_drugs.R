@@ -32,10 +32,10 @@ drug_dependency_demo <- function(demo_var, label_vec, x_label) {
 # Generate drug dependency plots for age, gender, and race (without including non-dependent cases)
 drug_dependency_age <- drug_dependency_demo("CATAG2", age_group_vector, "Altersgruppen")
 ggsave("presentation_files/plots/drug_dependency_age.png",
-       plot = drug_depenendency_age, width = 18, height = 9, dpi = 300)
+       plot = drug_dependency_age, width = 18, height = 9, dpi = 300)
 drug_dependency_gender <- drug_dependency_demo("irsex", ir_sex_vector, "Geschlecht")
 ggsave("presentation_files/plots/drug_dependency_gender.png",
-       plot = durg_dependency_gender, width = 18, height = 9, dpi = 300)
+       plot = drug_dependency_gender, width = 18, height = 9, dpi = 300)
 drug_dependency_race <- drug_dependency_demo("NEWRACE2", new_race2_vector, "Race")
 ggsave("presentation_files/plots/drug_dependency_race.png", 
        plot = drug_dependency_race, width = 18, height = 9, dpi = 300)
