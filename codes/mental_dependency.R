@@ -49,5 +49,5 @@ dependency_mental <- my_plot(
     ) +
     labs(x = "Abhängigkeiten")
 )
-
+ggsave("presentation_files/plots/dependency_mental.png", plot = dependency_mental, width = 15, height = 10, dpi = 300)
 ########################################################################################################################

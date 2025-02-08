@@ -49,7 +49,7 @@ smaller: true
 
 ### Umfragen pro 100.000 Einwohner nach Staat (2019)
 
-![](Presentation_files/Pres_plots/Karte_Verteilung.png)
+![](presentation_files/plots/usa_map.png)
 
 ## Definition
 
