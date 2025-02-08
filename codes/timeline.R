@@ -110,10 +110,17 @@ timeline_plot_fun <- function(table, label_vec, colors, limit, shapes) {
 
 # Generate timeline plots for various drug use metrics
 drugs_timeline_ever <- timeline_plot_fun(four_drugs_ever, labels_drugs, drug_colors, 0.85, shapes_drugs)
+ggsave("presentation_files/plots/drugs_timeline_ever.png", plot = drugs_timeline_ever, width = 15, height = 8, dpi = 800)
+
 drugs_timeline_30 <- timeline_plot_fun(four_drugs_30, labels_drugs, drug_colors, 0.85, shapes_drugs)
+ggsave("presentation_files/plots/drugs_timeline_30.png", plot = drugs_timeline_30, width = 15, height = 8, dpi = 800)
+
 drugs_timeline_dependency <- timeline_plot_fun(four_drugs_dependency, labels_drugs, drug_colors, 0.08, shapes_drugs)
+ggsave("presentation_files/plots/drugs_timeline_dependency.png", plot = drugs_timeline_dependency, width = 15, height = 8, dpi = 800)
 
 tobacco_timeline_ever <- timeline_plot_fun(tobacco_ever, labels_tobacco, tobacco_colors, 0.6, shapes_tobacco)
-tobacco_timeline_30 <- timeline_plot_fun(tobacco_30, labels_tobacco, tobacco_colors, 0.6, shapes_tobacco)
+ggsave("presentation_files/plots/tobacco_timeline_ever.png", plot = tobacco_timeline_ever, width = 15, height = 8, dpi = 800)
 
+tobacco_timeline_30 <- timeline_plot_fun(tobacco_30, labels_tobacco, tobacco_colors, 0.6, shapes_tobacco)
+ggsave("presentation_files/plots/tobacco_timeline_30.png", plot = tobacco_timeline_30, width = 15, height = 8, dpi = 800)
 ########################################################################################################################
