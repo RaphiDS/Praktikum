@@ -76,6 +76,22 @@ tobacco_colors <- c("#009E73", "darkorchid4", "lightblue", "darkgrey")
 labels_tobacco <- c("Zigarette", "Zigarre", "Rauchfreier Tabak", "Pfeife")
 shapes_tobacco <- c(16, 15, 17, 18)
 
+# Define color palettes for drug dependency plots
+drug_dep_color <- c(
+  "Alkohol" = "#0072B2",
+  "Kokain" = "#E69F00",
+  "Heroin" = "#CC79A7",
+  "Mehrfachabhängigkeit" = "grey20"
+)
+
+drug_dep_colors_5 <- c(
+  "Keine Abhängigkeit" = "gray60",
+  "Alkohol" = "#0072B2",
+  "Kokain" = "#E69F00",
+  "Heroin" = "#CC79A7",
+  "Mehrfache Abhängigkeit" = "grey20"
+)
+
 ########################################################################################################################
 # Function to generate demographic distribution plots for a given variable
 demo_distribution_fun <- function(demo_var, label_vec, x_label) {
@@ -338,22 +354,6 @@ nicotine_dependency_race_wn <- nicotine_dependency_demo_with_none("NEWRACE2", "R
 nicotine_dependency_gender_wn <- nicotine_dependency_demo_with_none("irsex", "Geschlecht", ir_sex_vector)
 
 ########################################################################################################################
-# Define color palettes for drug dependency plots
-
-drug_dep_color <- c(
-  "Alkohol" = "#0072B2",
-  "Kokain" = "#E69F00",
-  "Heroin" = "#CC79A7",
-  "Mehrfachabhängigkeit" = "grey20"
-)
-
-drug_dep_colors_5 <- c(
-  "Keine Abhängigkeit" = "gray60",
-  "Alkohol" = "#0072B2",
-  "Kokain" = "#E69F00",
-  "Heroin" = "#CC79A7",
-  "Mehrfache Abhängigkeit" = "grey20"
-)
 
 # Function to generate drug dependency distribution plots (excluding non-dependent cases)
 drug_dependency_demo <- function(demo_var, label_vec, x_label) {
