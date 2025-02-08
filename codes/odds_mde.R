@@ -54,5 +54,5 @@ odds <- ggplot(df_odds, aes(x = Dependency, y = Odds_Ratio, color = Dependency))
   ) +
   theme(legend.position = "none")
 
-ggsave("presentation_files/plots/odds.png", plot = odds, width = 15, height = 10, dpi = 300)
+ggsave("presentation_files/plots/odds.png", plot = odds, width = 18, height = 10, dpi = 300)
 ########################################################################################################################

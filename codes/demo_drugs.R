@@ -25,7 +25,9 @@ drug_dependency_demo <- function(demo_var, label_vec, x_label) {
       geom_bar(position = "fill") +
       scale_fill_manual(name = "Drogen", values = drug_dep_color) +
       scale_x_discrete(labels = new_labels) +
-      labs(x = x_label)
+      labs(x = x_label)+
+      theme(legend.text = element_text(size = 20),
+            legend.title = element_text(size = 20))
   )
 }
 
@@ -76,7 +78,9 @@ drug_dependency_demo_with_none <- function(demo_var, label_vec, x_label) {
         )
       ) +
       scale_x_discrete(labels = new_labels) +
-      labs(x = x_label)
+      labs(x = x_label)+
+      theme(legend.text = element_text(size = 20),
+            legend.title = element_text(size = 20))
   )
 }
 

@@ -62,7 +62,9 @@ nicotine_dependency_demo_with_none <- function(demo_var, x_label, label_vec) {
         name = "Nikotinabhängigkeit",
         values = c("Abhängigkeit" = "#009E73", "Keine Abhängigkeit" = "gray60")
       ) +
-      scale_x_discrete(name = x_label, labels = new_labels)
+      scale_x_discrete(name = x_label, labels = new_labels) +
+      theme(legend.text = element_text(size = 20),
+            legend.title = element_text(size = 20))
   )
 }
 

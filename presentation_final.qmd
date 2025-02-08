@@ -184,52 +184,77 @@ smaller: true
 
 ## Demografie - Altersgruppen
 
-![](presentation_files/plots/age)
+![](presentation_files/plots/age_distribution.png)
 
 ## Demografie - Race
 
-![](Presentation_files/Pres_plots/Ethnie_Verteilung_plot.png)
+![](presentation_files/plots/race_distribution.png)
 
-## Nikotinabhängigkeit
+## Demografie - Geschlecht
+
+![](presentation_files/plots/gender_distribution.png)
+
+## Abhängigkeit und Alter
 
 ::: panel-tabset
-### Alter
+### Nikotin ohne 
 
-![](Presentation_files/Pres_plots/NikAbhängig_Alter.png)
+![](presentation_files/plots/nicotine_dependency_age_wn.png)
 
-### Race
+### Nikotin 
+![](presentation_files/plots/nicotine_dependency_age.png)
 
-![](Presentation_files/Pres_plots/NikAbhängig_Ethnie.png)
+### Drogen ohne
+![](presentation_files/plots/drug_dependency_age_wn.png)
 
-### Geschlecht
-
-![](Presentation_files/Pres_plots/NikAbhängig_Geschlecht.png)
+### Drogen
+![](presentation_files/plots/drug_dependency_age.png)
 :::
 
-## Demografie und Substanzkonsum
+## Abhängigkeit und Race
 
 ::: panel-tabset
-### Alter
+### Nikotin ohne
 
-![](Presentation_files/Pres_plots/Subs_Alter_KA.png)
+![](presentation_files/plots/nicotine_dependency_race_wn.png)
 
-### Alter ohne KA
+### Nikotin
 
-![](Presentation_files/Pres_plots/SubsAbhängig_Alter.png)
+![](presentation_files/plots/nicotine_dependency_race.png)
 
-### Race
+### Drogen ohne
 
-![](Presentation_files/Pres_plots/SubsAbhängig_Ethnie.png)
+![](presentation_files/plots/drug_dependency_race_wn.png)
 
-### Geschlecht
+### Drogen
 
-![](Presentation_files/Pres_plots/SubsAbhängigkeit_Geschlecht.png)
+![](presentation_files/plots/drug_dependency_race.png)
+:::
+
+## Abhängigkeit und Gender
+
+::: panel-tabset
+### Nikotin ohne
+
+![](presentation_files/plots/nicotine_dependency_gender_wn.png)
+
+### Nikotin
+
+![](presentation_files/plots/nicotine_dependency_gender.png)
+
+### Drogen ohne
+
+![](presentation_files/plots/drug_dependency_gender_wn.png)
+
+### Drogen
+
+![](presentation_files/plots/drug_dependency_gender.png)
 :::
 
 ## Mentale Gesundheit
 
 -   Abstufung des psychischen Gesundheitszustands mithilfe von Indikatoren (SMIPP = Serious Mental Illness Predicted Probability)
--   Serious Mental Illness: Schwellenwert ab Schwellenwert von 0.236
+-   Serious Mental Illness: ab Schwellenwert von 0.236
 -   Serious to Moderate Mentall Illness: ab Schwellenwert von 0.066
 -   Any Mental Illness: ab 0.019
 -   Diese Bewertung kann nur für Erwachsene angewendet werden
@@ -238,20 +263,20 @@ smaller: true
 
 ### Abhängigkeit und Mentale Gesundheit
 
-![](Presentation_files/Pres_plots/SubsAbhängig_Gesundheit.png)
+![](presentation_files/plots/dependency_mental.png)
 
 ------------------------------------------------------------------------
 
 ### Odds Ratio für "Major Depressive Episode" nach Abhängigkeit
 
-![](Presentation_files/Pres_plots/Odds_Abhängigkeit.png)
+![](presentation_files/plots/odds.png)
 
 ## Fazit
 
 -   *1. Wie haben sich die Konsummuster in dem Zeitraum 2015 bis 2019 entwickelt?*
-    -   Es lassen sich keine eindeutigen Trends im Konsumverhalten erkennen, mit Ausnahme des Zigarettenkonsums, der eine bemerkenswerte Veränderung zeigt.
+    -   Es lassen sich keine eindeutigen Trends im Konsumverhalten erkennen, mit Ausnahme des Zigarettenkonsums, bei dem man eine leichte Abnahme erkennen kann.
 -   *2. Wie hängt der Konsum im Jahr 2019 mit demografischen Merkmalen zusammen?*
-    -   Beim Geschlecht zeigen sich keine signifikanten Unterschiede im Konsumverhalten, während bei anderen demografischen Faktoren deutliche Unterschiede erkennbar sind. - Die Unterschiede beim Geschlecht sind im Vergleich zu anderen demografischen Faktoren sehr klein
+    -   Die Unterschiede beim Geschlecht sind im Vergleich zu anderen demografischen Faktoren sehr klein.
 -   *3. Wie steht der Konsum im Jahr 2019 mit dem psychischen Gesundheitszustand der Befragten in Verbindung?*
     -   Es besteht ein erkennbarer Zusammenhang zwischen Drogenabhängigkeit und psychischen Gesundheitsproblemen, wobei Betroffene häufiger unter mentalen Belastungen leiden.
 
@@ -261,27 +286,9 @@ smaller: true
 -   psychische Gesundheitszustand: Abhängig von viele Faktoren, viele Formen an Erkrankungen
 -   Keine genaueren Infos über geografische Daten
 
-------------------------------------------------------------------------
 
 ------------------------------------------------------------------------
 
-## Anhang
-
-### Verteilung Geschlecht
-
-![](Presentation_files/Pres_plots/Verteilung_Geschlecht.png)
-
-------------------------------------------------------------------------
-
-### Einkommen und Abhängigkeit
-
-![](Presentation_files/Pres_plots/SubsAbhängig_Einkommen.png)
-
-------------------------------------------------------------------------
-
-### Mentale Gesundheit und Geschlecht
-
-![](Presentation_files/Pres_plots/MI_Geschlecht.png)
 
 ## Quelle
 
