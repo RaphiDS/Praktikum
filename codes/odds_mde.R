@@ -37,7 +37,7 @@ df_odds <- data_2019 %>%
   )
 
 # Plot the Odds Ratio (log-scale) for each dependency category with annotations
-ggplot(df_odds, aes(x = Dependency, y = Odds_Ratio, color = Dependency)) +
+odds <- ggplot(df_odds, aes(x = Dependency, y = Odds_Ratio, color = Dependency)) +
   geom_point(size = 5) +
   geom_hline(yintercept = 1, linetype = "dashed", color = "gray60") +
   annotate("text", x = 4, y = 1.05, label = "Gesamtdurchschnitt", color = "gray60", vjust = -0.5, size = 5) +
@@ -54,4 +54,5 @@ ggplot(df_odds, aes(x = Dependency, y = Odds_Ratio, color = Dependency)) +
   ) +
   theme(legend.position = "none")
 
+ggsave("presentation_files/plots/odds.png", plot = odds, width = 15, height = 10, dpi = 300)
 ########################################################################################################################
