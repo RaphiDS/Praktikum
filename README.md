@@ -8,9 +8,10 @@ editor_options:
 
 **Author:** Denis Oluri, Sarah Puthiaparampil, Raphael Schneider
 
-## Version & 
+## Version & Packages
 
-We use R Version 4.4.2. The Packages we use are: tidyverse usmap usdata
+We use R Version 4.4.2. The Packages we use are: tidyverse, usmap and
+usdata
 
 ## Data
 
@@ -29,7 +30,7 @@ OR
 
 ## Presentation
 
-To get the Presentation.html
+To get the Presentation:
 
 To create it manually:
 
@@ -41,3 +42,7 @@ To create it manually:
 OR
 
 -   open presentation.html
+
+## Images
+
+The Plots are saved in the presentation_files/plots folder
