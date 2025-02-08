@@ -57,5 +57,5 @@ usa_map <- plot_usmap(
     legend.title = element_text(size = 13),
     legend.text = element_text(size = 12)
   )
-
+ggsave("presentation_files/plots/usa_map.png", plot = usa_map, width = 18, height = 11, dpi = 300)
 ########################################################################################################################

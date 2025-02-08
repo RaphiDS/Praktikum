@@ -1,24 +1,16 @@
-# Load required libraries
-library(tidyverse)
-library(usmap)
-library(usdata)
+# setup.R
 
-########################################################################################################################
-# Load pre-filtered data and prepare the main dataset
+# List of required packages
+required_packages <- c("tidyverse", "ggplot2", "usmap","usdata")
 
-load("data_edit/filtered_data.Rdata")  # Load the Rdata file
+# Install missing packages
+missing_packages <- required_packages[!(required_packages %in% installed.packages()[,"Package"])]
+if(length(missing_packages)) install.packages(missing_packages)
 
-# Create a dataset with adjusted factor levels for the 'NEWRACE2' variable
-drug_data <- allfilterdata %>%
-  mutate(NEWRACE2 = factor(NEWRACE2, levels = c(1, 7, 2, 5, 6, 3, 4)))
+# Load packages
+lapply(required_packages, library, character.only = TRUE)
 
-# Subset the data for the year 2019
-data_2019 <- drug_data %>%
-  filter(year == 2019)
-
-########################################################################################################################
-# Define and set a custom ggplot theme
-
+# Custom color scales
 theme_custom <- theme_light() +
   theme(
     axis.title = element_text(size = 20),
@@ -39,9 +31,7 @@ my_plot <- function(plot_obj) {
     labs(y = "Prozent", title = "")
 }
 
-########################################################################################################################
-# Define label mappings for demographic variables
-
+# Define custom color palettes
 # Mapping for race codes to labels (labels remain in German)
 new_race2_vector <- c(
   "1" = "Weiße",
@@ -92,3 +82,16 @@ drug_dep_colors_5 <- c(
   "Heroin" = "#CC79A7",
   "Mehrfache Abhängigkeit" = "grey20"
 )
+
+########################################################################################################################
+# Load pre-filtered data and prepare the main dataset
+
+load("data_edit/filtered_data.Rdata")  # Load the Rdata file
+
+# Create a dataset with adjusted factor levels for the 'NEWRACE2' variable
+drug_data <- allfilterdata %>%
+  mutate(NEWRACE2 = factor(NEWRACE2, levels = c(1, 7, 2, 5, 6, 3, 4)))
+
+# Subset the data for the year 2019
+data_2019 <- drug_data %>%
+  filter(year == 2019)
