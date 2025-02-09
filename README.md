@@ -19,9 +19,10 @@ First you have to get the data:
 
 to create the dataset on your own:
 
+-   Load the setup.R file in the codes folder
 -   Go to: <https://www.samhsa.gov/data/data-we-collect/nsduh/datafiles>
     and download the data of the years 2015, 2016, 2017, 2018, 2019
--   Load them inside of RStudio
+-   Save them inside the data_edit folder
 -   Run data_edit/data_generating_code.R
 
 OR

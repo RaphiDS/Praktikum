@@ -1,11 +1,10 @@
-# Skript Raphi
-#loading all Datasets and packages
-load("C:/Users/49177/Desktop/Praktikum/Praktikum GIthub/StatPrak-Overdose/NSDUH_2015.RData")
-load("C:/Users/49177/Desktop/Praktikum/Praktikum GIthub/StatPrak-Overdose/NSDUH_2016.RData")
-load("C:/Users/49177/Desktop/Praktikum/Praktikum GIthub/StatPrak-Overdose/NSDUH_2017.RData")
-load("C:/Users/49177/Desktop/Praktikum/Praktikum GIthub/StatPrak-Overdose/NSDUH_2018.RData")
-load("C:/Users/49177/Desktop/Praktikum/Praktikum GIthub/StatPrak-Overdose/NSDUH_2019.RData")
-library(tidyverse)
+
+#loading all datasets
+load("data_edit/NSDUH_2015.RData")
+load("data_edit/NSDUH_2016.RData")
+load("data_edit/NSDUH_2017.RData")
+load("data_edit/NSDUH_2018.RData")
+load("data_edit/NSDUH_2019.RData")
 
 #filtering the relevant columns and creating reduced dataset
 filterdata2015 <- PUF2015_021518 %>%
@@ -96,4 +95,4 @@ allfilterdata <- rbind(filterdata2015[Reduce(intersect,list(colnames(filterdata2
                       filterdata2019[Reduce(intersect,list(colnames(filterdata2015), colnames(filterdata2016),
                       colnames(filterdata2017),colnames(filterdata2018), colnames(filterdata2019)))])
 
-save(allfilterdata, file = "combi_redu_data.Rdata")
+save(allfilterdata, file = "filtered_data.Rdata")
