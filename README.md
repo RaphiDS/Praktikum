@@ -35,7 +35,7 @@ to create the dataset on your own:
 
 OR
 
--   it already is loaded with the setup.R
+-   it is already loaded with the setup.R
 
 ## Presentation
 
@@ -57,8 +57,20 @@ To create it manually:
 
 OR
 
--   open presentation.html
+-   open presentation_final.html
 
 ## Images
 
 The Plots are saved in the presentation_files/plots folder
+
+## TLDR:
+
+-   load setup.R
+
+-   load source.R
+
+-   render presentation_final.qmd
+
+-   OR
+
+-   open presentation_final.html
