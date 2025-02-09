@@ -95,4 +95,4 @@ allfilterdata <- rbind(filterdata2015[Reduce(intersect,list(colnames(filterdata2
                       filterdata2019[Reduce(intersect,list(colnames(filterdata2015), colnames(filterdata2016),
                       colnames(filterdata2017),colnames(filterdata2018), colnames(filterdata2019)))])
 
-save(allfilterdata, file = "filtered_data.Rdata")
+save(allfilterdata, file = "data_edit/filtered_data.Rdata")
