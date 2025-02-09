@@ -44,7 +44,7 @@ odds <- ggplot(df_odds, aes(x = Dependency, y = Odds_Ratio, color = Dependency))
   scale_color_manual(values = drug_dep_colors_5) +
   scale_y_log10(
     limits = c(0.5, max(df_odds$Odds_Ratio, na.rm = TRUE) * 1.2),
-    breaks = c(0.1, 0.2, 0.5, 1, 2, 5, 10),
+    breaks = c(0.1, 0.2, 0.5, 1, 2, 4, 8),
     labels = scales::number_format(accuracy = 0.1)
   ) +
   labs(

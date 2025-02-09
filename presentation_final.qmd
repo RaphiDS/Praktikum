@@ -28,7 +28,7 @@ smaller: true
 -   "National Survey on Drug Use and Health" durchgeführt von SAMHSA
 -   Hauptquelle über den Konsum von Alkohol, Tabak, verschiedener Drogen und zu mentaler Gesundheit in den USA
 -   Grundgesamtheit: amerikanische, nicht-institutionalisierte Bürger\*innen ab 12
--   Stichprobengröße: ca. 56.000 Beobachtungen zu 1693 Variablen
+-   Stichprobengröße: ca. 56.000 Beobachtungen zu 2700 Variablen pro Jahr
 
 ------------------------------------------------------------------------
 
@@ -197,17 +197,20 @@ smaller: true
 ## Abhängigkeit und Alter
 
 ::: panel-tabset
-### Nikotin ohne 
+### Nikotin ohne
 
 ![](presentation_files/plots/nicotine_dependency_age_wn.png)
 
-### Nikotin 
+### Nikotin
+
 ![](presentation_files/plots/nicotine_dependency_age.png)
 
 ### Drogen ohne
+
 ![](presentation_files/plots/drug_dependency_age_wn.png)
 
 ### Drogen
+
 ![](presentation_files/plots/drug_dependency_age.png)
 :::
 
@@ -276,19 +279,17 @@ smaller: true
 -   *1. Wie haben sich die Konsummuster in dem Zeitraum 2015 bis 2019 entwickelt?*
     -   Es lassen sich keine eindeutigen Trends im Konsumverhalten erkennen, mit Ausnahme des Zigarettenkonsums, bei dem man eine leichte Abnahme erkennen kann.
 -   *2. Wie hängt der Konsum im Jahr 2019 mit demografischen Merkmalen zusammen?*
-    -   Die Unterschiede beim Geschlecht sind im Vergleich zu anderen demografischen Faktoren sehr klein.
+    -   Die Unterschiede beim Geschlecht sind im Vergleich zu anderen demografischen Faktoren sehr klein, besonders beim Alter erkennt man klare Unterschiede.
 -   *3. Wie steht der Konsum im Jahr 2019 mit dem psychischen Gesundheitszustand der Befragten in Verbindung?*
     -   Es besteht ein erkennbarer Zusammenhang zwischen Drogenabhängigkeit und psychischen Gesundheitsproblemen, wobei Betroffene häufiger unter mentalen Belastungen leiden.
 
 ## Limitationen, Ausblick
 
--   Viele weitere Demografische Faktoren im Datensatz --\> nur auf die allgemeinen beschränkt
--   psychische Gesundheitszustand: Abhängig von viele Faktoren, viele Formen an Erkrankungen
--   Keine genaueren Infos über geografische Daten
-
+-   Viele weitere demografische Faktoren im Datensatz --\> nur auf die Allgemeinen beschränkt
+-   Psychischer Gesundheitszustand: Abhängig von vielen Faktoren, viele Formen von Erkrankungen
+-   Keine genaueren Informationen über geografische Daten
 
 ------------------------------------------------------------------------
-
 
 ## Quelle
 

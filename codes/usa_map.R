@@ -54,8 +54,10 @@ usa_map <- plot_usmap(
   ) +
   theme(
     legend.position = "right",
-    legend.title = element_text(size = 13),
-    legend.text = element_text(size = 12)
+    legend.title = element_text(size = 25),
+    legend.text = element_text(size = 25),
+    legend.key.height = unit(1.5, units = "cm"),
+    legend.key.width = unit(0.8, units = "cm")
   )
 ggsave("presentation_files/plots/usa_map.png", plot = usa_map, width = 18, height = 11, dpi = 300)
 ########################################################################################################################

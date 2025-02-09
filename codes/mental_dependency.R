@@ -14,6 +14,30 @@ color_palette <- c(
   "Mehrfachabhängigkeit_2" = "#808080", "Mehrfachabhängigkeit_3" = "#4d4d4d"
 )
 
+# create the n
+dependency_counts <- data_2019 %>%
+  mutate(Dependency = case_when(
+    depndalc == 1 & depndcoc == 0 & depndher == 0 ~ "Alkohol",
+    depndcoc == 1 & depndalc == 0 & depndher == 0 ~ "Kokain",
+    depndher == 1 & depndalc == 0 & depndcoc == 0 ~ "Heroin",
+    (depndalc == 1 & depndcoc == 1) | (depndalc == 1 & depndher == 1) | (depndcoc == 1 & depndher == 1) ~ "Mehrfachabhängigkeit",
+    TRUE ~ "Keine Abhängigkeit"
+  )) %>%
+  filter(MI_CAT_U >= 0) %>%   # just cases shown in the plot
+  count(Dependency)
+
+# defines the labels
+dependency_order <- c("Keine Abhängigkeit", "Alkohol", "Kokain", "Heroin", "Mehrfachabhängigkeit")
+base_labels <- c("Keine", "Alkohol", "Kokain", "Heroin", "Mehrere")
+
+# Creates new labels for (n = )
+new_labels <- sapply(seq_along(dependency_order), function(i) {
+  count_value <- dependency_counts$n[dependency_counts$Dependency == dependency_order[i]]
+  paste0(base_labels[i], "\n(n = ", count_value, ")")
+})
+# ----------------------------------------------------------------------
+
+
 # Generate a mental health dependency plot based on the MI_CAT_U variable
 dependency_mental <- my_plot(
   data_2019 %>%
@@ -34,13 +58,7 @@ dependency_mental <- my_plot(
       fill = FillGroup
     )) +
     geom_bar(stat = "identity", position = "fill") +
-    scale_x_discrete(labels = c(
-      "Keine Abhängigkeit" = "Keine",
-      "Alkohol" = "Alkohol",
-      "Kokain" = "Kokain",
-      "Heroin" = "Heroin",
-      "Mehrfachabhängigkeit" = "Mehrere"
-    )) +
+    scale_x_discrete(labels = new_labels) +
     scale_fill_manual(
       name = "Mentale Erkrankungen:",
       values = color_palette,
